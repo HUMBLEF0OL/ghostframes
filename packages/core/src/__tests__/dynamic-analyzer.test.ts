@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { generateDynamicBlueprint } from "./dynamic-analyzer";
+import { generateDynamicBlueprint } from "../dynamic-analyzer.js";
 
 // ─── DOM Mock Utilities ────────────────────────────────────────────────────────
 const styleMocks = new WeakMap<Element, Partial<CSSStyleDeclaration>>();

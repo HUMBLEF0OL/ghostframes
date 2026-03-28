@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { DEFAULT_CONFIG, type SkeletonConfig, type Blueprint, type BlueprintNode } from "./types";
+import { DEFAULT_CONFIG, type SkeletonConfig, type Blueprint, type BlueprintNode } from "../types";
 
 // ─── DEFAULT_CONFIG Tests ─────────────────────────────────────────────────────
 

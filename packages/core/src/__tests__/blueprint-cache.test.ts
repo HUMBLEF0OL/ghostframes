@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { blueprintCache, computeStructuralHash, djb2 } from "./blueprint-cache";
-import type { Blueprint } from "./types.js";
+import { blueprintCache, computeStructuralHash, djb2 } from "../blueprint-cache";
+import type { Blueprint } from "../types.js";
 
 describe("djb2", () => {
   it("generates a consistent hex hash for a string", () => {

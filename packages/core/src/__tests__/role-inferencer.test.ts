@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { inferRole } from "./role-inferencer";
-import type { MeasuredNode, SkeletonConfig } from "./types";
-import { DEFAULT_CONFIG } from "./types";
+import { inferRole } from "../role-inferencer";
+import type { MeasuredNode, SkeletonConfig } from "../types";
+import { DEFAULT_CONFIG } from "../types";
 
 // ─── Test Helpers ──────────────────────────────────────────────────────────────
 

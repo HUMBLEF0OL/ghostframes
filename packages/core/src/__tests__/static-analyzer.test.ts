@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { generateStaticBlueprint, STATIC_DEFAULTS } from "./static-analyzer";
-import type { VNode } from "./static-analyzer";
+import { generateStaticBlueprint, STATIC_DEFAULTS } from "../static-analyzer";
+import type { VNode } from "../static-analyzer";
 
 // ─── VDOM Helper ───────────────────────────────────────────────────────────────
 function h(type: unknown, props: Record<string, unknown> = {}, ...children: unknown[]): VNode {
