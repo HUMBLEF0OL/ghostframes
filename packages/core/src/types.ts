@@ -37,6 +37,8 @@ export type LayoutProps = {
   // Grid child props
   gridColumn: string;
   gridRow: string;
+  // Others
+  direction: string;
 };
 
 // ─── Text Meta ────────────────────────────────────────────────────────────────
@@ -140,6 +142,10 @@ export type RelevantComputedStyles = {
   width: string;
   height: string;
   aspectRatio: string;
+  marginTop: string;
+  marginBottom: string;
+  marginLeft: string;
+  marginRight: string;
 };
 
 export type MeasuredNode = {
