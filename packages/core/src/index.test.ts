@@ -1,8 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { version } from "./index";
+import { DEFAULT_CONFIG } from "./index";
 
-describe("core", () => {
-  it("has a version", () => {
-    expect(version).toBe("0.1.0");
+describe("core index exports", () => {
+  it("exports DEFAULT_CONFIG", () => {
+    expect(DEFAULT_CONFIG).toBeDefined();
+    expect(DEFAULT_CONFIG.animation).toBe("shimmer");
   });
 });

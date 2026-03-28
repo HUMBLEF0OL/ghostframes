@@ -3,9 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@autoskeleton/core": ["packages/core/src"],
-      "@autoskeleton/react": ["packages/react/src"],
-      "@autoskeleton/test-utils": ["packages/test-utils/src"]
+      "@skelcore/core": ["packages/core/src"],
+      "@skelcore/react": ["packages/react/src"],
+      "@skelcore/test-utils": ["packages/test-utils/src"]
     }
   },
   "exclude": ["node_modules", "dist"]

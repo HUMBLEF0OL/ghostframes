@@ -1,5 +1,5 @@
 {
-  "name": "@autoskeleton/react",
+  "name": "@skelcore/react",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,7 +28,7 @@
     "@types/react-dom": "^19.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "@autoskeleton/core": "workspace:*",
+    "@skelcore/core": "workspace:*",
     "typescript": "^5.0.0",
     "tsup": "^8.0.0",
     "vitest": "^2.0.0"

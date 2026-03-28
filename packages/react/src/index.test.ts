@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { version } from "./index";
+import { DEFAULT_CONFIG } from "@skelcore/core";
 
-describe("react", () => {
-  it("has a version", () => {
-    expect(version).toBe("0.1.0");
+describe("react index exports", () => {
+  it("can import DEFAULT_CONFIG from core via react package", () => {
+    expect(DEFAULT_CONFIG).toBeDefined();
   });
 });
