@@ -124,3 +124,41 @@ export type SkelCorePropsBase = {
   // Opt-in to re-measure when container resizes
   remeasureOnResize?: boolean;
 };
+
+// ─── Measured Node (Role Inferencer Input) ─────────────────────────────────────
+
+export type RelevantComputedStyles = {
+  display: string;
+  visibility: string;
+  position: string;
+  borderRadius: string;
+  fontSize: string;
+  lineHeight: string;
+  backgroundImage: string;
+  objectFit: string;
+  overflow: string;
+  width: string;
+  height: string;
+  aspectRatio: string;
+};
+
+export type MeasuredNode = {
+  tagName: string; // uppercase, e.g. 'IMG', 'BUTTON'
+  ariaRole: string | null; // aria role attribute value
+  classList: string[]; // css class names
+  dataAttributes: Record<string, string>; // all data-* attributes
+  computedStyles: RelevantComputedStyles;
+  rect: {
+    width: number;
+    height: number;
+    top: number;
+    left: number;
+  };
+  hasChildren: boolean;
+  childCount: number;
+  textContent: string; // trimmed inner text
+  // Intrinsic media dimensions (populated from HTMLImageElement.naturalWidth etc.)
+  naturalWidth: number;
+  naturalHeight: number;
+  src: string; // src, href, or currentSrc
+};
