@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "SKELCORE_CORE": ["./lib/skelcore/core"],
+      "SKELCORE_REACT": ["./lib/skelcore/react"]
     }
   },
   "include": [

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import type { Blueprint, BlueprintNode, SkeletonConfig } from "@skelcore/core";
+import type { Blueprint, BlueprintNode, SkeletonConfig } from "../core";
 
 export interface SkeletonRendererProps {
   blueprint: Blueprint;

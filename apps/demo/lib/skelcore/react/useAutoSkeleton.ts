@@ -9,7 +9,7 @@ import {
   DEFAULT_CONFIG,
   type Blueprint,
   type SkeletonConfig,
-} from "@skelcore/core";
+} from "../core";
 
 export type SkeletonPhase = "idle" | "measuring" | "showing" | "exiting";
 

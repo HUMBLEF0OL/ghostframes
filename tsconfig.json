@@ -1,11 +1,10 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@skelcore/core": ["packages/core/src"],
-      "@skelcore/react": ["packages/react/src"],
-      "@skelcore/test-utils": ["packages/test-utils/src"]
+      "@skelcore/core": ["./packages/core/src"],
+      "@skelcore/react": ["./packages/react/src"],
+      "@skelcore/test-utils": ["./packages/test-utils/src"]
     }
   },
   "exclude": ["node_modules", "dist"]
