@@ -6,6 +6,7 @@ import { SkeletonRenderer } from "./SkeletonRenderer.js";
 export interface AutoSkeletonProps {
   loading: boolean;
   children: React.ReactNode;
+  fallback?: React.ReactNode;
   config?: Partial<SkeletonConfig>;
   blueprint?: Blueprint;
   slots?: Record<string, () => React.ReactNode>;
@@ -20,6 +21,7 @@ export interface AutoSkeletonProps {
 export const AutoSkeleton: React.FC<AutoSkeletonProps> = ({
   loading,
   children,
+  fallback,
   config: configOverride,
   blueprint: externalBlueprint,
   slots,
@@ -65,21 +67,33 @@ export const AutoSkeleton: React.FC<AutoSkeletonProps> = ({
   };
 
   return (
-    <div ref={containerRef} className="skel-auto-container" style={containerStyle}>
+    <div
+      ref={containerRef}
+      className="skel-auto-container"
+      style={containerStyle}
+      aria-busy={loading}
+    >
       {/* 1. Content Layer */}
-      <div className="skel-content" style={contentStyle}>
+      <div className="skel-content" style={contentStyle} data-loading={loading ? "true" : "false"}>
         {children}
       </div>
 
       {/* 2. Skeleton Overlay Layer */}
       {showSkeleton && blueprint && (
-        <div className="skel-overlay" style={overlayStyle}>
+        <div className="skel-overlay" style={overlayStyle} aria-hidden="true">
           <SkeletonRenderer
             blueprint={blueprint}
             config={config}
             slots={slots}
             mode={blueprint.source === "static" ? "flow" : "absolute"}
           />
+        </div>
+      )}
+
+      {/* 3. Fallback Layer (shown only while measuring) */}
+      {phase === "measuring" && !blueprint && fallback && (
+        <div className="skel-fallback" style={overlayStyle}>
+          {fallback}
         </div>
       )}
     </div>

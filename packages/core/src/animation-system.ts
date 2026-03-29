@@ -44,6 +44,13 @@ export class AnimationSystem {
   100% { background-position: 200% 0; }
 }
 
+/* Reset visibility for opted-out children */
+.skel-content[data-loading="true"] [data-no-skeleton] {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
 @keyframes skel-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
