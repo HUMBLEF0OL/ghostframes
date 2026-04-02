@@ -227,4 +227,19 @@ describe("SkeletonRenderer", () => {
     expect(imageNode.style.width).toBe("100px");
     expect(imageNode.style.height).toBe("100px");
   });
+
+  it("uses fluid sizing for static text groups in flow mode", () => {
+    const staticBlueprint: Blueprint = {
+      ...mockBlueprint,
+      source: "static",
+    };
+
+    const { container } = render(
+      <SkeletonRenderer blueprint={staticBlueprint} config={DEFAULT_CONFIG} mode="flow" />
+    );
+
+    const textGroup = container.querySelector(".skel-text-group") as HTMLElement;
+    expect(textGroup.style.width).toBe("100%");
+    expect(textGroup.style.height).toBe("auto");
+  });
 });
