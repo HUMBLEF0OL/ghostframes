@@ -1,6 +1,7 @@
 import { inferRole } from "./role-inferencer.js";
 import type { Blueprint, BlueprintNode, SkeletonConfig, MeasuredNode } from "./types.js";
 import { DEFAULT_CONFIG } from "./types.js";
+import { computeStructuralHash } from "./blueprint-cache.js";
 
 type CollectNode = {
   element: HTMLElement;
@@ -140,7 +141,7 @@ export async function generateDynamicBlueprint(
       rect: { width: rect.width, height: rect.height, top: rect.top, left: rect.left },
       hasChildren: el.childElementCount > 0,
       childCount: el.childElementCount,
-      textContent: el.textContent || "",
+      textContent: (el.textContent || "").trim(),
       naturalWidth: el instanceof HTMLImageElement ? el.naturalWidth : 0,
       naturalHeight: el instanceof HTMLImageElement ? el.naturalHeight : 0,
       src:
@@ -301,6 +302,7 @@ export async function generateDynamicBlueprint(
     rootWidth: rootRect.width,
     rootHeight: rootRect.height,
     nodes: rootNode.children,
+    structuralHash: computeStructuralHash(root, config.maxDepth),
     generatedAt: Date.now(),
     source: "dynamic",
   };

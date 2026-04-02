@@ -45,10 +45,12 @@ export function useAutoSkeleton(
 
     // Cache miss: measure once, then reuse the returned structural hash.
     const b = await generateDynamicBlueprint(contentRef.current, config);
-    const structuralHash = (b as Blueprint & { structuralHash: string }).structuralHash;
+    const structuralHash = b.structuralHash;
 
-    lastStructuralHashRef.current = structuralHash;
-    blueprintCache.set(contentRef.current, b, structuralHash);
+    if (structuralHash) {
+      lastStructuralHashRef.current = structuralHash;
+      blueprintCache.set(contentRef.current, b, structuralHash);
+    }
 
     setBlueprint(b);
     setPhase("showing");

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { generateDynamicBlueprint } from "../dynamic-analyzer.js";
+import { computeStructuralHash } from "../blueprint-cache.js";
 
 // ─── DOM Mock Utilities ────────────────────────────────────────────────────────
 const styleMocks = new WeakMap<Element, Partial<CSSStyleDeclaration>>();
@@ -61,6 +62,22 @@ beforeEach(() => {
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 describe("generateDynamicBlueprint", () => {
+  it("attaches structuralHash to the returned blueprint", async () => {
+    const root = document.createElement("div");
+    mockLayout(root, { width: 400, height: 200, top: 0, left: 0 });
+
+    const child = document.createElement("p");
+    child.textContent = "Hello";
+    mockLayout(child, { width: 100, height: 24, top: 10, left: 10 });
+    root.appendChild(child);
+    document.body.appendChild(root);
+
+    const bp = await generateDynamicBlueprint(root);
+
+    expect(bp.structuralHash).toBeDefined();
+    expect(bp.structuralHash).toBe(computeStructuralHash(root));
+  });
+
   it("collects nested elements into a structural Blueprint hierarchy", async () => {
     const root = document.createElement("div");
     mockLayout(root, { width: 500, height: 500, top: 0, left: 0 });
@@ -391,5 +408,21 @@ describe("generateDynamicBlueprint", () => {
     const bp = await generateDynamicBlueprint(root);
     expect(bp.nodes).toHaveLength(1);
     expect(bp.nodes[0].role).toBe("image");
+  });
+
+  it("trims textContent before role inference scoring", async () => {
+    const root = document.createElement("div");
+    mockLayout(root, { width: 500, height: 500, top: 0, left: 0 });
+
+    const pill = document.createElement("div");
+    pill.textContent = "   ";
+    mockLayout(pill, { width: 40, height: 20, top: 10, left: 10 }, { borderRadius: "20px" });
+    root.appendChild(pill);
+
+    document.body.appendChild(root);
+
+    const bp = await generateDynamicBlueprint(root);
+    expect(bp.nodes).toHaveLength(1);
+    expect(bp.nodes[0].role).toBe("text");
   });
 });

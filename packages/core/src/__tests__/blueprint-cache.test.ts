@@ -51,6 +51,30 @@ describe("computeStructuralHash", () => {
 
     expect(computeStructuralHash(root1)).not.toBe(computeStructuralHash(root2));
   });
+
+  it("includes data-skeleton-role in hash calculation", () => {
+    const root = document.createElement("div");
+    const child = document.createElement("section");
+    root.appendChild(child);
+
+    const before = computeStructuralHash(root);
+    child.setAttribute("data-skeleton-role", "avatar");
+    const after = computeStructuralHash(root);
+
+    expect(after).not.toBe(before);
+  });
+
+  it("includes data-skeleton-slot in hash calculation", () => {
+    const root = document.createElement("div");
+    const child = document.createElement("section");
+    root.appendChild(child);
+
+    const before = computeStructuralHash(root);
+    child.setAttribute("data-skeleton-slot", "hero-media");
+    const after = computeStructuralHash(root);
+
+    expect(after).not.toBe(before);
+  });
 });
 
 describe("BlueprintCache", () => {
@@ -84,23 +108,21 @@ describe("BlueprintCache", () => {
     expect(blueprintCache.get(el, hash)).toBeNull();
   });
 
-  it("known limitation: structural hash does not detect attribute-only changes", () => {
-    // This test documents a known limitation: changes to data-skeleton-role or classes
-    // that don't affect DOM structure won't invalidate the cache.
-    // The structural hash only considers tagName, childCount, and depth.
+  it("invalidates when data-skeleton-role changes", () => {
     const el = document.createElement("div");
     const hash1 = computeStructuralHash(el);
-
-    // Change an attribute that affects role inference but not structure
     el.setAttribute("data-skeleton-role", "avatar");
     const hash2 = computeStructuralHash(el);
 
-    // Hash is the same because structure is identical
-    expect(hash1).toBe(hash2);
+    expect(hash1).not.toBe(hash2);
+  });
 
-    // This means callers should use a blueprint key that includes:
-    // - cache key (element ref)
-    // - role-relevant data attributes (data-skeleton-role, data-skeleton-slot, etc.)
-    // Or re-compute blueprint when these attributes change.
+  it("invalidates when data-skeleton-slot changes", () => {
+    const el = document.createElement("div");
+    const hash1 = computeStructuralHash(el);
+    el.setAttribute("data-skeleton-slot", "card-title");
+    const hash2 = computeStructuralHash(el);
+
+    expect(hash1).not.toBe(hash2);
   });
 });

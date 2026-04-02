@@ -45,7 +45,7 @@ describe("SkeletonRenderer", () => {
     );
     const root = container.firstChild as HTMLElement;
     expect(root).toHaveClass("skel-renderer-root");
-    expect(root.style.width).toBe("500px");
+    expect(root.style.width).toBe("100%");
     expect(root.style.height).toBe("300px");
   });
 

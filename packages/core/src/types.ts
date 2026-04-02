@@ -78,6 +78,8 @@ export type Blueprint = {
   rootWidth: number;
   rootHeight: number;
   nodes: BlueprintNode[];
+  // Optional to remain backward-compatible with existing serialized blueprints.
+  structuralHash?: string;
   generatedAt: number; // Date.now()
   source: "static" | "dynamic"; // how it was generated
 };

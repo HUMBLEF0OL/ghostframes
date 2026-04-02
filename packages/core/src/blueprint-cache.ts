@@ -30,8 +30,10 @@ export function computeStructuralHash(root: Element, maxDepth: number = 12): str
     if (depth > maxDepth) return;
 
     // Serialize node identity
-    // Format: Tag:ChildrenCount:Depth
-    parts.push(`${el.tagName}:${el.childElementCount}:${depth}`);
+    // Format: Tag:ChildrenCount:Depth:SkeletonRole:SkeletonSlot
+    const skeletonRole = el.getAttribute("data-skeleton-role") ?? "";
+    const skeletonSlot = el.getAttribute("data-skeleton-slot") ?? "";
+    parts.push(`${el.tagName}:${el.childElementCount}:${depth}:${skeletonRole}:${skeletonSlot}`);
 
     // Early exit for leaves
     if (el.childElementCount === 0) return;
