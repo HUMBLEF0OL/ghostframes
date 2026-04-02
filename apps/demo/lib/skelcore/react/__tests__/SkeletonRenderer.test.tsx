@@ -33,6 +33,18 @@ const mockBlueprint: Blueprint = {
       layout: {},
       children: [],
     },
+    {
+      id: "node-3",
+      role: "avatar",
+      tagName: "IMG",
+      width: 56,
+      height: 56,
+      top: 180,
+      left: 10,
+      borderRadius: "50%",
+      layout: {},
+      children: [],
+    },
   ],
   generatedAt: Date.now(),
   source: "dynamic",
@@ -81,5 +93,20 @@ describe("SkeletonRenderer", () => {
     expect(imageNode.style.position).toBe("absolute");
     expect(imageNode.style.top).toBe("70px");
     expect(imageNode.style.left).toBe("10px");
+  });
+
+  it("applies configured radius to regular blocks and preserves avatar circles", () => {
+    const config = {
+      ...DEFAULT_CONFIG,
+      borderRadius: 24,
+    };
+
+    const { container } = render(<SkeletonRenderer blueprint={mockBlueprint} config={config} />);
+
+    const imageNode = container.querySelector(".skel-role-image") as HTMLElement;
+    const avatarNode = container.querySelector(".skel-role-avatar") as HTMLElement;
+
+    expect(imageNode.style.borderRadius).toBe("24px");
+    expect(avatarNode.style.borderRadius).toBe("50%");
   });
 });

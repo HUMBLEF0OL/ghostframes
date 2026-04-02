@@ -30,10 +30,16 @@ export default function CallbacksPage() {
       return null;
     }
 
+    const countNodes = (nodes: Blueprint["nodes"]): number => {
+      return nodes.reduce((total, node) => total + 1 + countNodes(node.children), 0);
+    };
+
     return {
-      nodes: blueprint.nodes.length,
+      topLevelNodes: blueprint.nodes.length,
+      totalNodes: countNodes(blueprint.nodes),
       size: `${Math.round(blueprint.rootWidth)}x${Math.round(blueprint.rootHeight)}`,
       source: blueprint.source,
+      capturedAt: new Date(blueprint.generatedAt).toLocaleTimeString(),
     };
   }, [blueprint]);
 
@@ -52,7 +58,7 @@ export default function CallbacksPage() {
         badge="onMeasured"
       >
         <div className="space-y-4">
-          <AutoSkeleton loading={loading} onMeasured={setBlueprint}>
+          <AutoSkeleton loading={loading} onMeasured={setBlueprint} remeasureOnResize>
             <CallbackSample />
           </AutoSkeleton>
 
@@ -64,10 +70,14 @@ export default function CallbacksPage() {
           </button>
 
           {summary ? (
-            <div className="grid grid-cols-1 gap-2 rounded-lg border border-zinc-800 bg-zinc-950 p-3 text-xs light:border-zinc-300 light:bg-zinc-100 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2 rounded-lg border border-zinc-800 bg-zinc-950 p-3 text-xs light:border-zinc-300 light:bg-zinc-100 sm:grid-cols-5">
               <div>
                 <p className="text-zinc-500 light:text-zinc-600">Top-level nodes</p>
-                <p className="font-mono text-zinc-300 light:text-zinc-700">{summary.nodes}</p>
+                <p className="font-mono text-zinc-300 light:text-zinc-700">{summary.topLevelNodes}</p>
+              </div>
+              <div>
+                <p className="text-zinc-500 light:text-zinc-600">Total nodes</p>
+                <p className="font-mono text-zinc-300 light:text-zinc-700">{summary.totalNodes}</p>
               </div>
               <div>
                 <p className="text-zinc-500 light:text-zinc-600">Root size</p>
@@ -76,6 +86,10 @@ export default function CallbacksPage() {
               <div>
                 <p className="text-zinc-500 light:text-zinc-600">Blueprint source</p>
                 <p className="font-mono text-zinc-300 light:text-zinc-700">{summary.source}</p>
+              </div>
+              <div>
+                <p className="text-zinc-500 light:text-zinc-600">Captured</p>
+                <p className="font-mono text-zinc-300 light:text-zinc-700">{summary.capturedAt}</p>
               </div>
             </div>
           ) : (

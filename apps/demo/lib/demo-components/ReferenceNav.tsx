@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "../theme-context";
+import { BrandMark } from "./BrandMark";
 
 const navSections = [
   {
@@ -48,9 +49,7 @@ export function ReferenceNav() {
     <nav className="sticky top-[57px] hidden h-[calc(100vh-57px)] w-72 flex-col overflow-y-auto border-r border-zinc-800 bg-zinc-950 p-4 light:border-zinc-200 light:bg-zinc-50 md:flex">
       <div className="mb-6 flex items-center justify-between gap-2">
         <Link href="/" className="flex items-center gap-2 text-white transition-opacity hover:opacity-80 light:text-zinc-900">
-          <div className="flex h-5 w-5 items-center justify-center rounded bg-gradient-to-br from-indigo-500 to-violet-600">
-            <span className="text-xs font-bold text-white">S</span>
-          </div>
+          <BrandMark size={20} />
           <span className="text-sm font-bold">SkelCore</span>
         </Link>
 

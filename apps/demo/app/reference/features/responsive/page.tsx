@@ -10,7 +10,7 @@ function ResponsiveCard({ width }: { width: number }) {
   return (
     <div
       className="rounded-xl border border-zinc-800 bg-zinc-900 p-4 transition-all light:border-zinc-200 light:bg-white"
-      style={{ width }}
+      style={{ width, maxWidth: "100%" }}
     >
       {isWide ? (
         <div className="flex gap-4">
@@ -77,9 +77,11 @@ export default function ResponsivePage() {
               className="mb-4 w-full"
             />
 
-            <AutoSkeleton loading={loading} remeasureOnResize={remeasureOnResize}>
-              <ResponsiveCard width={width} />
-            </AutoSkeleton>
+            <div style={{ width, maxWidth: "100%" }}>
+              <AutoSkeleton loading={loading} remeasureOnResize={remeasureOnResize}>
+                <ResponsiveCard width={width} />
+              </AutoSkeleton>
+            </div>
           </div>
         </div>
       </FeatureCard>
@@ -91,7 +93,14 @@ export default function ResponsivePage() {
   remeasureOnResize={true}
 >
   <ResponsiveCard />
-</AutoSkeleton>`}
+</AutoSkeleton>
+
+// Apply width to the measured wrapper
+<div style={{ width }}>
+  <AutoSkeleton loading={loading} remeasureOnResize={true}>
+    <ResponsiveCard />
+  </AutoSkeleton>
+</div>`}
         />
       </FeatureCard>
     </div>

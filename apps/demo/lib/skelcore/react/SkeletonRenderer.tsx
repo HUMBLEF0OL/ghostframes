@@ -38,12 +38,15 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
     if (node.role === "skip") return null;
 
     const isContainer = node.role === "container" || node.isTable || node.isTableRow;
+    const isTableCell = node.role === "table-cell" || node.isTableCell;
     const isText = node.role === "text" && node.text;
     const animationClass = config.animation === "none" ? "" : `skel-${config.animation}`;
+    const preserveNodeRadius = node.role === "avatar" || (mode === "flow" && blueprint.source === "static");
+    const resolvedBorderRadius = preserveNodeRadius ? node.borderRadius : `${config.borderRadius}px`;
 
     // Common style attributes
     const commonStyles: React.CSSProperties = {
-      borderRadius: node.borderRadius,
+      borderRadius: resolvedBorderRadius,
       backgroundColor: config.baseColor,
       position: mode === "absolute" ? "absolute" : "relative",
     };
@@ -53,6 +56,9 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
       commonStyles.left = `${node.left}px`;
       commonStyles.width = `${node.width}px`;
       commonStyles.height = `${node.height}px`;
+    } else if (!isContainer) {
+      commonStyles.width = `${node.width}px`;
+      commonStyles.height = `${node.height}px`;
     }
 
     // 1. Handle Container / Table Roles
@@ -60,7 +66,16 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
       let Tag: React.ElementType = "div";
       if (node.isTable) Tag = "table";
       else if (node.isTableRow) Tag = "tr";
-      else if (node.role === "table-cell") Tag = "td";
+
+      const filteredLayout = Object.fromEntries(
+        Object.entries(node.layout).filter(([key]) => {
+          const normalizedKey = key.toLowerCase();
+          return (
+            !normalizedKey.includes("margin") &&
+            !normalizedKey.includes("background")
+          );
+        })
+      );
 
       return (
         <Tag
@@ -70,9 +85,7 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
             ...commonStyles,
             backgroundColor: "transparent", // Containers are invisible
             ...(mode === "absolute"
-              ? Object.fromEntries(
-                  Object.entries(node.layout).filter(([key]) => !key.toLowerCase().includes("margin"))
-                )
+              ? filteredLayout
               : node.layout),
           } as React.CSSProperties}
         >
@@ -81,7 +94,39 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
       );
     }
 
-    // 2. Handle Text Role (Multi-line bars)
+    // 2. Handle Table Cell Role (Inset bar instead of full-cell mask)
+    if (isTableCell) {
+      const widthRatio = node.text?.lastLineWidthRatio ?? 0.7;
+      const barHeight = Math.min(config.minTextHeight, Math.max(6, node.height * 0.45));
+      const cellTag = node.tagName.toLowerCase() === "th" ? "th" : "td";
+      const CellTag: React.ElementType = mode === "flow" ? cellTag : "div";
+
+      return (
+        <CellTag
+          key={node.id}
+          className="skel-table-cell"
+          style={{
+            ...commonStyles,
+            backgroundColor: "transparent",
+            display: "flex",
+            alignItems: "center",
+            paddingInline: "8px",
+          }}
+        >
+          <span
+            className={`skel-block ${animationClass} skel-table-cell-bar`}
+            style={{
+              width: `${Math.round(widthRatio * 100)}%`,
+              height: `${barHeight}px`,
+              borderRadius: "4px",
+              backgroundColor: config.baseColor,
+            }}
+          />
+        </CellTag>
+      );
+    }
+
+    // 3. Handle Text Role (Multi-line bars)
     if (isText && node.text) {
       const { lines, lineHeight, lastLineWidthRatio } = node.text;
       return (
@@ -108,7 +153,7 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
       );
     }
 
-    // 3. Handle Custom Slots
+    // 4. Handle Custom Slots
     if (node.role === "custom" && node.slotKey && slots[node.slotKey]) {
       return (
         <div key={node.id} style={commonStyles}>
@@ -117,7 +162,7 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
       );
     }
 
-    // 4. Default: Render as Atomic Block (Image, Button, Icon, etc.)
+    // 5. Default: Render as Atomic Block (Image, Button, Icon, etc.)
     return (
       <div
         key={node.id}
@@ -133,7 +178,9 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
   const rootStyle: React.CSSProperties = {
     position: "relative",
     width: "100%",
+    maxWidth: "100%",
     height: blueprint.rootHeight > 0 ? `${blueprint.rootHeight}px` : "auto",
+    overflow: "hidden",
   };
 
   return (
@@ -141,5 +188,4 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
       {nodesToRender.map(renderNode)}
     </div>
   );
-}
-;
+};

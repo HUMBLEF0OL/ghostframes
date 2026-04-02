@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { AutoSkeleton } from "../../../../lib/skelcore/react";
 import { CodeBlock, FeatureCard } from "../../../../lib/demo-components";
 import type { Blueprint, BlueprintNode } from "../../../../lib/skelcore/core";
@@ -58,6 +58,17 @@ export default function CachingPage() {
     setLoading(false);
   }
 
+  const handleMeasured = useCallback((blueprint: Blueprint) => {
+    const signature = signatureForBlueprint(blueprint);
+    const seen = knownSignatures.current.has(signature);
+    knownSignatures.current.add(signature);
+    setCacheHit(seen);
+
+    if (pendingStart.current !== null) {
+      setLastMeasureMs(performance.now() - pendingStart.current);
+    }
+  }, []);
+
   return (
     <div className="space-y-6">
       <header>
@@ -71,16 +82,7 @@ export default function CachingPage() {
         <div className="space-y-4">
           <AutoSkeleton
             loading={loading}
-            onMeasured={(blueprint) => {
-              const signature = signatureForBlueprint(blueprint);
-              const seen = knownSignatures.current.has(signature);
-              knownSignatures.current.add(signature);
-              setCacheHit(seen);
-
-              if (pendingStart.current !== null) {
-                setLastMeasureMs(performance.now() - pendingStart.current);
-              }
-            }}
+            onMeasured={handleMeasured}
           >
             <ProfileCard />
           </AutoSkeleton>

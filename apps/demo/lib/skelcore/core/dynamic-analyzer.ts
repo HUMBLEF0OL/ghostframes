@@ -177,6 +177,7 @@ export async function generateDynamicBlueprint(
         "TBODY",
         "TFOOT",
         "DIV",
+        "FORM",
         "SECTION",
         "ARTICLE",
         "HEADER",

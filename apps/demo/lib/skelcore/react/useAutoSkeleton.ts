@@ -28,22 +28,34 @@ export function useAutoSkeleton(
   const lastStructuralHashRef = useRef<string | null>(null);
   // Track last known dimensions so we can show an instant placeholder during re-measurement
   const lastDimsRef = useRef<{ width: number; height: number } | null>(null);
+  const onMeasuredRef = useRef(options.onMeasured);
 
-  const measure = useCallback(async () => {
+  useEffect(() => {
+    onMeasuredRef.current = options.onMeasured;
+  }, [options.onMeasured]);
+
+  const measure = useCallback(async (forceFresh: boolean = false) => {
     if (!contentRef.current || !loading) return;
 
     setPhase("measuring");
 
     try {
-      const existingHash = lastStructuralHashRef.current;
+      const existingHash = forceFresh ? null : lastStructuralHashRef.current;
       if (existingHash) {
         const cached = blueprintCache.get(contentRef.current, existingHash);
         if (cached) {
-          lastDimsRef.current = { width: cached.rootWidth, height: cached.rootHeight };
-          setBlueprint(cached);
-          setPhase("showing");
-          options.onMeasured?.(cached);
-          return;
+          const rect = contentRef.current.getBoundingClientRect();
+          const widthDiff = Math.abs(cached.rootWidth - rect.width);
+          const heightDiff = Math.abs(cached.rootHeight - rect.height);
+          const sizeChanged = widthDiff > 2 || heightDiff > 2;
+
+          if (!sizeChanged) {
+            lastDimsRef.current = { width: cached.rootWidth, height: cached.rootHeight };
+            setBlueprint(cached);
+            setPhase("showing");
+            onMeasuredRef.current?.(cached);
+            return;
+          }
         }
       }
 
@@ -57,14 +69,14 @@ export function useAutoSkeleton(
       lastDimsRef.current = { width: b.rootWidth, height: b.rootHeight };
       setBlueprint(b);
       setPhase("showing");
-      options.onMeasured?.(b);
+      onMeasuredRef.current?.(b);
     } catch (err) {
       console.error("[SkelCore] Blueprint measurement failed:", err);
       // Graceful fallback: hide skeleton, show content
       setPhase("idle");
       setBlueprint(null);
     }
-  }, [loading, contentRef, config, options.onMeasured]);
+  }, [loading, contentRef, config]);
 
   // Initial Measurement and Loading Toggle
   useEffect(() => {
@@ -94,7 +106,7 @@ export function useAutoSkeleton(
   useEffect(() => {
     if (options.remeasureOnResize && loading && contentRef.current && phase === "showing") {
       resizeObserverRef.current = new ResizeObserver(() => {
-        measure();
+        measure(true);
       });
       resizeObserverRef.current.observe(contentRef.current);
       return () => resizeObserverRef.current?.disconnect();

@@ -38,7 +38,9 @@ export default function CustomSlotsPage() {
       <header>
         <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">Custom Slots</h1>
         <p className="text-lg text-zinc-500 light:text-zinc-600">
-          Apply data-skeleton-slot for custom skeleton rendering on specific elements.
+          Apply data-skeleton-slot for custom skeleton rendering on specific elements. Toggle ON passes
+          slots and uses the custom renderer for product-thumbnail; toggle OFF passes undefined and falls
+          back to auto-generated skeletons for the same content.
         </p>
       </header>
 
@@ -58,13 +60,17 @@ export default function CustomSlotsPage() {
             label="Use custom slots"
             checked={showSlots}
             onChange={setShowSlots}
-            description="Compare auto detection vs custom renderer"
+            description="ON: use custom product-thumbnail slot renderer. OFF: slots is undefined and AutoSkeleton falls back to auto-detected skeleton nodes."
           />
 
           <div className="border-t border-zinc-800 pt-4 light:border-zinc-200">
             <AutoSkeleton loading={loading} slots={showSlots ? customSlots : undefined}>
               <ProductCardWithSlot />
             </AutoSkeleton>
+            <p className="mt-3 text-xs text-zinc-500 light:text-zinc-600">
+              The underlying ProductCardWithSlot markup does not change. This toggle only changes skeleton
+              rendering strategy.
+            </p>
           </div>
         </div>
       </FeatureCard>

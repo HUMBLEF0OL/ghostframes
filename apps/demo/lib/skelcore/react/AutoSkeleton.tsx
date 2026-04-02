@@ -40,19 +40,25 @@ export default function AutoSkeleton({
   });
 
   const showSkeleton = loading || phase === "exiting";
-  const contentVisible = phase === "measuring" || !loading;
+  const hasOverlayLayer = Boolean(
+    (showSkeleton && blueprint) || phase === "measuring"
+  );
+  const contentVisible = !loading || !hasOverlayLayer;
 
   const containerStyle: React.CSSProperties = {
     position: "relative",
     display: "block", // Ensure we take full width for measurement
     width: "100%",
+    maxWidth: "100%",
     minWidth: "1px",
     minHeight: "1px",
+    overflow: "hidden",
   };
 
   const contentStyle: React.CSSProperties = {
     visibility: contentVisible ? "visible" : "hidden",
-    pointerEvents: "auto",
+    opacity: contentVisible ? 1 : 0,
+    pointerEvents: contentVisible ? "auto" : "none",
     userSelect: "auto",
   };
 
@@ -64,6 +70,7 @@ export default function AutoSkeleton({
     bottom: 0,
     pointerEvents: "none",
     zIndex: 10,
+    overflow: "hidden",
     opacity: phase === "exiting" ? 0 : 1,
     transition: `opacity ${config.transitionDuration}ms ease-in`,
   };

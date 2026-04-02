@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "../theme-context";
+import { BrandMark } from "./BrandMark";
 
 const navItems = [
   { href: "/", label: "Showcase", isActive: (pathname: string) => pathname === "/" },
@@ -19,10 +20,8 @@ export function MainHeader() {
     <header className="sticky top-0 z-50 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur light:border-zinc-200 light:bg-white/90">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <Link href="/" className="flex items-center gap-2 rounded-md px-1 py-1 transition-opacity hover:opacity-85">
-          <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-indigo-500 to-violet-600">
-            <span className="text-xs font-bold text-white">S</span>
-          </div>
-          <span className="text-sm font-bold text-white light:text-zinc-900">SkelCore</span>
+          <BrandMark size={24} />
+          <span className="text-md font-bold text-white tracking-widest light:text-zinc-900">SKELCORE</span>
         </Link>
 
         <nav aria-label="Primary" className="flex flex-1 items-center justify-center gap-1 overflow-x-auto px-1">

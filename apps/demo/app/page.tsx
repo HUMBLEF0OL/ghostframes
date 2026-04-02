@@ -97,7 +97,7 @@ const tableData = [
 function DataTable() {
   return (
     <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 light:border-zinc-200 light:bg-white">
-      <table className="w-full text-sm">
+      <table className="w-full text-sm border-separate border-spacing-y-2">
         <thead>
           <tr className="border-b border-zinc-800 light:border-zinc-200">
             <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 light:text-zinc-600">Service</th>
@@ -107,20 +107,60 @@ function DataTable() {
             <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-zinc-500 light:text-zinc-600">Health</th>
           </tr>
         </thead>
+
         <tbody>
           {tableData.map((row) => (
-            <tr key={row.name} className="border-b border-zinc-800/60 transition-colors last:border-0 hover:bg-zinc-800/30 light:border-zinc-200 light:hover:bg-zinc-100">
-              <td className="px-5 py-4 font-medium text-white light:text-zinc-900">{row.name}</td>
+            <tr
+              key={row.name}
+              className="bg-zinc-900 light:bg-white rounded-lg transition-colors hover:bg-zinc-800/40 light:hover:bg-zinc-100"
+            >
+              <td className="px-5 py-4 font-medium text-white light:text-zinc-900 rounded-l-lg">
+                {row.name}
+              </td>
+
               <td className="px-5 py-4">
-                <span className={`inline-flex items-center gap-1.5 text-xs font-semibold ${row.status === "Active" ? "text-emerald-400" : row.status === "Warning" ? "text-amber-400" : "text-zinc-500"}`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${row.status === "Active" ? "bg-emerald-400" : row.status === "Warning" ? "bg-amber-400" : "bg-zinc-500"}`} />
+                <span
+                  className={`inline-flex items-center gap-1.5 text-xs font-semibold ${
+                    row.status === "Active"
+                      ? "text-emerald-400"
+                      : row.status === "Warning"
+                      ? "text-amber-400"
+                      : "text-zinc-500"
+                  }`}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      row.status === "Active"
+                        ? "bg-emerald-400"
+                        : row.status === "Warning"
+                        ? "bg-amber-400"
+                        : "bg-zinc-500"
+                    }`}
+                  />
                   {row.status}
                 </span>
               </td>
-              <td className="px-5 py-4 text-right font-mono text-zinc-300 light:text-zinc-700">{row.throughput}</td>
-              <td className="px-5 py-4 text-right font-mono text-zinc-300 light:text-zinc-700">{row.latency}</td>
-              <td className="px-5 py-4 text-right">
-                <span className={`font-bold ${row.health >= 90 ? "text-emerald-400" : row.health >= 70 ? "text-amber-400" : "text-red-400"}`}>{row.health}%</span>
+
+              <td className="px-5 py-4 text-right font-mono text-zinc-300 light:text-zinc-700">
+                {row.throughput}
+              </td>
+
+              <td className="px-5 py-4 text-right font-mono text-zinc-300 light:text-zinc-700">
+                {row.latency}
+              </td>
+
+              <td className="px-5 py-4 text-right rounded-r-lg">
+                <span
+                  className={`font-bold ${
+                    row.health >= 90
+                      ? "text-emerald-400"
+                      : row.health >= 70
+                      ? "text-amber-400"
+                      : "text-red-400"
+                  }`}
+                >
+                  {row.health}%
+                </span>
               </td>
             </tr>
           ))}
