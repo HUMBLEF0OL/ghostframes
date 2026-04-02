@@ -83,7 +83,7 @@ export default function AutoSkeleton({
 
       {/* 2. Skeleton Overlay Layer */}
       {showSkeleton && blueprint && (
-        <div className="skel-overlay" style={overlayStyle} aria-hidden="true">
+        <div className="skel-overlay" data-no-skeleton style={overlayStyle} aria-hidden="true">
           <SkeletonRenderer
             blueprint={blueprint}
             config={config}
@@ -97,6 +97,7 @@ export default function AutoSkeleton({
       {phase === "measuring" && !blueprint && (
         <div
           className="skel-overlay skel-measuring-placeholder"
+          data-no-skeleton
           style={{
             ...overlayStyle,
             opacity: 1,
@@ -115,7 +116,7 @@ export default function AutoSkeleton({
 
       {/* 4. User-provided Fallback Layer (only if set, shown while measuring with no prior dims) */}
       {phase === "measuring" && !blueprint && !lastDimsRef.current && fallback && (
-        <div className="skel-fallback" style={overlayStyle}>
+        <div className="skel-fallback" data-no-skeleton style={overlayStyle}>
           {fallback}
         </div>
       )}
