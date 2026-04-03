@@ -6,7 +6,7 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/@skelcore/core)](https://bundlephobia.com/package/@skelcore/core)
 [![license](https://img.shields.io/npm/l/@skelcore/core)](../../LICENSE)
 
-`@skelcore/core` is the heart of the SkelCore library. It is **framework-agnostic** — it contains no React, Vue, or any UI-framework code. If you are building a React app, you almost certainly want [`@skelcore/react`](../react/README.md), which consumes this package and wraps it with idiomatic React components.
+`@skelcore/core` is the heart of the SkelCore library. It is **framework-agnostic** — it contains no React, Vue, or any UI-framework code. If you are building a React app, you almost certainly want [`@skelcore/react`](https://www.npmjs.com/package/@skelcore/react), which consumes this package and wraps it with idiomatic React components.
 
 Use `@skelcore/core` directly when you are:
 
