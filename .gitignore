@@ -156,4 +156,6 @@ coverage/
 *.pid.lock
 .eslintcache
 .stylelintcache
-node_modules/
+node_modules/
+
+.worktrees
