@@ -178,9 +178,7 @@ describe("SkeletonRenderer", () => {
       tableCellDefaultWidthRatio: 0.6,
     };
 
-    const { container } = render(
-      <SkeletonRenderer blueprint={tableBlueprint} config={config} />
-    );
+    const { container } = render(<SkeletonRenderer blueprint={tableBlueprint} config={config} />);
 
     const cell = container.querySelector(".skel-table-cell") as HTMLElement;
     const bar = container.querySelector(".skel-table-cell-bar") as HTMLElement;

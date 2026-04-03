@@ -65,8 +65,12 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
     // 1. Handle Container / Table Roles
     if (isContainer) {
       let Tag: React.ElementType = "div";
-      if (node.isTable) Tag = "table";
-      else if (node.isTableRow) Tag = "tr";
+      // In absolute mode, table tags can trigger browser table layout quirks.
+      // Keep semantic tags for flow mode only.
+      if (mode === "flow") {
+        if (node.isTable) Tag = "table";
+        else if (node.isTableRow) Tag = "tr";
+      }
 
       const filteredLayout = Object.fromEntries(
         Object.entries(node.layout).filter(([key]) => {
@@ -95,12 +99,15 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
       );
     }
 
-    // 2. Handle Table Cell Role (Inset bar instead of full-cell mask)
+    // 1.5 Handle Table Cell Role as inset content bars
     if (isTableCell) {
-      const widthRatio = node.text?.lastLineWidthRatio ?? 0.7;
-      const barHeight = Math.min(config.minTextHeight, Math.max(6, node.height * 0.45));
+      const widthRatio = node.text?.lastLineWidthRatio ?? config.tableCellDefaultWidthRatio;
+      const barHeight = Math.min(
+        config.minTextHeight,
+        Math.max(config.tableCellBarMinHeight, node.height * config.tableCellBarHeightRatio)
+      );
       const cellTag = node.tagName.toLowerCase() === "th" ? "th" : "td";
-      const CellTag: React.ElementType = mode === "flow" ? cellTag : "div";
+      const CellTag = mode === "flow" ? cellTag : "div";
 
       return (
         <CellTag
@@ -111,7 +118,7 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
             backgroundColor: "transparent",
             display: "flex",
             alignItems: "center",
-            paddingInline: "8px",
+            paddingInline: `${config.tableCellInsetX}px`,
           }}
         >
           <span

@@ -20,7 +20,9 @@ describe("AutoSkeleton structural hash reuse", () => {
 
     const getSpy = vi.spyOn(core.blueprintCache, "get");
     const setSpy = vi.spyOn(core.blueprintCache, "set");
-    const generateSpy = vi.spyOn(core, "generateDynamicBlueprint").mockResolvedValue(generatedBlueprint);
+    const generateSpy = vi
+      .spyOn(core, "generateDynamicBlueprint")
+      .mockResolvedValue(generatedBlueprint);
 
     const { rerender } = render(
       <AutoSkeleton loading={true}>
@@ -74,7 +76,9 @@ describe("AutoSkeleton structural hash reuse", () => {
       </AutoSkeleton>
     );
 
-    await waitFor(() => expect(getSpy).toHaveBeenCalledWith(expect.any(HTMLElement), expect.any(String)));
+    await waitFor(() =>
+      expect(getSpy).toHaveBeenCalledWith(expect.any(HTMLElement), expect.any(String))
+    );
 
     expect(generateSpy).toHaveBeenCalledTimes(1);
     expect(structuralHashSpy).not.toHaveBeenCalled();

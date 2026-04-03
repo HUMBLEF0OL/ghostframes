@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { DEFAULT_CONFIG, AnimationSystem, type Blueprint, type SkeletonConfig, type BlueprintNode } from "../../lib/skelcore/core";
 
 // --- Co-located Library Logic (Hardened Verification) ---
@@ -115,7 +115,7 @@ function useAutoSkeleton(
     setBlueprint(b);
     setPhase("showing");
     options.onMeasured?.(b);
-  }, [loading, contentRef, config, options.onMeasured]);
+  }, [loading, contentRef, config, options]);
 
   React.useEffect(() => {
     if (loading) {
@@ -138,7 +138,7 @@ function useAutoSkeleton(
         setBlueprint(null);
       }
     }
-  }, [loading, measure, options.externalBlueprint, config.transitionDuration]);
+  }, [loading, measure, options.externalBlueprint, config.transitionDuration, phase]);
 
   React.useEffect(() => {
     if (options.remeasureOnResize && loading && contentRef.current && phase === "showing") {

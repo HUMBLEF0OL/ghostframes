@@ -20,7 +20,7 @@ function mockLayout(
       bottom: (rect.top ?? 0) + (rect.height ?? 0),
       x: rect.left ?? 0,
       y: rect.top ?? 0,
-      toJSON: () => { },
+      toJSON: () => {},
     }) as DOMRect;
 
   if (styles.display) {

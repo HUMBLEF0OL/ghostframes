@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render } from "@testing-library/react";
 import { act } from "react";
+import type { Blueprint } from "@skelcore/core";
 import { AutoSkeleton } from "../AutoSkeleton.js";
 
 // Mock implementation of Blueprint/Measurement
@@ -12,7 +13,7 @@ describe("AutoSkeleton", () => {
     vi.useFakeTimers();
   });
 
-  const staticBlueprint = {
+  const staticBlueprint: Blueprint = {
     version: 1,
     rootWidth: 100,
     rootHeight: 20,

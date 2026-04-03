@@ -57,7 +57,7 @@ export class AnimationSystem {
     // For "none" mode, no keyframes are emitted
 
     // Build animation classes conditionally based on mode
-    let animationClassesCSS = "";
+    let animationClassesCSS: string;
     if (config.animation === "shimmer") {
       animationClassesCSS = `
 .skel-shimmer {

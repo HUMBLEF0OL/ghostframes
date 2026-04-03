@@ -9,7 +9,7 @@ test.describe("SkelCore React Adapter", () => {
     // Use .first() as there are multiple skeletons on the test page
     const overlay = page.locator(".skel-overlay").first();
     await expect(overlay).toBeVisible();
-    
+
     // Check initial state
     const blocks = page.locator(".skel-block");
     await expect(await blocks.count()).toBeGreaterThan(5);
@@ -19,17 +19,17 @@ test.describe("SkelCore React Adapter", () => {
     // 1. Toggle off to measure real content
     await page.click("#toggle-loading");
     await expect(page.locator(".skel-overlay").first()).not.toBeVisible();
-    
+
     const card = page.locator("#test-card");
     const cardRect = await card.boundingBox();
-    
+
     // 2. Toggle back on
     await page.click("#toggle-loading");
     await expect(page.locator(".skel-overlay").first()).toBeVisible();
-    
+
     const overlayRoot = page.locator(".skel-auto-container").first();
     const overlayRect = await overlayRoot.boundingBox();
-    
+
     // Assert dimensions match within 2px
     expect(Math.abs(cardRect!.width - overlayRect!.width)).toBeLessThanOrEqual(2);
     expect(Math.abs(cardRect!.height - overlayRect!.height)).toBeLessThanOrEqual(2);
@@ -38,7 +38,7 @@ test.describe("SkelCore React Adapter", () => {
   test("data-skeleton-ignore elements remain visible", async ({ page }) => {
     const cancelBtn = page.locator("#cancel-btn");
     await expect(cancelBtn).toBeVisible();
-    
+
     // Verify it's not hidden by the parent skel-content opacity: 0
     // We check computed opacity
     const opacity = await cancelBtn.evaluate((el) => window.getComputedStyle(el).opacity);
@@ -47,16 +47,16 @@ test.describe("SkelCore React Adapter", () => {
 
   test("skeleton unmounts after transition duration", async ({ page }) => {
     await expect(page.locator(".skel-overlay").first()).toBeVisible();
-    
+
     // Toggle loading off
     await page.click("#toggle-loading");
-    
+
     // Should be in 'exiting' state immediately
     await expect(page.locator(".skel-overlay").first()).toHaveAttribute("style", /opacity: 0/);
-    
+
     // Wait for 600ms (transition is 300ms + grace period)
     await page.waitForTimeout(600);
-    
+
     // Should be completely gone from DOM
     await expect(page.locator(".skel-overlay")).not.toBeAttached();
   });

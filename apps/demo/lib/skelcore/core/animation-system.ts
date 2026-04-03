@@ -11,7 +11,11 @@ export class AnimationSystem {
   injectStyles(config: SkeletonConfig = DEFAULT_CONFIG): void {
     if (typeof document === "undefined") return;
 
-    const configHash = `${config.baseColor}-${config.highlightColor}-${config.speed}-${config.borderRadius}`;
+    // Validate speed: must be positive and greater than 0 to avoid division by zero or negative durations
+    // Use ?? instead of || to allow explicit 0 to be clamped (not hidden by default)
+    const validatedSpeed = Math.max(0.1, config.speed ?? 1);
+
+    const configHash = `${config.baseColor}-${config.highlightColor}-${config.speed}-${config.borderRadius}-${config.animation}`;
     if (this.styleTag && this.currentConfigHash === configHash) return;
 
     if (!this.styleTag) {
@@ -21,16 +25,83 @@ export class AnimationSystem {
     }
 
     this.currentConfigHash = configHash;
-    this.styleTag.textContent = this.generateCSS(config);
+    this.styleTag.textContent = this.generateCSS(config, validatedSpeed);
   }
 
   /**
    * Generates the CSS string containing variables, keyframes, and utility classes.
+   * Speed is pre-validated to ensure no division by zero or negative durations.
+   * Animation mode is enforced: "none" produces no animated keyframes.
    */
-  private generateCSS(config: SkeletonConfig): string {
-    const speed = config.speed || 1;
-    const shimmerDuration = 2 / speed;
-    const pulseDuration = 1.5 / speed;
+  private generateCSS(config: SkeletonConfig, validatedSpeed: number): string {
+    const shimmerDuration = 2 / validatedSpeed;
+    const pulseDuration = 1.5 / validatedSpeed;
+
+    // Build keyframes conditionally based on animation mode
+    let keyframesCSS = "";
+    if (config.animation === "shimmer") {
+      keyframesCSS = `
+@keyframes skel-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+`;
+    } else if (config.animation === "pulse") {
+      keyframesCSS = `
+@keyframes skel-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+`;
+    }
+    // For "none" mode, no keyframes are emitted
+
+    // Build animation classes conditionally based on mode
+    let animationClassesCSS: string;
+    if (config.animation === "shimmer") {
+      animationClassesCSS = `
+.skel-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--skel-base) 25%,
+    var(--skel-highlight) 50%,
+    var(--skel-base) 75%
+  );
+  background-size: 200% 100%;
+  animation: skel-shimmer ${shimmerDuration}s infinite linear;
+}
+
+.skel-pulse {
+  opacity: 0.7;
+}
+`;
+    } else if (config.animation === "pulse") {
+      animationClassesCSS = `
+.skel-shimmer {
+  background: var(--skel-base);
+}
+
+.skel-pulse {
+  animation: skel-pulse ${pulseDuration}s infinite ease-in-out;
+}
+`;
+    } else {
+      // Mode "none": static styles only
+      animationClassesCSS = `
+.skel-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--skel-base) 25%,
+    var(--skel-highlight) 50%,
+    var(--skel-base) 75%
+  );
+}
+
+.skel-pulse {
+  opacity: 0.7;
+}
+`;
+    }
 
     return `
 :root {
@@ -39,11 +110,7 @@ export class AnimationSystem {
   --skel-radius: ${config.borderRadius}px;
 }
 
-@keyframes skel-shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
+${keyframesCSS}
 /* Reset visibility for opted-out children */
 .skel-content[data-loading="true"] [data-no-skeleton],
 .skel-content[data-loading="true"] [data-skeleton-ignore] {
@@ -52,11 +119,6 @@ export class AnimationSystem {
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
-}
-
-@keyframes skel-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
 }
 
 .skel-block {
@@ -69,27 +131,12 @@ export class AnimationSystem {
   overflow: hidden;
 }
 
-.skel-shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--skel-base) 25%,
-    var(--skel-highlight) 50%,
-    var(--skel-base) 75%
-  );
-  background-size: 200% 100%;
-  animation: skel-shimmer ${shimmerDuration}s infinite linear;
-  will-change: background-position;
-}
-
-.skel-pulse {
-  animation: skel-pulse ${pulseDuration}s infinite ease-in-out;
-  will-change: opacity;
-}
-
+${animationClassesCSS}
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .skel-shimmer, .skel-pulse {
     animation: none !important;
+    opacity: 0.7 !important;
   }
 }
     `.trim();

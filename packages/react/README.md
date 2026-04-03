@@ -8,7 +8,7 @@
 
 `@skelcore/react` wraps SkelCore's engine with idiomatic React components and a hook. It measures your real UI — fonts, layout, borders, media — and replaces it with a pixel-perfect skeleton overlay while data loads. No manual schema. No configuration required to get started.
 
-**[→ Live Demo](TODO_ADD_DEMO_URL)**
+**[→ Live Demo](https://skelcore.vercel.app/)**
 
 ---
 

@@ -1,5 +1,4 @@
 import { inferRole } from "./role-inferencer";
-import { djb2 } from "./blueprint-cache";
 import type { Blueprint, BlueprintNode, SkeletonConfig, MeasuredNode } from "./types";
 import { DEFAULT_CONFIG } from "./types";
 
@@ -16,39 +15,24 @@ type ReadResult = {
   parentIndex: number; // to look up parent rect for clipping
 };
 
-// Non-visual tags whose subtrees we always skip
-const NON_VISUAL_TAGS = new Set([
-  "SCRIPT", "STYLE", "LINK", "META", "HEAD",
-  "NOSCRIPT", "TEMPLATE", "TITLE",
-]);
-
 export async function generateDynamicBlueprint(
   root: HTMLElement,
   config: SkeletonConfig = DEFAULT_CONFIG
-): Promise<Blueprint & { structuralHash: string }> {
-  // ─── Timing ─────────────────────────────────────────────────────────────────
+): Promise<Blueprint> {
+  // ─── Font Loading ────────────────────────────────────────────────────────────
+  // Wait for web fonts to load before measuring text layout
   if (typeof document !== "undefined" && document.fonts) {
     await document.fonts.ready;
   }
 
-  await new Promise((resolve) => requestAnimationFrame(resolve));
-  await new Promise((resolve) => requestAnimationFrame(resolve));
-
-  // ─── PASS 1: COLLECT + HASH ───────────────────────────────────────────────────
-  // No forced layout. We walk the DOM tree, collect visual elements, and compute
-  // the structural hash in a single pass — merging what was previously two separate
-  // tree traversals (walk + computeStructuralHash).
+  // ─── PASS 1: COLLECT ─────────────────────────────────────────────────────────
+  // No forced layout. We only read the DOM tree structure and attributes.
   const collected: CollectNode[] = [];
-  const hashParts: string[] = [];
 
   function walk(el: Element, depth: number) {
     if (depth > config.maxDepth) return;
 
     const htmlEl = el as HTMLElement;
-    const tag = htmlEl.tagName;
-
-    // Skip non-visual tags and their entire subtrees immediately
-    if (NON_VISUAL_TAGS.has(tag)) return;
 
     // Fast inline exclusions to skip subtrees entirely
     if (htmlEl.getAttribute("data-skeleton-ignore") !== null) return;
@@ -58,15 +42,13 @@ export async function generateDynamicBlueprint(
     if (htmlEl.style && htmlEl.style.display === "none") return;
 
     // Closed <details> omit content
-    if (tag === "DETAILS" && !(htmlEl as HTMLDetailsElement).open) {
+    if (htmlEl.tagName === "DETAILS" && !(htmlEl as HTMLDetailsElement).open) {
       return;
     }
 
     // Only collect if not target root (we want the children to be the top-level blueprint nodes)
     if (el !== root) {
       collected.push({ element: htmlEl, depth });
-      // Contribute to structural hash inline — same format as computeStructuralHash
-      hashParts.push(`${tag}:${htmlEl.childElementCount}:${depth}`);
     }
 
     // Stop traversing if it's a Shadow DOM boundary
@@ -74,7 +56,10 @@ export async function generateDynamicBlueprint(
 
     const children = htmlEl.children;
     for (let i = 0; i < children.length; i++) {
-      walk(children[i], depth + 1);
+      const child = children[i];
+      if (child.nodeType === 1) {
+        walk(child, depth + 1);
+      }
     }
   }
 
@@ -214,8 +199,8 @@ export async function generateDynamicBlueprint(
       }
     }
 
-    let top = rect.top - rootTop;
-    let left = rect.left - rootLeft;
+    const top = rect.top - rootTop;
+    const left = rect.left - rootLeft;
 
     const node: BlueprintNode = {
       id: `dyn-${nodeCounter++}`,
@@ -291,6 +276,5 @@ export async function generateDynamicBlueprint(
     nodes: rootNode.children,
     generatedAt: Date.now(),
     source: "dynamic",
-    structuralHash: djb2(hashParts.join("|"))
   };
 }
