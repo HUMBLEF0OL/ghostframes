@@ -1,6 +1,17 @@
 # skelcore
 Zero config skeleton loaders for React.
 
+## Installation
+
+```bash
+pnpm add @skelcore/skelcore
+```
+
+```ts
+import { AutoSkeleton } from "@skelcore/skelcore";
+import { generateStaticBlueprint } from "@skelcore/skelcore/runtime";
+```
+
 ## Build-Time Capture (Phase 3 MVP)
 
 Generate demo manifest artifacts with:

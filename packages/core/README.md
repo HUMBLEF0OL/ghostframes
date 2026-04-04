@@ -1,14 +1,14 @@
-# @skelcore/core
+# @skelcore/skelcore Runtime APIs
 
 > Framework-agnostic analysis engine, blueprint system, animation utilities, and shared types powering SkelCore.
 
-[![npm version](https://img.shields.io/npm/v/@skelcore/core)](https://www.npmjs.com/package/@skelcore/core)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/@skelcore/core)](https://bundlephobia.com/package/@skelcore/core)
-[![license](https://img.shields.io/npm/l/@skelcore/core)](../../LICENSE)
+[![npm version](https://img.shields.io/npm/v/@skelcore/skelcore)](https://www.npmjs.com/package/@skelcore/skelcore)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@skelcore/skelcore)](https://bundlephobia.com/package/@skelcore/skelcore)
+[![license](https://img.shields.io/npm/l/@skelcore/skelcore)](../../LICENSE)
 
-`@skelcore/core` is the heart of the SkelCore library. It is **framework-agnostic** — it contains no React, Vue, or any UI-framework code. If you are building a React app, you almost certainly want [`@skelcore/react`](../react/README.md), which consumes this package and wraps it with idiomatic React components.
+The `@skelcore/skelcore/runtime` subpath is the framework-agnostic engine. It contains no React, Vue, or any UI-framework code. If you are building a React app, you almost certainly want [`@skelcore/skelcore`](../react/README.md), which includes the React facade.
 
-Use `@skelcore/core` directly when you are:
+Use `@skelcore/skelcore/runtime` directly when you are:
 
 - Building your **own framework adapter** (Vue, Svelte, Solid, etc.)
 - Generating blueprints **server-side** (Node.js / SSR — no DOM required)
@@ -20,13 +20,13 @@ Use `@skelcore/core` directly when you are:
 
 ```bash
 # npm
-npm install @skelcore/core
+npm install @skelcore/skelcore
 
 # pnpm
-pnpm add @skelcore/core
+pnpm add @skelcore/skelcore
 
 # yarn
-yarn add @skelcore/core
+yarn add @skelcore/skelcore
 ```
 
 > **Note:** This package ships both CJS (`dist/index.js`) and ESM (`dist/index.mjs`) builds with full TypeScript declarations. It has **zero runtime dependencies**.
@@ -113,7 +113,7 @@ import {
 
   // Constants
   DEFAULT_CONFIG,
-} from "@skelcore/core";
+} from "@skelcore/skelcore/runtime";
 ```
 
 ---
@@ -140,7 +140,7 @@ Traverses a virtual DOM tree (a React element tree, or any duck-typed `{ type, p
 ### Usage
 
 ```ts
-import { generateStaticBlueprint } from "@skelcore/core";
+import { generateStaticBlueprint } from "@skelcore/skelcore/runtime";
 
 // Works in Node.js — no DOM, no browser APIs
 const blueprint = generateStaticBlueprint({
@@ -170,7 +170,7 @@ When using with React JSX, the JSX element IS a valid `VNode`, so you can pass J
 
 ```tsx
 // Works in a React Server Component or any tsx file
-import { generateStaticBlueprint } from "@skelcore/core";
+import { generateStaticBlueprint } from "@skelcore/skelcore/runtime";
 
 const blueprint = generateStaticBlueprint(
   <div style={{ display: "flex", gap: "12px" }}>
@@ -230,7 +230,7 @@ async function generateDynamicBlueprint(
 ): Promise<Blueprint>
 ```
 
-Measures a **live DOM subtree** and produces a pixel-precise Blueprint using absolute positions. This is the engine behind `AutoSkeleton` in `@skelcore/react`.
+Measures a **live DOM subtree** and produces a pixel-precise Blueprint using absolute positions. This is the engine behind `AutoSkeleton` in `@skelcore/skelcore`.
 
 > **Browser only.** Requires `window`, `document`, `getComputedStyle`, and `getBoundingClientRect`.
 
@@ -267,7 +267,7 @@ The function is carefully designed to avoid [layout thrashing](https://www.afast
 ### Usage
 
 ```ts
-import { generateDynamicBlueprint, DEFAULT_CONFIG } from "@skelcore/core";
+import { generateDynamicBlueprint, DEFAULT_CONFIG } from "@skelcore/skelcore/runtime";
 
 const root = document.getElementById("my-card")!;
 const blueprint = await generateDynamicBlueprint(root, {
@@ -343,7 +343,7 @@ type MeasuredNode = {
 ### Usage
 
 ```ts
-import { inferRole, DEFAULT_CONFIG } from "@skelcore/core";
+import { inferRole, DEFAULT_CONFIG } from "@skelcore/skelcore/runtime";
 
 const role = inferRole(measuredNode, DEFAULT_CONFIG);
 ```
@@ -357,7 +357,7 @@ const role = inferRole(measuredNode, DEFAULT_CONFIG);
 A pre-created instance of `BlueprintCache`. Use this in your adapter to avoid re-measuring when the DOM structure hasn't changed.
 
 ```ts
-import { blueprintCache, computeStructuralHash } from "@skelcore/core";
+import { blueprintCache, computeStructuralHash } from "@skelcore/skelcore/runtime";
 
 const root = document.getElementById("my-widget")!;
 const hash = computeStructuralHash(root, 12);
@@ -397,7 +397,7 @@ Generates a djb2 hash of the DOM subtree structure. The hash encodes `tagName`, 
 - Changing text content or non-skeleton attributes does **not** invalidate the cache (by design)
 
 ```ts
-import { computeStructuralHash } from "@skelcore/core";
+import { computeStructuralHash } from "@skelcore/skelcore/runtime";
 
 const hash = computeStructuralHash(root);       // default maxDepth: 12
 const hash2 = computeStructuralHash(root, 6);   // shallower, cheaper
@@ -413,7 +413,7 @@ function djb2(str: string): string
 The underlying fast non-cryptographic hash used by `computeStructuralHash`. Returns a hex string.
 
 ```ts
-import { djb2 } from "@skelcore/core";
+import { djb2 } from "@skelcore/skelcore/runtime";
 
 djb2("hello world"); // "4a17b156"
 ```
@@ -427,7 +427,7 @@ djb2("hello world"); // "4a17b156"
 A pre-created instance of `AnimationSystem`. Used by framework adapters to inject and manage the required CSS into `<head>`.
 
 ```ts
-import { animationSystem, DEFAULT_CONFIG } from "@skelcore/core";
+import { animationSystem, DEFAULT_CONFIG } from "@skelcore/skelcore/runtime";
 
 // Inject CSS (idempotent — safe to call on every render)
 animationSystem.injectStyles(DEFAULT_CONFIG);
@@ -524,7 +524,7 @@ All visual and behavioral options are controlled through a single `SkeletonConfi
 ### `DEFAULT_CONFIG`
 
 ```ts
-import { DEFAULT_CONFIG } from "@skelcore/core";
+import { DEFAULT_CONFIG } from "@skelcore/skelcore/runtime";
 
 // DEFAULT_CONFIG:
 {
@@ -620,7 +620,7 @@ type LayoutProps = {
 
 ### `SkelCorePropsBase`
 
-The base props type for framework adapters (e.g. `@skelcore/react` extends this):
+The base props type for framework adapters (e.g. `@skelcore/skelcore` extends this):
 
 ```ts
 type SkelCorePropsBase = {
@@ -710,3 +710,4 @@ See [CHANGELOG.md](./CHANGELOG.md) for the full release history.
 ## License
 
 [MIT](../../LICENSE) © SkelCore Contributors
+
