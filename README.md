@@ -14,3 +14,19 @@ This command runs `skelcore capture` with `apps/demo/skelcore.capture.config.mjs
 - `apps/demo/lib/skelcore/generated/manifest.json`
 - `apps/demo/lib/skelcore/generated/manifest-loader.ts`
 - `apps/demo/lib/skelcore/generated/capture-report.txt`
+
+## CI Quality Gates (Phase 6)
+
+Run the full Phase 6 quality gate locally with:
+
+```bash
+pnpm phase6:gate
+```
+
+This executes:
+
+- `skelcore validate` to enforce schema, required key coverage derived from the captured manifest entries, invalid-entry budget, and artifact size.
+- `skelcore diff` to produce deterministic drift output. In CI, pull requests diff the candidate manifest against the base branch snapshot.
+- `skelcore report` to aggregate human/json outputs for CI.
+
+Artifacts are written to `.tmp/skelcore/`.

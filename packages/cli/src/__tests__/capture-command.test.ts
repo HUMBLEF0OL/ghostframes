@@ -4,12 +4,18 @@ import { runCaptureCommand } from "../commands/capture-command";
 
 describe("runCli", () => {
   it("returns non-zero for unknown command", async () => {
-    const exitCode = await runCli(["unknown"], {
+    const io = {
       log: vi.fn(),
       error: vi.fn(),
+    };
+
+    const exitCode = await runCli(["unknown"], {
+      log: io.log,
+      error: io.error,
     });
 
     expect(exitCode).toBe(1);
+    expect(io.error).toHaveBeenCalledWith("Supported commands: capture, validate, diff, report");
   });
 
   it("returns 1 when capture run fails", async () => {

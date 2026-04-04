@@ -1,0 +1,62 @@
+import type { ManifestDiffResult, ManifestQualityResult, Phase6Report } from "../types";
+
+export function buildPhase6Report(input: {
+    validate: ManifestQualityResult;
+    diff?: ManifestDiffResult;
+}): Phase6Report {
+    const overallPass = input.validate.gates.overall && (input.diff ? input.diff.gates.overall : true);
+
+    return {
+        generatedAt: new Date().toISOString(),
+        overallPass,
+        validate: input.validate,
+        diff: input.diff,
+    };
+}
+
+export function renderQualityTextReport(result: ManifestQualityResult): string {
+    return [
+        "Skelcore Manifest Validation",
+        `Overall: ${result.gates.overall ? "PASS" : "FAIL"}`,
+        `Schema valid: ${result.gates.schemaValid}`,
+        `Coverage ratio: ${result.summary.coverageRatio.toFixed(3)}`,
+        `Required keys: ${result.summary.presentRequiredKeys}/${result.summary.totalRequiredKeys}`,
+        `Invalid entries: ${result.summary.invalidEntries}`,
+        `Artifact size (bytes): ${result.summary.artifactSizeBytes}`,
+        result.errors.length === 0 ? "Errors: none" : `Errors: ${result.errors.join(" | ")}`,
+        "",
+    ].join("\n");
+}
+
+export function renderDiffTextReport(result: ManifestDiffResult): string {
+    return [
+        "Skelcore Manifest Diff",
+        `Overall: ${result.gates.overall ? "PASS" : "FAIL"}`,
+        `Added keys: ${result.summary.added}`,
+        `Removed keys: ${result.summary.removed}`,
+        `Changed keys: ${result.summary.changed}`,
+        `Changed key names: ${result.changedKeys.join(", ") || "none"}`,
+        result.errors.length === 0 ? "Errors: none" : `Errors: ${result.errors.join(" | ")}`,
+        "",
+    ].join("\n");
+}
+
+export function renderPhase6TextReport(report: Phase6Report): string {
+    const lines = [
+        "Skelcore Phase 6 Report",
+        `Generated at: ${report.generatedAt}`,
+        `Overall: ${report.overallPass ? "PASS" : "FAIL"}`,
+        "",
+        renderQualityTextReport(report.validate).trimEnd(),
+    ];
+
+    if (report.diff) {
+        lines.push("", renderDiffTextReport(report.diff).trimEnd());
+    }
+
+    return `${lines.join("\n")}\n`;
+}
+
+export function renderPhase6JsonReport(report: Phase6Report): string {
+    return `${JSON.stringify(report, null, 2)}\n`;
+}

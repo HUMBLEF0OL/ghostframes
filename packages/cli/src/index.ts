@@ -2,6 +2,9 @@
 
 import { pathToFileURL } from "node:url";
 import { runCaptureCommand } from "./commands/capture-command";
+import { runDiffCommand } from "./commands/diff-command";
+import { runReportCommand } from "./commands/report-command";
+import { runValidateCommand } from "./commands/validate-command";
 import type { CliIo } from "./types";
 
 const defaultIo: CliIo = {
@@ -11,13 +14,22 @@ const defaultIo: CliIo = {
 
 export async function runCli(argv: string[], io: CliIo = defaultIo): Promise<number> {
   const [command, ...rest] = argv;
-  if (!command || command === "capture") {
-    return runCaptureCommand(rest, io);
-  }
 
-  io.error(`Unknown command: ${command}`);
-  io.error("Supported commands: capture");
-  return 1;
+  switch (command) {
+    case undefined:
+    case "capture":
+      return runCaptureCommand(rest, io);
+    case "validate":
+      return runValidateCommand(rest, io);
+    case "diff":
+      return runDiffCommand(rest, io);
+    case "report":
+      return runReportCommand(rest, io);
+    default:
+      io.error(`Unknown command: ${command}`);
+      io.error("Supported commands: capture, validate, diff, report");
+      return 1;
+  }
 }
 
 const invokedUrl = process.argv[1] ? pathToFileURL(process.argv[1]).href : "";

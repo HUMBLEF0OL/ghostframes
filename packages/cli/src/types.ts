@@ -35,3 +35,72 @@ export interface CaptureReport {
   targetsDiscovered: number;
   artifactsEmitted: number;
 }
+
+export type GateMode = "strict" | "warn";
+
+export interface ManifestQualityThresholds {
+  requiredKeys: string[];
+  minCoverage: number;
+  maxInvalidEntries: number;
+  maxArtifactSizeBytes?: number;
+}
+
+export interface ManifestQualitySummary {
+  entryCount: number;
+  totalRequiredKeys: number;
+  presentRequiredKeys: number;
+  coverageRatio: number;
+  invalidEntries: number;
+  artifactSizeBytes: number;
+}
+
+export interface ManifestQualityGates {
+  schemaValid: boolean;
+  coverage: boolean;
+  requiredKeys: boolean;
+  invalidEntries: boolean;
+  artifactSize: boolean;
+  overall: boolean;
+}
+
+export interface ManifestQualityResult {
+  summary: ManifestQualitySummary;
+  gates: ManifestQualityGates;
+  missingRequiredKeys: string[];
+  invalidEntryKeys: string[];
+  errors: string[];
+  parseError?: string;
+}
+
+export interface ManifestDiffThresholds {
+  maxChangedKeys?: number;
+}
+
+export interface ManifestDiffSummary {
+  added: number;
+  removed: number;
+  changed: number;
+}
+
+export interface ManifestDiffGates {
+  baseValid: boolean;
+  candidateValid: boolean;
+  changeBudget: boolean;
+  overall: boolean;
+}
+
+export interface ManifestDiffResult {
+  summary: ManifestDiffSummary;
+  addedKeys: string[];
+  removedKeys: string[];
+  changedKeys: string[];
+  gates: ManifestDiffGates;
+  errors: string[];
+}
+
+export interface Phase6Report {
+  generatedAt: string;
+  overallPass: boolean;
+  validate: ManifestQualityResult;
+  diff?: ManifestDiffResult;
+}
