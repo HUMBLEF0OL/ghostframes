@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { runDiffCommand } from "../commands/diff-command";
-import { createManifest } from "./phase6-test-helpers";
+import { createManifest } from "./quality-test-helpers";
 
 const createdDirs: string[] = [];
 

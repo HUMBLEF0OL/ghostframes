@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
-    buildPhase6Report,
-    renderPhase6JsonReport,
-    renderPhase6TextReport,
+    buildQualityReport,
+    renderQualityJsonReport,
+    renderQualityReportText,
 } from "../quality/report-renderer";
 import type { CliIo, GateMode, ManifestDiffResult, ManifestQualityResult } from "../types";
 
@@ -41,12 +41,12 @@ export async function runReportCommand(argv: string[], io: CliIo): Promise<numbe
             diffResult = diffParsed.diff;
         }
 
-        const report = buildPhase6Report({
+        const report = buildQualityReport({
             validate: validateParsed.validate,
             diff: diffResult,
         });
 
-        const output = args.format === "json" ? renderPhase6JsonReport(report) : renderPhase6TextReport(report);
+        const output = args.format === "json" ? renderQualityJsonReport(report) : renderQualityReportText(report);
 
         if (args.outPath) {
             const outPath = path.resolve(process.cwd(), args.outPath);

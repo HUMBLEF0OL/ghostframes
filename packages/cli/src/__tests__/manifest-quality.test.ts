@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { evaluateManifestQuality } from "../quality/manifest-quality";
-import { createInvalidManifestWithEntry, createManifest } from "./phase6-test-helpers";
+import { createInvalidManifestWithEntry, createManifest } from "./quality-test-helpers";
 
 describe("evaluateManifestQuality", () => {
     it("passes for a valid manifest with required keys", () => {

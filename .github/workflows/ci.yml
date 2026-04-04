@@ -38,19 +38,19 @@ jobs:
       - name: Turbo quality gates
         run: pnpm turbo run test lint typecheck build
 
-      - name: Phase 6 manifest quality gate
+      - name: Manifest quality gate
         run: |
           mkdir -p .tmp/skelcore
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             git fetch origin "${{ github.base_ref }}" --depth=1
             git show "origin/${{ github.base_ref }}:apps/demo/lib/skelcore/generated/manifest.json" > .tmp/skelcore/base-manifest.json
-            PHASE6_BASE_MANIFEST=.tmp/skelcore/base-manifest.json PHASE6_CANDIDATE_MANIFEST=apps/demo/lib/skelcore/generated/manifest.json pnpm phase6:gate
+            QUALITY_BASE_MANIFEST=.tmp/skelcore/base-manifest.json QUALITY_CANDIDATE_MANIFEST=apps/demo/lib/skelcore/generated/manifest.json pnpm quality:gate
           else
-            pnpm phase6:gate
+            pnpm quality:gate
           fi
 
-      - name: Upload Phase 6 artifacts
+      - name: Upload quality artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: phase6-quality-reports
+          name: quality-reports
           path: .tmp/skelcore

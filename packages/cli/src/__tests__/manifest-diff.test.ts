@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { evaluateManifestDiff } from "../quality/manifest-diff";
-import { createManifest } from "./phase6-test-helpers";
+import { createManifest } from "./quality-test-helpers";
 
 describe("evaluateManifestDiff", () => {
     it("returns zero changes for identical manifests", () => {

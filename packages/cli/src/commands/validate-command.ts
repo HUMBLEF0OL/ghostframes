@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { evaluateManifestQuality } from "../quality/manifest-quality";
-import { renderPhase6JsonReport, renderQualityTextReport } from "../quality/report-renderer";
-import type { CliIo, GateMode, ManifestQualityThresholds, Phase6Report } from "../types";
+import { renderQualityJsonReport, renderQualityTextReport } from "../quality/report-renderer";
+import type { CliIo, GateMode, ManifestQualityThresholds, QualityReport } from "../types";
 
 interface ValidateArgs {
     manifestPath?: string;
@@ -48,7 +48,7 @@ export async function runValidateCommand(argv: string[], io: CliIo): Promise<num
             thresholds,
         });
 
-        const report: Phase6Report = {
+        const report: QualityReport = {
             generatedAt: new Date().toISOString(),
             overallPass: quality.gates.overall,
             validate: quality,
@@ -66,7 +66,7 @@ export async function runValidateCommand(argv: string[], io: CliIo): Promise<num
         if (args.jsonOutPath) {
             const outPath = path.resolve(process.cwd(), args.jsonOutPath);
             await fs.mkdir(path.dirname(outPath), { recursive: true });
-            await fs.writeFile(outPath, renderPhase6JsonReport(report), "utf8");
+            await fs.writeFile(outPath, renderQualityJsonReport(report), "utf8");
             io.log(`Wrote JSON report: ${outPath}`);
         }
 

@@ -98,7 +98,7 @@ export interface ManifestDiffResult {
   errors: string[];
 }
 
-export interface Phase6Report {
+export interface QualityReport {
   generatedAt: string;
   overallPass: boolean;
   validate: ManifestQualityResult;

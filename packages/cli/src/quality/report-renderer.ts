@@ -1,9 +1,9 @@
-import type { ManifestDiffResult, ManifestQualityResult, Phase6Report } from "../types";
+import type { ManifestDiffResult, ManifestQualityResult, QualityReport } from "../types";
 
-export function buildPhase6Report(input: {
+export function buildQualityReport(input: {
     validate: ManifestQualityResult;
     diff?: ManifestDiffResult;
-}): Phase6Report {
+}): QualityReport {
     const overallPass = input.validate.gates.overall && (input.diff ? input.diff.gates.overall : true);
 
     return {
@@ -41,9 +41,9 @@ export function renderDiffTextReport(result: ManifestDiffResult): string {
     ].join("\n");
 }
 
-export function renderPhase6TextReport(report: Phase6Report): string {
+export function renderQualityReportText(report: QualityReport): string {
     const lines = [
-        "Skelcore Phase 6 Report",
+        "Skelcore Quality Report",
         `Generated at: ${report.generatedAt}`,
         `Overall: ${report.overallPass ? "PASS" : "FAIL"}`,
         "",
@@ -57,6 +57,6 @@ export function renderPhase6TextReport(report: Phase6Report): string {
     return `${lines.join("\n")}\n`;
 }
 
-export function renderPhase6JsonReport(report: Phase6Report): string {
+export function renderQualityJsonReport(report: QualityReport): string {
     return `${JSON.stringify(report, null, 2)}\n`;
 }

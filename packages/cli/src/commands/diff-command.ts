@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { evaluateManifestDiff } from "../quality/manifest-diff";
-import { renderDiffTextReport, renderPhase6JsonReport } from "../quality/report-renderer";
-import type { CliIo, GateMode, ManifestDiffThresholds, Phase6Report } from "../types";
+import { renderDiffTextReport, renderQualityJsonReport } from "../quality/report-renderer";
+import type { CliIo, GateMode, ManifestDiffThresholds, QualityReport } from "../types";
 
 interface DiffArgs {
     basePath?: string;
@@ -56,7 +56,7 @@ export async function runDiffCommand(argv: string[], io: CliIo): Promise<number>
             thresholds,
         });
 
-        const report: Phase6Report = {
+        const report: QualityReport = {
             generatedAt: new Date().toISOString(),
             overallPass: diff.gates.overall,
             validate: {
@@ -95,7 +95,7 @@ export async function runDiffCommand(argv: string[], io: CliIo): Promise<number>
         if (args.jsonOutPath) {
             const outPath = path.resolve(process.cwd(), args.jsonOutPath);
             await fs.mkdir(path.dirname(outPath), { recursive: true });
-            await fs.writeFile(outPath, renderPhase6JsonReport(report), "utf8");
+            await fs.writeFile(outPath, renderQualityJsonReport(report), "utf8");
             io.log(`Wrote JSON report: ${outPath}`);
         }
 
