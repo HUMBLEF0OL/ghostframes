@@ -23,6 +23,8 @@ export type ManifestResolutionSource = Extract<
 export interface ResolutionPolicy {
   mode: ResolutionPolicyMode;
   strict: boolean;
+  /** Evaluate manifest and emit telemetry, but always serve dynamic output */
+  shadowTelemetryOnly?: boolean;
 }
 
 export interface ResolverContext {
@@ -43,6 +45,9 @@ export interface ResolutionEvent {
   usedFallback: boolean;
   reason: string;
   timestamp: number;
+  candidateSource?: "manifest" | "none";
+  rejectionCategory?: "miss" | "invalid";
+  rejectionReason?: string;
   /** Manifest-specific validation details if source is manifest-related */
   manifestValidation?: ManifestEntryValidationResult;
 }

@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useRef, useMemo } from "react";
-import { DEFAULT_CONFIG, type Blueprint, type SkeletonConfig, type BlueprintManifest } from "@skelcore/core";
+import {
+  DEFAULT_CONFIG,
+  type Blueprint,
+  type SkeletonConfig,
+  type BlueprintManifest,
+} from "@skelcore/core";
 import { useAutoSkeleton } from "./useAutoSkeleton";
 import { SkeletonRenderer } from "./SkeletonRenderer";
 import { useSkelcoreContext } from "./SkelcoreProvider";

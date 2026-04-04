@@ -159,3 +159,4 @@ coverage/
 node_modules/
 
 .worktrees
+docs

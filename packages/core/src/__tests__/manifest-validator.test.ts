@@ -60,9 +60,9 @@ describe("manifest-types", () => {
 describe("manifest validator", () => {
     describe("parseManifest", () => {
         it("rejects null/undefined input", () => {
-            expect(parseManifest(null as any).success).toBe(false);
-            expect(parseManifest(undefined as any).success).toBe(false);
-            expect(parseManifest({} as any).success).toBe(false);
+            expect(parseManifest(null).success).toBe(false);
+            expect(parseManifest(undefined).success).toBe(false);
+            expect(parseManifest({}).success).toBe(false);
         });
 
         it("rejects missing required top-level fields", () => {
@@ -137,7 +137,7 @@ describe("manifest validator", () => {
     describe("parseEntry", () => {
         it("rejects entry without blueprint", () => {
             const bad = { key: "test", structuralHash: "hash" };
-            const result = parseEntry(bad as any);
+            const result = parseEntry(bad);
             expect(result.valid).toBe(false);
             expect(result.reason).toContain("blueprint");
         });

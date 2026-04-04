@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render } from "@testing-library/react";
 import { act } from "react";
-import type { Blueprint } from "@skelcore/core";
+import { asStructuralHash, type Blueprint, type BlueprintManifest } from "@skelcore/core";
 import { AutoSkeleton } from "../AutoSkeleton.js";
 
 // Mock implementation of Blueprint/Measurement
@@ -11,6 +11,14 @@ import { AutoSkeleton } from "../AutoSkeleton.js";
 describe("AutoSkeleton", () => {
   beforeEach(() => {
     vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    act(() => {
+      vi.runOnlyPendingTimers();
+    });
+    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   const staticBlueprint: Blueprint = {
@@ -38,6 +46,23 @@ describe("AutoSkeleton", () => {
     ],
     generatedAt: Date.now(),
     source: "static" as const,
+  };
+
+  const shadowManifest: BlueprintManifest = {
+    manifestVersion: 1,
+    packageVersion: "0.1.0",
+    build: { builtAt: Date.now(), appVersion: "1.0.0" },
+    defaults: { ttlMs: 86400000 },
+    entries: {
+      "card-1": {
+        key: "card-1",
+        blueprint: staticBlueprint,
+        structuralHash: asStructuralHash("shadow_hash"),
+        generatedAt: Date.now(),
+        ttlMs: 86400000,
+        quality: { confidence: 0.95, warnings: [] },
+      },
+    },
   };
 
   it("renders children when not loading", () => {
@@ -106,12 +131,40 @@ describe("AutoSkeleton", () => {
     const onResolution = vi.fn();
 
     render(
-      <AutoSkeleton loading={true} onResolution={onResolution} skeletonKey="card-1">
+      <AutoSkeleton
+        loading={true}
+        onResolution={onResolution}
+        skeletonKey="card-1"
+        blueprint={staticBlueprint}
+      >
         <div>Content</div>
       </AutoSkeleton>
     );
 
     expect(onResolution).toHaveBeenCalled();
     expect(onResolution.mock.calls[0][0].source).toBeDefined();
+  });
+
+  it("emits shadow telemetry and keeps dynamic source in hybrid shadow mode", () => {
+    const onResolution = vi.fn();
+
+    render(
+      <AutoSkeleton
+        loading={true}
+        skeletonKey="card-1"
+        manifest={shadowManifest}
+        policyOverride={{ mode: "hybrid", shadowTelemetryOnly: true }}
+        onResolution={onResolution}
+      >
+        <div>Content</div>
+      </AutoSkeleton>
+    );
+
+    expect(onResolution).toHaveBeenCalled();
+
+    const event = onResolution.mock.calls[0][0];
+    expect(event.source).toBe("dynamic");
+    expect(event.reason).toBe("shadow-hit");
+    expect(event.candidateSource).toBe("manifest");
   });
 });

@@ -5,7 +5,7 @@ import {
     type ResolutionSource,
 } from "../resolution-types.js";
 import { resolveBlueprint, validatePrecomputed } from "../resolver.js";
-import type { BlueprintManifest } from "@skelcore/core";
+import { asStructuralHash, type BlueprintManifest } from "@skelcore/core";
 
 describe("resolution-types", () => {
     it("exposes runtime-only default policy", () => {
@@ -70,7 +70,7 @@ describe("resolver with manifest support", () => {
                     generatedAt: Date.now(),
                     source: "dynamic",
                 },
-                structuralHash: "current_hash" as unknown as any,
+                structuralHash: asStructuralHash("current_hash"),
                 generatedAt: Date.now(),
                 ttlMs: 86400000,
                 quality: { confidence: 0.95, warnings: [] },
@@ -147,5 +147,65 @@ describe("resolver with manifest support", () => {
         });
         expect(result.event.source).toBe("placeholder");
         expect(result.blueprint).toBeNull();
+    });
+
+    it("reports shadow-hit but serves dynamic output in hybrid shadow mode", () => {
+        const result = resolveBlueprint({
+            manifest: mockManifest,
+            skeletonKey: "MyComponent",
+            policyOverride: { mode: "hybrid", strict: false, shadowTelemetryOnly: true },
+            structuralHash: "current_hash",
+        });
+
+        expect(result.blueprint).toBeNull();
+        expect(result.event.source).toBe("dynamic");
+        expect(result.event.reason).toBe("shadow-hit");
+        expect(result.event.candidateSource).toBe("manifest");
+        expect(result.event.rejectionCategory).toBeUndefined();
+        expect(result.event.rejectionReason).toBeUndefined();
+    });
+
+    it("reports shadow-miss when manifest key is missing", () => {
+        const result = resolveBlueprint({
+            manifest: mockManifest,
+            skeletonKey: "UnknownComponent",
+            policyOverride: { mode: "hybrid", strict: false, shadowTelemetryOnly: true },
+        });
+
+        expect(result.blueprint).toBeNull();
+        expect(result.event.source).toBe("dynamic");
+        expect(result.event.reason).toBe("shadow-miss");
+        expect(result.event.candidateSource).toBe("none");
+        expect(result.event.rejectionCategory).toBe("miss");
+        expect(result.event.rejectionReason).toContain("not found in manifest");
+    });
+
+    it("reports shadow-invalid when manifest entry is stale", () => {
+        const staleManifest: BlueprintManifest = {
+            ...mockManifest,
+            entries: {
+                ...mockManifest.entries,
+                MyComponent: {
+                    ...mockManifest.entries.MyComponent,
+                    generatedAt: 1,
+                    ttlMs: 1,
+                },
+            },
+        };
+
+        const result = resolveBlueprint({
+            manifest: staleManifest,
+            skeletonKey: "MyComponent",
+            policyOverride: { mode: "hybrid", strict: false, shadowTelemetryOnly: true },
+            now: Date.now(),
+            structuralHash: "current_hash",
+        });
+
+        expect(result.blueprint).toBeNull();
+        expect(result.event.source).toBe("dynamic");
+        expect(result.event.reason.startsWith("shadow-invalid:")).toBe(true);
+        expect(result.event.candidateSource).toBe("manifest");
+        expect(result.event.rejectionCategory).toBe("invalid");
+        expect(result.event.rejectionReason).toContain("stale");
     });
 });

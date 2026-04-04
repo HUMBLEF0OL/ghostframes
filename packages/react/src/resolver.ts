@@ -18,6 +18,8 @@ export function validatePrecomputed(
 export function resolveBlueprint(context: ResolverContext): ResolutionResult {
   const policyMode = context.policyOverride?.mode ?? DEFAULT_RESOLUTION_POLICY.mode;
   const strict = context.policyOverride?.strict ?? DEFAULT_RESOLUTION_POLICY.strict;
+  const shadowTelemetryOnly =
+    policyMode === "hybrid" && context.policyOverride?.shadowTelemetryOnly === true;
 
   // 1. EXPLICIT: provided blueprint always wins
   if (context.externalBlueprint) {
@@ -46,6 +48,43 @@ export function resolveBlueprint(context: ResolverContext): ResolutionResult {
       now: context.now,
       strictStyleDrift: strict,
     });
+
+    if (shadowTelemetryOnly) {
+      if (manifestResult.accepted) {
+        return {
+          blueprint: null,
+          event: {
+            source: "dynamic",
+            policyMode,
+            usedFallback: false,
+            reason: "shadow-hit",
+            timestamp: Date.now(),
+            candidateSource: "manifest",
+            manifestValidation: {
+              valid: true,
+              entry: manifestResult.entry,
+            },
+          },
+        };
+      }
+
+      const rejectionReason = manifestResult.reason ?? "unknown-rejection";
+      const isMiss = /not found|no-skeleton-key|no-manifest/i.test(rejectionReason);
+
+      return {
+        blueprint: null,
+        event: {
+          source: "dynamic",
+          policyMode,
+          usedFallback: false,
+          reason: isMiss ? "shadow-miss" : `shadow-invalid: ${rejectionReason}`,
+          timestamp: Date.now(),
+          candidateSource: isMiss ? "none" : "manifest",
+          rejectionCategory: isMiss ? "miss" : "invalid",
+          rejectionReason,
+        },
+      };
+    }
 
     if (manifestResult.accepted && manifestResult.entry) {
       return {
@@ -91,4 +130,3 @@ export function resolveBlueprint(context: ResolverContext): ResolutionResult {
     },
   };
 }
-
