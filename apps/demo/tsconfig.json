@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,9 +23,15 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "SKELCORE_CORE": ["./lib/skelcore/core"],
-      "SKELCORE_REACT": ["./lib/skelcore/react"]
+      "@/*": [
+        "./*"
+      ],
+      "SKELCORE_CORE": [
+        "./lib/skelcore/core"
+      ],
+      "SKELCORE_REACT": [
+        "./lib/skelcore/react"
+      ]
     }
   },
   "include": [
@@ -32,5 +42,10 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "lib/skelcore/**/__tests__/**",
+    "lib/skelcore/**/*.test.ts",
+    "lib/skelcore/**/*.test.tsx"
+  ]
 }

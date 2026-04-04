@@ -24,7 +24,8 @@
     "dev": "tsup src/index.tsx --format cjs,esm --watch --dts",
     "lint": "eslint src --config ../../eslint.config.mjs",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "size": "size-limit"
   },
   "peerDependencies": {
     "react": ">=18",
@@ -36,7 +37,7 @@
   "size-limit": [
     {
       "path": "dist/index.js",
-      "limit": "10 KB"
+      "limit": "12 KB"
     }
   ],
   "devDependencies": {

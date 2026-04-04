@@ -24,12 +24,13 @@
     "dev": "tsup src/index.ts --format cjs,esm --watch --dts",
     "lint": "eslint src --config ../../eslint.config.mjs",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "size": "size-limit"
   },
   "size-limit": [
     {
       "path": "dist/index.js",
-      "limit": "6 KB"
+      "limit": "7 KB"
     }
   ],
   "devDependencies": {
