@@ -71,12 +71,9 @@ importers:
 
   apps/demo:
     dependencies:
-      '@skelcore/core':
+      '@skelcore/skelcore':
         specifier: workspace:*
-        version: link:../../packages/core
-      '@skelcore/react':
-        specifier: workspace:*
-        version: link:../../packages/react
+        version: link:../../packages/skelcore
       next:
         specifier: 16.2.1
         version: 16.2.1(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -117,6 +114,9 @@ importers:
       '@skelcore/core':
         specifier: workspace:*
         version: link:../core
+      '@skelcore/skelcore':
+        specifier: workspace:*
+        version: link:../skelcore
       playwright:
         specifier: ^1.58.2
         version: 1.58.2
@@ -197,6 +197,16 @@ importers:
 
   packages/skelcore:
     dependencies:
+      playwright:
+        specifier: ^1.58.2
+        version: 1.58.2
+      react:
+        specifier: '>=18'
+        version: 19.2.4
+      react-dom:
+        specifier: '>=18'
+        version: 19.2.4(react@19.2.4)
+    devDependencies:
       '@skelcore/cli':
         specifier: workspace:*
         version: link:../cli
@@ -206,13 +216,6 @@ importers:
       '@skelcore/react':
         specifier: workspace:*
         version: link:../react
-      react:
-        specifier: '>=18'
-        version: 19.2.4
-      react-dom:
-        specifier: '>=18'
-        version: 19.2.4(react@19.2.4)
-    devDependencies:
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.14
@@ -231,9 +234,9 @@ importers:
 
   packages/test-utils:
     devDependencies:
-      '@skelcore/core':
+      '@skelcore/skelcore':
         specifier: workspace:*
-        version: link:../core
+        version: link:../skelcore
       tsup:
         specifier: ^8.0.0
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(typescript@6.0.2)

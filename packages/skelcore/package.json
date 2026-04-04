@@ -41,8 +41,8 @@
         "CHANGELOG.md"
     ],
     "scripts": {
-        "build": "tsup src/index.ts src/react.ts src/runtime.ts src/build.ts --format cjs,esm --dts",
-        "dev": "tsup src/index.ts src/react.ts src/runtime.ts src/build.ts --format cjs,esm --watch --dts",
+        "build": "tsup --config tsup.config.ts",
+        "dev": "tsup --config tsup.config.ts --watch",
         "lint": "eslint src --config ../../eslint.config.mjs",
         "test": "vitest run",
         "typecheck": "tsc --noEmit"
@@ -52,11 +52,12 @@
         "react-dom": ">=18"
     },
     "dependencies": {
-        "@skelcore/cli": "workspace:*",
-        "@skelcore/core": "workspace:*",
-        "@skelcore/react": "workspace:*"
+        "playwright": "^1.58.2"
     },
     "devDependencies": {
+        "@skelcore/cli": "workspace:*",
+        "@skelcore/core": "workspace:*",
+        "@skelcore/react": "workspace:*",
         "@types/react": "^19.0.0",
         "@types/react-dom": "^19.0.0",
         "tsup": "^8.5.1",
