@@ -8,6 +8,7 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
+    "capture:demo": "pnpm --filter @skelcore/cli build && node packages/cli/dist/index.js capture --config apps/demo/skelcore.capture.config.mjs",
     "size": "turbo run size",
     "validate": "pnpm lint && pnpm typecheck && pnpm build && pnpm test",
     "release:check": "changeset status --verbose",

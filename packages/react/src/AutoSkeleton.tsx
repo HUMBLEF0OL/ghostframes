@@ -95,6 +95,7 @@ export function AutoSkeleton({
       className="skel-auto-container"
       style={containerStyle}
       aria-busy={loading}
+      data-skeleton-key={skeletonKey}
     >
       {/* 1. Content Layer */}
       <div className="skel-content" style={contentStyle} data-loading={loading ? "true" : "false"}>
