@@ -178,3 +178,54 @@ export type MeasuredNode = {
   naturalHeight: number;
   src: string; // src, href, or currentSrc
 };
+
+// ─── Rollout Telemetry ────────────────────────────────────────────────────────
+
+export type RolloutEnvironment = "dev" | "staging" | "prod";
+
+export type RolloutEventType =
+  | "canary-validation"
+  | "rollout-decision"
+  | "rollback-triggered"
+  | "strategy-selected"
+  | "safety-gate-check"
+  | "anomaly-detected";
+
+export type RolloutDecision = "proceed" | "rollback" | "hold";
+
+export interface DecisionProof {
+  reason: string;
+  passed: boolean;
+  thresholdErrorRate?: number;
+  observedErrorRate?: number;
+  thresholdLatencyMs?: number;
+  observedP99LatencyMs?: number;
+}
+
+export interface RolloutEvent {
+  type: RolloutEventType;
+  timestamp: number;
+  environment: RolloutEnvironment;
+  routeKey: string;
+  requestId: string;
+  policyVersion: number;
+  decision?: RolloutDecision;
+  decisionProof?: DecisionProof;
+  rollbackTarget?: number;
+  payload?: Record<string, unknown>;
+}
+
+export interface RolloutMetrics {
+  totalEvents: number;
+  eventsByType: Record<RolloutEventType, number>;
+  decisionCounts: Record<RolloutDecision, number>;
+  environmentMetrics: Record<RolloutEnvironment, RolloutMetricsPerEnv>;
+}
+
+export interface RolloutMetricsPerEnv {
+  eventsObserved: number;
+  proceededCount: number;
+  rolledBackCount: number;
+  heldCount: number;
+  lastRollbackAt?: number;
+}
