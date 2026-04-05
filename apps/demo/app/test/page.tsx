@@ -7,6 +7,7 @@ import {
   type BlueprintManifest,
   type ResolutionEvent,
 } from "@skelcore/skelcore";
+import { FeatureCard } from "../../lib/demo-components";
 
 // Mock manifest for demo (would be loaded from server in real app)
 const mockManifest: BlueprintManifest = {
@@ -39,31 +40,13 @@ const mockManifest: BlueprintManifest = {
 
 function ProductCard() {
   return (
-    <div
-      style={{
-        width: 300,
-        height: 200,
-        background: "#fff",
-        borderRadius: 8,
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        padding: 12,
-        fontFamily: "system-ui, -apple-system, sans-serif",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          height: 100,
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          borderRadius: 4,
-          marginBottom: 12,
-        }}
-      />
-      <div
-        style={{ height: 16, background: "#333", marginBottom: 8, borderRadius: 2, width: "80%" }}
-      />
-      <div style={{ height: 14, background: "#666", borderRadius: 2, width: "60%" }} />
-    </div>
+    <article className="h-52 max-w-sm rounded-xl border border-zinc-800 bg-zinc-900 p-4 light:border-zinc-200 light:bg-white">
+      <div className="mb-4 h-24 rounded-md bg-gradient-to-br from-indigo-500 to-violet-600" />
+      <div className="space-y-2">
+        <div className="h-3 w-4/5 rounded bg-zinc-700 light:bg-zinc-200" />
+        <div className="h-3 w-2/3 rounded bg-zinc-700 light:bg-zinc-200" />
+      </div>
+    </article>
   );
 }
 
@@ -84,129 +67,85 @@ export default function TestPage(): React.ReactElement {
   };
 
   return (
-    <div style={{ padding: 24, maxWidth: 1200, margin: "0 auto" }}>
-      <h1 style={{ marginBottom: 8 }}>Phase 2: Manifest amp Policy Demo</h1>
-      <p style={{ color: "#666", marginBottom: 24 }}>
-        Test precomputed manifest resolution with different policy modes
-      </p>
+    <div className="app-surface guide-page">
+      <main className="app-content guide-flow">
+        <header className="guide-header">
+          <h1 className="guide-title font-bold text-white light:text-zinc-900">Phase 2: Manifest and Policy Demo</h1>
+          <p className="text-zinc-500 light:text-zinc-600">
+            Test precomputed manifest resolution with runtime-only, hybrid, and precomputed-only policies.
+          </p>
+        </header>
 
-      <div
-        style={{
-          background: "#f5f5f5",
-          padding: 16,
-          borderRadius: 8,
-          marginBottom: 24,
-          borderLeft: "4px solid #667eea",
-        }}
-      >
-        <label style={{ display: "block", marginBottom: 12, fontWeight: 500 }}>Policy Mode:</label>
-        <div style={{ display: "flex", gap: 16 }}>
-          {(["runtime-only", "hybrid", "precomputed-only"] as const).map((mode) => (
-            <label key={mode} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <input
-                type="radio"
-                checked={policyMode === mode}
-                onChange={() => setPolicyMode(mode)}
-                style={{ cursor: "pointer" }}
-              />
-              <span style={{ cursor: "pointer" }}>{mode}</span>
-            </label>
-          ))}
-        </div>
-        <p style={{ fontSize: 12, color: "#666", marginTop: 12 }}>
-          runtime-only: Measure DOM dynamically, ignore manifest
-          <br />
-          hybrid: Try manifest first, fall back to dynamic measurement
-          <br />
-          precomputed-only: Use manifest only, fail if not available
-        </p>
-      </div>
+        <FeatureCard title="Policy Mode" description="Switch resolver behavior for the same component" badge="Resolution">
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-3">
+              {(["runtime-only", "hybrid", "precomputed-only"] as const).map((mode) => (
+                <label key={mode} className="flex items-center gap-2 rounded border border-zinc-700 px-3 py-2 text-sm text-zinc-300 light:border-zinc-300 light:text-zinc-700">
+                  <input
+                    type="radio"
+                    checked={policyMode === mode}
+                    onChange={() => setPolicyMode(mode)}
+                    className="cursor-pointer"
+                  />
+                  <span className="cursor-pointer">{mode}</span>
+                </label>
+              ))}
+            </div>
 
-      <div style={{ marginBottom: 32 }}>
-        <h2 style={{ marginBottom: 16 }}>Component with Manifest</h2>
-        <AutoSkeleton
-          loading={loading}
-          skeletonKey="ProductCard"
-          manifest={mockManifest}
-          policyOverride={{ mode: policyMode }}
-          onResolution={handleResolution}
-        >
-          <ProductCard />
-        </AutoSkeleton>
-      </div>
-
-      <div
-        style={{
-          background: "#f9f9f9",
-          border: "1px solid #ddd",
-          borderRadius: 8,
-          padding: 16,
-        }}
-      >
-        <h3 style={{ marginBottom: 12 }}>Resolution Events</h3>
-        {resolutionEvents.length === 0 ? (
-          <p style={{ color: "#999" }}>No events yet</p>
-        ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {resolutionEvents.map((event, idx) => (
-              <div
-                key={idx}
-                style={{
-                  padding: 8,
-                  background: "#fff",
-                  border: "1px solid #eee",
-                  borderRadius: 4,
-                  fontSize: 12,
-                  fontFamily: "monospace",
-                }}
-              >
-                <span style={{ color: "#667eea", fontWeight: 500 }}>{event.source}</span> |{" "}
-                {event.reason}
-              </div>
-            ))}
+            <p className="text-xs text-zinc-500 light:text-zinc-600">
+              runtime-only: dynamic measurement only. hybrid: manifest first, dynamic fallback. precomputed-only:
+              manifest required.
+            </p>
           </div>
-        )}
-      </div>
+        </FeatureCard>
 
-      <div
-        style={{
-          background: "#e3f2fd",
-          border: "1px solid #90caf9",
-          borderRadius: 8,
-          padding: 16,
-          marginTop: 24,
-          fontSize: 14,
-        }}
-      >
-        <strong>About this demo:</strong>
-        <ul style={{ marginLeft: 20, marginTop: 8 }}>
-          <li>The component loads with a 2-second delay to simulate async content</li>
-          <li>The manifest entry is checked before dynamic measurement based on policy mode</li>
-          <li>Resolution events are logged showing which source was used (manifest vs dynamic)</li>
-          <li>
-            In production, manifests would be precomputed at build time and served from your
-            CDN/server
-          </li>
-        </ul>
-      </div>
+        <FeatureCard title="Component with Manifest" description="AutoSkeleton resolves using the selected policy">
+          <AutoSkeleton
+            loading={loading}
+            skeletonKey="ProductCard"
+            manifest={mockManifest}
+            policyOverride={{ mode: policyMode }}
+            onResolution={handleResolution}
+          >
+            <ProductCard />
+          </AutoSkeleton>
+        </FeatureCard>
 
-      <div style={{ marginTop: 24 }}>
-        <button
-          onClick={() => setLoading(!loading)}
-          style={{
-            padding: "10px 20px",
-            background: "#667eea",
-            color: "white",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-            fontSize: 14,
-            fontWeight: 500,
-          }}
-        >
-          Toggle Loading ({loading ? "loading" : "loaded"})
-        </button>
-      </div>
+        <FeatureCard title="Resolution Events" description="Latest resolver decisions from onResolution" badge="Log">
+          {resolutionEvents.length === 0 ? (
+            <p className="text-sm text-zinc-500 light:text-zinc-600">No events yet</p>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {resolutionEvents.map((event, idx) => (
+                <div
+                  key={idx}
+                  className="rounded border border-zinc-700 bg-zinc-950 p-2 font-mono text-xs text-zinc-300 light:border-zinc-300 light:bg-zinc-50 light:text-zinc-700"
+                >
+                  <span className="font-semibold text-indigo-300 light:text-indigo-700">{event.source}</span> | {event.reason}
+                </div>
+              ))}
+            </div>
+          )}
+        </FeatureCard>
+
+        <FeatureCard title="About This Demo" description="What this page validates" badge="Notes">
+          <ul className="list-disc space-y-1 pl-5 text-sm text-zinc-400 light:text-zinc-700">
+            <li>Component starts with a 2-second loading phase to simulate async content.</li>
+            <li>Manifest entries are considered before dynamic fallback based on policy mode.</li>
+            <li>Resolution events show which source was chosen and why.</li>
+            <li>Production artifacts are precomputed at build time and served as static JSON.</li>
+          </ul>
+        </FeatureCard>
+
+        <div>
+          <button
+            onClick={() => setLoading(!loading)}
+            className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+          >
+            Toggle Loading ({loading ? "loading" : "loaded"})
+          </button>
+        </div>
+      </main>
     </div>
   );
 }

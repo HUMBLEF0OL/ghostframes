@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SkelCore Demo & Reference",
+  title: "SkelCore Official Guide",
   description: "Zero-config skeleton loaders for React",
 };
 
@@ -48,7 +48,7 @@ export default function RootLayout({
       <body className="boxy-demo min-h-full flex flex-col">
         <ClientProviders>
           <MainHeader />
-          {children}
+          <div className="app-shell w-full">{children}</div>
         </ClientProviders>
       </body>
     </html>
