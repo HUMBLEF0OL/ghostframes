@@ -7,8 +7,8 @@ test.describe("demo reference routes", () => {
     const primaryNav = page.getByRole("navigation", { name: "Primary" });
     await expect(primaryNav).toBeVisible();
 
-    const showcaseLink = primaryNav.getByRole("link", { name: "Showcase" });
-    await expect(showcaseLink).toHaveAttribute("aria-current", "page");
+    const guideLink = primaryNav.getByRole("link", { name: "Guide" });
+    await expect(guideLink).toHaveAttribute("aria-current", "page");
 
     await primaryNav.getByRole("link", { name: "Reference" }).click();
     await expect(page).toHaveURL(/\/reference$/);
