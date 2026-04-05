@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { parseManifest } from "@ghostframe/ghostframe/runtime";
+import { parseManifest } from "@ghostframe/runtime";
 import { CodeBlock, FeatureCard } from "../../../../lib/demo-components";
 import generatedManifest from "../../../../lib/ghostframe/generated/manifest-loader";
 

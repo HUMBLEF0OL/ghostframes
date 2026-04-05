@@ -4,12 +4,12 @@ Zero config skeleton loaders for React.
 ## Installation
 
 ```bash
-pnpm add @ghostframe/ghostframe
+pnpm add @ghostframe/runtime
 ```
 
 ```ts
-import { AutoSkeleton } from "@ghostframe/ghostframe";
-import { generateStaticBlueprint } from "@ghostframe/ghostframe/runtime";
+import { AutoSkeleton } from "@ghostframe/runtime";
+import { generateStaticBlueprint } from "@ghostframe/runtime";
 ```
 
 ## Build-Time Capture (Phase 3 MVP)

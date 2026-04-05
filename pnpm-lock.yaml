@@ -71,7 +71,7 @@ importers:
 
   apps/demo:
     dependencies:
-      '@ghostframe/ghostframe':
+      '@ghostframe/runtime':
         specifier: workspace:*
         version: link:../../packages/ghostframe
       next:
@@ -231,7 +231,7 @@ importers:
 
   packages/test-utils:
     devDependencies:
-      '@ghostframe/ghostframe':
+      '@ghostframe/runtime':
         specifier: workspace:*
         version: link:../ghostframe
       tsup:

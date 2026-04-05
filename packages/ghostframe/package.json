@@ -1,5 +1,5 @@
 {
-    "name": "@ghostframe/ghostframe",
+    "name": "@ghostframe/runtime",
     "version": "0.1.0",
     "type": "module",
     "main": "./dist/index.cjs",
@@ -20,12 +20,6 @@
             "import": "./dist/react.js",
             "require": "./dist/react.cjs",
             "default": "./dist/react.js"
-        },
-        "./runtime": {
-            "types": "./dist/runtime.d.ts",
-            "import": "./dist/runtime.js",
-            "require": "./dist/runtime.cjs",
-            "default": "./dist/runtime.js"
         },
         "./build": {
             "types": "./dist/build.d.ts",

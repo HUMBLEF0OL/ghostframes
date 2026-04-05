@@ -6,7 +6,7 @@ import {
     GhostframeProvider,
     derivePolicyForPath,
     getResolverTelemetryCounters,
-} from "@ghostframe/ghostframe";
+} from "@ghostframe/runtime";
 import { ThemeProvider } from "../lib/theme-context";
 import generatedManifest from "../lib/ghostframe/generated/manifest-loader";
 

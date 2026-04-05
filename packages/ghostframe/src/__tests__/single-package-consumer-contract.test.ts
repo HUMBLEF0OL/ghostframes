@@ -8,7 +8,7 @@ describe("single package consumer contract", () => {
     expect(typeof root.AutoSkeleton).toBe("function");
   });
 
-  it("exposes runtime APIs via /runtime", () => {
+  it("exposes core runtime APIs from the unified package", () => {
     expect(typeof runtime.generateStaticBlueprint).toBe("function");
   });
 
