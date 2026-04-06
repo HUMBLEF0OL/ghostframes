@@ -1,6 +1,6 @@
-# SkelCore Demo
+# Ghostframe Demo
 
-A comprehensive Next.js demonstration of `@skelcore/react` features and customization options.
+A comprehensive Next.js demonstration of `@ghostframe/react` features and customization options.
 
 ## Running the Demo
 
@@ -13,7 +13,7 @@ pnpm dev
 
 ## Demo Sections
 
-The demo showcases 13 use-cases covering basic to advanced SkelCore features:
+The demo showcases 13 use-cases covering basic to advanced Ghostframe features:
 
 ### Core Features (Sections 1-8)
 
@@ -60,7 +60,7 @@ The demo showcases 13 use-cases covering basic to advanced SkelCore features:
 
 ## Learn More
 
-- [SkelCore Documentation](../docs/README.md)
-- [React Package Docs](../packages/react/README.md)
-- [Core Package Docs](../packages/core/README.md)
-- [Migration Guide](../docs/migration-guide.md)
+- [Workspace README](../../README.md)
+- [React Package Docs](../../packages/react/README.md)
+- [Core Package Docs](../../packages/core/README.md)
+- [Unified Package Plan](../../docs/UNIFIED_PACKAGE_PLAN.md)

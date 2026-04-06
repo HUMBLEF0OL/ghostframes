@@ -1,4 +1,4 @@
-# @ghostframe/runtime
+# @ghostframe/react
 
 > Automatic, zero-configuration skeleton loading states for React — powered by live DOM measurement.
 
@@ -6,9 +6,9 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/@ghostframe/runtime)](https://bundlephobia.com/package/@ghostframe/runtime)
 [![license](https://img.shields.io/npm/l/@ghostframe/runtime)](../../LICENSE)
 
-`@ghostframe/runtime` wraps Ghostframe's engine with idiomatic React components and a hook. It measures your real UI — fonts, layout, borders, media — and replaces it with a pixel-perfect skeleton overlay while data loads. No manual schema. No configuration required to get started.
+`@ghostframe/react` wraps Ghostframe's engine with idiomatic React components and a hook. It measures your real UI — fonts, layout, borders, media — and replaces it with a pixel-perfect skeleton overlay while data loads. No manual schema. No configuration required to get started.
 
-**[→ Live Demo](https://ghostframe.vercel.app/)**
+**[→ Live Demo](https://getghostframe.vercel.app/)**
 
 ---
 
@@ -132,7 +132,7 @@ The **primary component**. It wraps your content, measures it while loading, and
 | `blueprint` | `Blueprint` | ❌ | `undefined` | A pre-computed blueprint (e.g. from SSR). Skips DOM measurement entirely. |
 | `hydrateBlueprint` | `Blueprint` | ❌ | `undefined` | SSR/edge blueprint candidate validated on the client before reuse. |
 | `blueprintSource` | `"client" \| "server" \| "cache"` | ❌ | `"client"` | Declares where `hydrateBlueprint` originated so validation and fallback rules can be applied. |
-| `onBlueprintInvalidated` | `(reason) => void` | ❌ | `undefined` | Called when hydrated blueprint validation fails and SkelCore falls back to measurement. |
+| `onBlueprintInvalidated` | `(reason) => void` | ❌ | `undefined` | Called when hydrated blueprint validation fails and Ghostframe falls back to measurement. |
 | `measurementPolicy` | `{ mode: "eager" \| "idle" \| "viewport" \| "manual"; budgetMs?: number }` | ❌ | `{ mode: "eager" }` | Controls when measurement starts and optionally caps analyzer work budget per run. |
 | `blueprintCachePolicy` | `{ ttlMs?: number; version?: number }` | ❌ | `undefined` | Optional TTL/version gates for cache and hydration blueprint reuse. |
 | `fallback` | `React.ReactNode` | ❌ | `undefined` | Shown only during the first measurement pass, before a blueprint is ready. |
@@ -255,7 +255,7 @@ Resolution order:
 
 ```tsx
 // Server-side (RSC or route handler)
-import { generateStaticBlueprint } from "@skelcore/core";
+import { generateStaticBlueprint } from "@ghostframe/runtime";
 
 const serverBlueprint = generateStaticBlueprint(
   <article>
@@ -265,7 +265,7 @@ const serverBlueprint = generateStaticBlueprint(
 );
 
 // Client component
-import { AutoSkeleton } from "@skelcore/react";
+import { AutoSkeleton } from "@ghostframe/react";
 
 <AutoSkeleton
   loading={loading}

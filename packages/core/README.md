@@ -6,7 +6,7 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/@ghostframe/runtime)](https://bundlephobia.com/package/@ghostframe/runtime)
 [![license](https://img.shields.io/npm/l/@ghostframe/runtime)](../../LICENSE)
 
-The `@ghostframe/runtime` package root is the framework-agnostic engine. It contains no React, Vue, or any UI-framework code. If you are building a React app, you almost certainly want [`@ghostframe/runtime`](../react/README.md), which includes the React facade.
+The `@ghostframe/core` package is the framework-agnostic engine. It contains no React, Vue, or any UI-framework code. If you are building a React app, you almost certainly want [`@ghostframe/react`](../react/README.md), which includes the React facade.
 
 Use `@ghostframe/runtime` directly when you are:
 
@@ -246,7 +246,7 @@ Measures a **live DOM subtree** and produces a pixel-precise Blueprint using abs
 Both analyzers accept optional `include` and `exclude` matcher arrays. `exclude` always wins over `include`.
 
 ```ts
-import { generateDynamicBlueprint } from "@skelcore/core";
+import { generateDynamicBlueprint } from "@ghostframe/core";
 
 const blueprint = await generateDynamicBlueprint(root, undefined, {
   include: [{ selector: ".skeleton-target" }],
