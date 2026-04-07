@@ -26,6 +26,12 @@
       "@/*": [
         "./*"
       ],
+      "@ghostframes/runtime": [
+        "../../packages/react/src/index.tsx"
+      ],
+      "@ghostframes/core": [
+        "../../packages/core/src/index.ts"
+      ],
       "GHOSTFRAMES_CORE": [
         "./lib/ghostframes/core"
       ],

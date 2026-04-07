@@ -426,8 +426,9 @@ export function validateManifestCompatibility(
 
   // 2. Required fields check
   const requiredFields = profile?.requiredFields || ["entries", "build", "defaults"];
+  const manifestRecord = manifest as unknown as Record<string, unknown>;
   for (const field of requiredFields) {
-    if (!(field in manifest) || (manifest as Record<string, unknown>)[field] === undefined) {
+    if (!(field in manifest) || manifestRecord[field] === undefined) {
       errors.push({
         code: "missing-required-field",
         message: `Required field "${field}" is missing or undefined.`,

@@ -54,7 +54,7 @@ export function useAutoSkeleton(
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
   const idleCallbackRef = useRef<number | null>(null);
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof globalThis.setTimeout> | null>(null);
   const lastStructuralHashRef = useRef<string | null>(null);
   const loadingRef = useRef(loading);
   const measureRunIdRef = useRef(0);

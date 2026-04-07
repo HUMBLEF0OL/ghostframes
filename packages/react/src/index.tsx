@@ -15,6 +15,14 @@ export {
   DEFAULT_HYBRID_CONFIDENCE_THRESHOLDS,
 } from "./resolver";
 export {
+  deriveStrictRolloutPolicyForPath,
+  type StrictCompatibilityStatus,
+  type StrictRolloutFallbackMode,
+  type StrictRolloutPolicyInput,
+  type StrictRolloutPolicySelection,
+  type StrictRolloutTier,
+} from "./strict-rollout";
+export {
   DEFAULT_RESOLUTION_POLICY,
   type ResolutionPolicy,
   type ResolutionEvent,
@@ -24,6 +32,7 @@ export {
   type HybridConfidenceGateDecision,
   type ResolutionPolicyMode,
 } from "./resolution-types";
+export type { CompatibilityProfile } from "@ghostframes/core";
 export {
   GhostframesProvider,
   useGhostframesContext,

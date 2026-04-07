@@ -4,10 +4,11 @@ import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
     GhostframesProvider,
+    deriveStrictRolloutPolicyForPath,
     diffResolverTelemetryCounters,
-    derivePolicyForPath,
     evaluateHybridConfidenceGate,
     getResolverTelemetryCounters,
+    type CompatibilityProfile,
 } from "@ghostframes/runtime";
 import { ThemeProvider } from "../lib/theme-context";
 import generatedManifest from "../lib/ghostframes/generated/manifest-loader";
@@ -24,6 +25,18 @@ const EMPTY_COUNTERS: ReturnType<typeof getResolverTelemetryCounters> = {
     shadowMisses: 0,
     shadowInvalids: 0,
 };
+
+const STRICT_ROLLOUT_COMPATIBILITY_PROFILE: CompatibilityProfile = {
+    manifestVersion: 1,
+    requiredFields: ["entries", "build", "defaults"],
+};
+
+function parsePrefixes(value: string | undefined): string[] {
+    return (value ?? "")
+        .split(",")
+        .map((segment) => segment.trim())
+        .filter(Boolean);
+}
 
 type TelemetrySnapshot = {
     route: string;
@@ -71,37 +84,39 @@ export function ClientProviders({
     const telemetrySinkEnabled = process.env.NEXT_PUBLIC_SKEL_TELEMETRY_SINK === "true";
 
     const strictEnabled = process.env.NEXT_PUBLIC_SKEL_STRICT_MODE === "true";
-    const strictPrefixes = (process.env.NEXT_PUBLIC_SKEL_STRICT_PATHS ?? "")
-        .split(",")
-        .map((segment) => segment.trim())
-        .filter(Boolean);
+    const strictCanaryPrefixes = parsePrefixes(process.env.NEXT_PUBLIC_SKEL_STRICT_CANARY_PATHS);
+    const strictExpandedPrefixes = parsePrefixes(process.env.NEXT_PUBLIC_SKEL_STRICT_EXPANDED_PATHS);
+    const strictBroadPrefixes = parsePrefixes(process.env.NEXT_PUBLIC_SKEL_STRICT_BROAD_PATHS);
+    const legacyStrictPrefixes = parsePrefixes(process.env.NEXT_PUBLIC_SKEL_STRICT_PATHS);
+    const strictFallbackMode =
+        process.env.NEXT_PUBLIC_SKEL_STRICT_ROLLBACK_MODE === "runtime-only"
+            ? "runtime-only"
+            : "hybrid";
 
     const serveEnabled = process.env.NEXT_PUBLIC_SKEL_SERVE_HYBRID === "true";
-    const servePrefixes = (process.env.NEXT_PUBLIC_SKEL_SERVE_PATHS ?? "")
-        .split(",")
-        .map((segment) => segment.trim())
-        .filter(Boolean);
-    const serveBlockPrefixes = (process.env.NEXT_PUBLIC_SKEL_SERVE_BLOCK_PATHS ?? "")
-        .split(",")
-        .map((segment) => segment.trim())
-        .filter(Boolean);
+    const servePrefixes = parsePrefixes(process.env.NEXT_PUBLIC_SKEL_SERVE_PATHS);
+    const serveBlockPrefixes = parsePrefixes(process.env.NEXT_PUBLIC_SKEL_SERVE_BLOCK_PATHS);
 
     const shadowEnabled = process.env.NEXT_PUBLIC_SKEL_SHADOW_TELEMETRY === "true";
-    const allowedPrefixes = (process.env.NEXT_PUBLIC_SKEL_SHADOW_PATHS ?? "")
-        .split(",")
-        .map((segment) => segment.trim())
-        .filter(Boolean);
+    const allowedPrefixes = parsePrefixes(process.env.NEXT_PUBLIC_SKEL_SHADOW_PATHS);
 
-    const policy = derivePolicyForPath({
+    const rolloutSelection = deriveStrictRolloutPolicyForPath({
         pathname,
         strictEnabled,
-        strictPaths: strictPrefixes,
+        strictPaths: legacyStrictPrefixes,
+        strictCanaryPaths: strictCanaryPrefixes,
+        strictExpandedPaths: strictExpandedPrefixes,
+        strictBroadPaths: strictBroadPrefixes.length > 0 ? strictBroadPrefixes : legacyStrictPrefixes,
         serveEnabled,
         servePaths: servePrefixes,
         serveBlockPaths: serveBlockPrefixes,
         shadowEnabled,
         shadowPaths: allowedPrefixes,
+        manifest: generatedManifest,
+        strictCompatibilityProfile: STRICT_ROLLOUT_COMPATIBILITY_PROFILE,
+        fallbackMode: strictFallbackMode,
     });
+    const policy = rolloutSelection.policy;
 
     useEffect(() => {
         if (!telemetrySinkEnabled) {
