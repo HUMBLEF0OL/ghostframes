@@ -71,6 +71,32 @@ export interface ResolverTelemetryCounters {
   shadowInvalids: number;
 }
 
+export interface ResolverConfidenceMetrics {
+  manifestAttempts: number;
+  servedCount: number;
+  manifestHitRatio: number;
+  invalidationRate: number;
+  fallbackRatio: number;
+}
+
+export interface HybridConfidenceThresholds {
+  minManifestHitRatio: number;
+  maxInvalidationRate: number;
+  rollbackHitRatioFloor: number;
+  rollbackInvalidationCeil: number;
+  minManifestAttempts: number;
+}
+
+export interface HybridConfidenceGateDecision {
+  status: "pass" | "hold" | "rollback";
+  pass: boolean;
+  promotionEligible: boolean;
+  rollbackRecommended: boolean;
+  reasons: string[];
+  metrics: ResolverConfidenceMetrics;
+  thresholds: HybridConfidenceThresholds;
+}
+
 export interface ValidationResult {
   valid: boolean;
   reason?: string;

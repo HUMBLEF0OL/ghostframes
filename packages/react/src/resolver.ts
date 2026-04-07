@@ -1,7 +1,10 @@
 import type { Blueprint, ManifestEntryValidationResult } from "@ghostframes/core";
 import {
   DEFAULT_RESOLUTION_POLICY,
+  type HybridConfidenceGateDecision,
+  type HybridConfidenceThresholds,
   type ResolutionPolicy,
+  type ResolverConfidenceMetrics,
   type ResolverTelemetryCounters,
   type ResolverContext,
   type ResolutionResult,
@@ -31,6 +34,14 @@ const resolverTelemetryCounters: ResolverTelemetryCounters = {
   shadowHits: 0,
   shadowMisses: 0,
   shadowInvalids: 0,
+};
+
+export const DEFAULT_HYBRID_CONFIDENCE_THRESHOLDS: HybridConfidenceThresholds = {
+  minManifestHitRatio: 0.75,
+  maxInvalidationRate: 0.05,
+  rollbackHitRatioFloor: 0.6,
+  rollbackInvalidationCeil: 0.08,
+  minManifestAttempts: 1,
 };
 
 function incrementCounter(counter: keyof ResolverTelemetryCounters): void {
@@ -97,6 +108,7 @@ export function derivePolicyForPath(input: {
   strictPaths: string[];
   serveEnabled: boolean;
   servePaths: string[];
+  serveBlockPaths?: string[];
   shadowEnabled?: boolean;
   shadowPaths?: string[];
 }): ResolutionPolicy {
@@ -111,6 +123,11 @@ export function derivePolicyForPath(input: {
   const isShadowRoute = input.shadowEnabled === true && matchesPrefix(input.shadowPaths ?? []);
   if (isShadowRoute) {
     return { mode: "hybrid", strict: false, shadowTelemetryOnly: true };
+  }
+
+  const isServeBlocked = matchesPrefix(input.serveBlockPaths ?? []);
+  if (isServeBlocked) {
+    return { mode: "runtime-only", strict: false };
   }
 
   const isServingRoute = input.serveEnabled && matchesPrefix(input.servePaths);
@@ -185,6 +202,119 @@ export function resetResolverTelemetryCounters(): void {
 
 export function resetResolverSessionCache(): void {
   sessionBlueprintStore.clear();
+}
+
+function normalizeRatio(value: number): number {
+  if (!Number.isFinite(value) || value <= 0) {
+    return 0;
+  }
+  if (value >= 1) {
+    return 1;
+  }
+
+  return value;
+}
+
+function getManifestAttemptCount(counters: ResolverTelemetryCounters): number {
+  return counters.manifestHits + counters.manifestMisses + counters.invalidations;
+}
+
+function getServedCount(counters: ResolverTelemetryCounters): number {
+  return (
+    counters.manifestHits +
+    counters.sessionHits +
+    counters.dynamicFallbacks +
+    counters.placeholderFallbacks
+  );
+}
+
+export function computeResolverConfidenceMetrics(
+  counters: ResolverTelemetryCounters
+): ResolverConfidenceMetrics {
+  const manifestAttempts = getManifestAttemptCount(counters);
+  const servedCount = getServedCount(counters);
+
+  return {
+    manifestAttempts,
+    servedCount,
+    manifestHitRatio:
+      manifestAttempts > 0 ? normalizeRatio(counters.manifestHits / manifestAttempts) : 0,
+    invalidationRate:
+      manifestAttempts > 0 ? normalizeRatio(counters.invalidations / manifestAttempts) : 0,
+    fallbackRatio:
+      servedCount > 0
+        ? normalizeRatio(
+          (counters.sessionHits + counters.dynamicFallbacks + counters.placeholderFallbacks) /
+          servedCount
+        )
+        : 0,
+  };
+}
+
+export function diffResolverTelemetryCounters(
+  current: ResolverTelemetryCounters,
+  baseline: ResolverTelemetryCounters
+): ResolverTelemetryCounters {
+  return {
+    explicitHits: Math.max(current.explicitHits - baseline.explicitHits, 0),
+    manifestHits: Math.max(current.manifestHits - baseline.manifestHits, 0),
+    manifestMisses: Math.max(current.manifestMisses - baseline.manifestMisses, 0),
+    sessionHits: Math.max(current.sessionHits - baseline.sessionHits, 0),
+    dynamicFallbacks: Math.max(current.dynamicFallbacks - baseline.dynamicFallbacks, 0),
+    placeholderFallbacks: Math.max(current.placeholderFallbacks - baseline.placeholderFallbacks, 0),
+    invalidations: Math.max(current.invalidations - baseline.invalidations, 0),
+    shadowHits: Math.max(current.shadowHits - baseline.shadowHits, 0),
+    shadowMisses: Math.max(current.shadowMisses - baseline.shadowMisses, 0),
+    shadowInvalids: Math.max(current.shadowInvalids - baseline.shadowInvalids, 0),
+  };
+}
+
+export function evaluateHybridConfidenceGate(input: {
+  counters: ResolverTelemetryCounters;
+  previousWindowPass?: boolean;
+  thresholds?: Partial<HybridConfidenceThresholds>;
+}): HybridConfidenceGateDecision {
+  const thresholds: HybridConfidenceThresholds = {
+    ...DEFAULT_HYBRID_CONFIDENCE_THRESHOLDS,
+    ...input.thresholds,
+  };
+  const metrics = computeResolverConfidenceMetrics(input.counters);
+  const reasons: string[] = [];
+  const hasEnoughData = metrics.manifestAttempts >= thresholds.minManifestAttempts;
+
+  if (!hasEnoughData) {
+    reasons.push(
+      `insufficient-manifest-attempts: ${metrics.manifestAttempts}/${thresholds.minManifestAttempts}`
+    );
+  }
+
+  if (metrics.manifestHitRatio < thresholds.minManifestHitRatio) {
+    reasons.push(
+      `manifest-hit-ratio-below-threshold: ${metrics.manifestHitRatio.toFixed(3)} < ${thresholds.minManifestHitRatio.toFixed(3)}`
+    );
+  }
+
+  if (metrics.invalidationRate > thresholds.maxInvalidationRate) {
+    reasons.push(
+      `invalidation-rate-above-threshold: ${metrics.invalidationRate.toFixed(3)} > ${thresholds.maxInvalidationRate.toFixed(3)}`
+    );
+  }
+
+  const rollbackRecommended =
+    metrics.manifestHitRatio < thresholds.rollbackHitRatioFloor ||
+    metrics.invalidationRate > thresholds.rollbackInvalidationCeil;
+  const pass = hasEnoughData && reasons.length === 0;
+  const promotionEligible = pass && input.previousWindowPass === true;
+
+  return {
+    status: rollbackRecommended ? "rollback" : pass ? "pass" : "hold",
+    pass,
+    promotionEligible,
+    rollbackRecommended,
+    reasons,
+    metrics,
+    thresholds,
+  };
 }
 
 export function validatePrecomputed(
@@ -298,10 +428,10 @@ export function resolveBlueprint(context: ResolverContext): ResolutionResult {
           manifestValidation: isMiss
             ? undefined
             : {
-                valid: false,
-                reason: rejectionReason,
-                invalidationReason,
-              },
+              valid: false,
+              reason: rejectionReason,
+              invalidationReason,
+            },
         },
       };
     }

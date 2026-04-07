@@ -5,7 +5,10 @@ import {
   type ResolutionSource,
 } from "../resolution-types.js";
 import {
+  computeResolverConfidenceMetrics,
   derivePolicyForPath,
+  diffResolverTelemetryCounters,
+  evaluateHybridConfidenceGate,
   getResolverTelemetryCounters,
   recordRuntimeBlueprint,
   resetResolverSessionCache,
@@ -91,6 +94,140 @@ describe("resolver", () => {
 
     expect(policy.mode).toBe("hybrid");
     expect(policy.strict).toBe(false);
+  });
+
+  it("allows disabling hybrid mode for route prefixes", () => {
+    const policy = derivePolicyForPath({
+      pathname: "/test/path",
+      strictEnabled: false,
+      strictPaths: [],
+      serveEnabled: true,
+      servePaths: ["/test"],
+      serveBlockPaths: ["/test"],
+    });
+
+    expect(policy.mode).toBe("runtime-only");
+    expect(policy.strict).toBe(false);
+  });
+});
+
+describe("resolver confidence metrics", () => {
+  it("computes manifest and fallback ratios from counters", () => {
+    const metrics = computeResolverConfidenceMetrics({
+      explicitHits: 0,
+      manifestHits: 8,
+      manifestMisses: 1,
+      sessionHits: 2,
+      dynamicFallbacks: 1,
+      placeholderFallbacks: 0,
+      invalidations: 1,
+      shadowHits: 0,
+      shadowMisses: 0,
+      shadowInvalids: 0,
+    });
+
+    expect(metrics.manifestAttempts).toBe(10);
+    expect(metrics.servedCount).toBe(11);
+    expect(metrics.manifestHitRatio).toBeCloseTo(0.8);
+    expect(metrics.invalidationRate).toBeCloseTo(0.1);
+    expect(metrics.fallbackRatio).toBeCloseTo(3 / 11);
+  });
+
+  it("diffs cumulative counters into route windows", () => {
+    const delta = diffResolverTelemetryCounters(
+      {
+        explicitHits: 2,
+        manifestHits: 15,
+        manifestMisses: 3,
+        sessionHits: 3,
+        dynamicFallbacks: 4,
+        placeholderFallbacks: 1,
+        invalidations: 2,
+        shadowHits: 0,
+        shadowMisses: 0,
+        shadowInvalids: 0,
+      },
+      {
+        explicitHits: 1,
+        manifestHits: 10,
+        manifestMisses: 1,
+        sessionHits: 1,
+        dynamicFallbacks: 2,
+        placeholderFallbacks: 1,
+        invalidations: 1,
+        shadowHits: 0,
+        shadowMisses: 0,
+        shadowInvalids: 0,
+      }
+    );
+
+    expect(delta.explicitHits).toBe(1);
+    expect(delta.manifestHits).toBe(5);
+    expect(delta.manifestMisses).toBe(2);
+    expect(delta.invalidations).toBe(1);
+    expect(delta.dynamicFallbacks).toBe(2);
+    expect(delta.placeholderFallbacks).toBe(0);
+  });
+
+  it("marks confidence gate pass and promotion eligibility on second passing window", () => {
+    const firstWindow = evaluateHybridConfidenceGate({
+      counters: {
+        explicitHits: 0,
+        manifestHits: 9,
+        manifestMisses: 1,
+        sessionHits: 0,
+        dynamicFallbacks: 1,
+        placeholderFallbacks: 0,
+        invalidations: 0,
+        shadowHits: 0,
+        shadowMisses: 0,
+        shadowInvalids: 0,
+      },
+    });
+
+    const secondWindow = evaluateHybridConfidenceGate({
+      counters: {
+        explicitHits: 0,
+        manifestHits: 9,
+        manifestMisses: 1,
+        sessionHits: 0,
+        dynamicFallbacks: 1,
+        placeholderFallbacks: 0,
+        invalidations: 0,
+        shadowHits: 0,
+        shadowMisses: 0,
+        shadowInvalids: 0,
+      },
+      previousWindowPass: firstWindow.pass,
+    });
+
+    expect(firstWindow.pass).toBe(true);
+    expect(firstWindow.promotionEligible).toBe(false);
+    expect(secondWindow.pass).toBe(true);
+    expect(secondWindow.promotionEligible).toBe(true);
+    expect(secondWindow.status).toBe("pass");
+  });
+
+  it("marks rollback when hit ratio and invalidation thresholds breach rollback floor", () => {
+    const decision = evaluateHybridConfidenceGate({
+      counters: {
+        explicitHits: 0,
+        manifestHits: 4,
+        manifestMisses: 2,
+        sessionHits: 0,
+        dynamicFallbacks: 2,
+        placeholderFallbacks: 0,
+        invalidations: 3,
+        shadowHits: 0,
+        shadowMisses: 0,
+        shadowInvalids: 0,
+      },
+    });
+
+    expect(decision.pass).toBe(false);
+    expect(decision.rollbackRecommended).toBe(true);
+    expect(decision.status).toBe("rollback");
+    expect(decision.reasons.length).toBeGreaterThan(0);
   });
 });
 

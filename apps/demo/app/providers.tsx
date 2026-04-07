@@ -4,20 +4,48 @@ import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
     GhostframesProvider,
+    diffResolverTelemetryCounters,
     derivePolicyForPath,
+    evaluateHybridConfidenceGate,
     getResolverTelemetryCounters,
 } from "@ghostframes/runtime";
 import { ThemeProvider } from "../lib/theme-context";
 import generatedManifest from "../lib/ghostframes/generated/manifest-loader";
 
+const EMPTY_COUNTERS: ReturnType<typeof getResolverTelemetryCounters> = {
+    explicitHits: 0,
+    manifestHits: 0,
+    manifestMisses: 0,
+    sessionHits: 0,
+    dynamicFallbacks: 0,
+    placeholderFallbacks: 0,
+    invalidations: 0,
+    shadowHits: 0,
+    shadowMisses: 0,
+    shadowInvalids: 0,
+};
+
 type TelemetrySnapshot = {
     route: string;
     timestamp: number;
-    counters: ReturnType<typeof getResolverTelemetryCounters>;
+    counters: {
+        cumulative: ReturnType<typeof getResolverTelemetryCounters>;
+        window: ReturnType<typeof getResolverTelemetryCounters>;
+    };
     ratios: {
         manifestHitRatio: number;
         invalidationRate: number;
         fallbackRatio: number;
+        cumulativeManifestHitRatio: number;
+        cumulativeInvalidationRate: number;
+    };
+    gate: {
+        status: "pass" | "hold" | "rollback";
+        pass: boolean;
+        promotionEligible: boolean;
+        rollbackRecommended: boolean;
+        reasons: string[];
+        manifestAttempts: number;
     };
 };
 
@@ -53,6 +81,10 @@ export function ClientProviders({
         .split(",")
         .map((segment) => segment.trim())
         .filter(Boolean);
+    const serveBlockPrefixes = (process.env.NEXT_PUBLIC_SKEL_SERVE_BLOCK_PATHS ?? "")
+        .split(",")
+        .map((segment) => segment.trim())
+        .filter(Boolean);
 
     const shadowEnabled = process.env.NEXT_PUBLIC_SKEL_SHADOW_TELEMETRY === "true";
     const allowedPrefixes = (process.env.NEXT_PUBLIC_SKEL_SHADOW_PATHS ?? "")
@@ -66,6 +98,7 @@ export function ClientProviders({
         strictPaths: strictPrefixes,
         serveEnabled,
         servePaths: servePrefixes,
+        serveBlockPaths: serveBlockPrefixes,
         shadowEnabled,
         shadowPaths: allowedPrefixes,
     });
@@ -75,33 +108,7 @@ export function ClientProviders({
             return;
         }
 
-        const counters = getResolverTelemetryCounters();
-        const manifestAttempts = counters.manifestHits + counters.manifestMisses + counters.invalidations;
-        const servedCount =
-            counters.manifestHits +
-            counters.sessionHits +
-            counters.dynamicFallbacks +
-            counters.placeholderFallbacks;
-
-        const snapshot: TelemetrySnapshot = {
-            route: pathname,
-            timestamp: Date.now(),
-            counters,
-            ratios: {
-                manifestHitRatio:
-                    manifestAttempts > 0 ? counters.manifestHits / manifestAttempts : 0,
-                invalidationRate:
-                    manifestAttempts > 0 ? counters.invalidations / manifestAttempts : 0,
-                fallbackRatio:
-                    servedCount > 0
-                        ? (counters.sessionHits +
-                            counters.dynamicFallbacks +
-                            counters.placeholderFallbacks) /
-                        servedCount
-                        : 0,
-            },
-        };
-
+        const cumulativeCounters = getResolverTelemetryCounters();
         const sink: TelemetrySink = window.__SKEL_TELEMETRY__ ?? {
             latest: null,
             snapshots: [],
@@ -111,6 +118,64 @@ export function ClientProviders({
             clear() {
                 this.latest = null;
                 this.snapshots = [];
+            },
+        };
+
+        const latestForRoute = [...sink.snapshots]
+            .reverse()
+            .find((snapshot) => snapshot.route === pathname);
+        const baselineCounters = latestForRoute?.counters.cumulative ?? EMPTY_COUNTERS;
+        const windowCounters = diffResolverTelemetryCounters(cumulativeCounters, baselineCounters);
+        const currentGate = evaluateHybridConfidenceGate({
+            counters: windowCounters,
+            previousWindowPass: latestForRoute?.gate.pass,
+        });
+
+        const windowManifestAttempts = currentGate.metrics.manifestAttempts;
+        const cumulativeManifestAttempts =
+            cumulativeCounters.manifestHits +
+            cumulativeCounters.manifestMisses +
+            cumulativeCounters.invalidations;
+
+        const snapshot: TelemetrySnapshot = {
+            route: pathname,
+            timestamp: Date.now(),
+            counters: {
+                cumulative: cumulativeCounters,
+                window: windowCounters,
+            },
+            ratios: {
+                manifestHitRatio:
+                    windowManifestAttempts > 0
+                        ? windowCounters.manifestHits / windowManifestAttempts
+                        : 0,
+                invalidationRate:
+                    windowManifestAttempts > 0
+                        ? windowCounters.invalidations / windowManifestAttempts
+                        : 0,
+                fallbackRatio:
+                    currentGate.metrics.servedCount > 0
+                        ? (windowCounters.sessionHits +
+                            windowCounters.dynamicFallbacks +
+                            windowCounters.placeholderFallbacks) /
+                        currentGate.metrics.servedCount
+                        : 0,
+                cumulativeManifestHitRatio:
+                    cumulativeManifestAttempts > 0
+                        ? cumulativeCounters.manifestHits / cumulativeManifestAttempts
+                        : 0,
+                cumulativeInvalidationRate:
+                    cumulativeManifestAttempts > 0
+                        ? cumulativeCounters.invalidations / cumulativeManifestAttempts
+                        : 0,
+            },
+            gate: {
+                status: currentGate.status,
+                pass: currentGate.pass,
+                promotionEligible: currentGate.promotionEligible,
+                rollbackRecommended: currentGate.rollbackRecommended,
+                reasons: currentGate.reasons,
+                manifestAttempts: windowManifestAttempts,
             },
         };
 
