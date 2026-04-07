@@ -1,5 +1,4 @@
 import * as root from "../index";
-import * as react from "../react";
 import * as runtime from "../runtime";
 import * as build from "../build";
 
@@ -8,11 +7,6 @@ describe("@ghostframes/runtime export contract", () => {
     expect(typeof root.AutoSkeleton).toBe("function");
     expect(typeof root.useAutoSkeleton).toBe("function");
     expect(typeof root.GhostframesProvider).toBe("function");
-  });
-
-  test("react subpath exports expected symbols", () => {
-    expect(typeof react.AutoSkeleton).toBe("function");
-    expect(typeof react.resolveBlueprint).toBe("function");
   });
 
   test("internal runtime module exports expected symbols", () => {
