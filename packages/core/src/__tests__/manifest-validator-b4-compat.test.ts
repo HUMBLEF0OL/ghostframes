@@ -362,5 +362,17 @@ describe("B4: Manifest Compatibility Validator", () => {
             const passRate = results.filter((r) => r.compatible).length / results.length;
             expect(passRate).toBe(1.0);
         });
+
+        it("GATE: B4_COMPATIBILITY_GATE - supported matrix pass rate is 100%", () => {
+            const supportedVersions = ["0.1.0", "1.0.0", "1.1.0", "1.5.0"];
+            const results = supportedVersions.map((version) =>
+                validateCompatibilityMatrix(createManifest(1, version), {
+                    supportedVersions,
+                })
+            );
+
+            const passRate = results.filter((result) => result.compatible).length / results.length;
+            expect(passRate).toBe(1.0);
+        });
     });
 });

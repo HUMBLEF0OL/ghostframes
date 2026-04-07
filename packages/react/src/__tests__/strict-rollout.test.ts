@@ -102,4 +102,23 @@ describe("strict rollout policy helper", () => {
         expect(result.strictRolloutTier).toBe("broad");
         expect(result.policy.mode).toBe("strict-precomputed");
     });
+
+    it("GATE: B6_STRICT_GATE - canary compatibility enables strict-precomputed", () => {
+        const result = deriveStrictRolloutPolicyForPath({
+            pathname: "/reference/features/resolver-policy",
+            strictEnabled: true,
+            strictCanaryPaths: ["/reference"],
+            strictExpandedPaths: ["/advanced"],
+            strictBroadPaths: ["/stress"],
+            serveEnabled: true,
+            servePaths: ["/reference"],
+            manifest: createManifest(),
+            strictCompatibilityProfile,
+        });
+
+        expect(result.strictRolloutTier).toBe("canary");
+        expect(result.compatibilityStatus).toBe("compatible");
+        expect(result.policy.mode).toBe("strict-precomputed");
+        expect(result.policy.strict).toBe(true);
+    });
 });

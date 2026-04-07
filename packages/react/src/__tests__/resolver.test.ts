@@ -229,6 +229,43 @@ describe("resolver confidence metrics", () => {
     expect(decision.status).toBe("rollback");
     expect(decision.reasons.length).toBeGreaterThan(0);
   });
+
+  it("GATE: B5_CONFIDENCE_GATE - promotion eligible after two passing windows", () => {
+    const firstWindow = evaluateHybridConfidenceGate({
+      counters: {
+        explicitHits: 0,
+        manifestHits: 9,
+        manifestMisses: 1,
+        sessionHits: 0,
+        dynamicFallbacks: 1,
+        placeholderFallbacks: 0,
+        invalidations: 0,
+        shadowHits: 0,
+        shadowMisses: 0,
+        shadowInvalids: 0,
+      },
+    });
+
+    const secondWindow = evaluateHybridConfidenceGate({
+      counters: {
+        explicitHits: 0,
+        manifestHits: 9,
+        manifestMisses: 1,
+        sessionHits: 0,
+        dynamicFallbacks: 1,
+        placeholderFallbacks: 0,
+        invalidations: 0,
+        shadowHits: 0,
+        shadowMisses: 0,
+        shadowInvalids: 0,
+      },
+      previousWindowPass: firstWindow.pass,
+    });
+
+    expect(firstWindow.pass).toBe(true);
+    expect(secondWindow.pass).toBe(true);
+    expect(secondWindow.promotionEligible).toBe(true);
+  });
 });
 
 describe("resolver with manifest support", () => {

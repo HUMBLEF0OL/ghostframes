@@ -1,58 +1,217 @@
 {
-    "executedAt": "2026-04-07T09:32:54Z",
-    "targetBranch": "feat/rewamp",
-    "gates": [
-        {
-            "name": "B1_PARITY_GATE",
-            "status": "PARITY_PASS",
-            "description": "Capture Parity Baseline: >= 95% parity with deterministic reason codes",
-            "testFile": "packages/cli/src/__tests__/parity.test.ts",
-            "testCount": 7,
-            "allPassed": true,
-            "threshold": 0.95,
-            "evidence": {
-                "parityTestCount": 7,
-                "testResults": [
-                    "✓ should compute parity rate from artifacts",
-                    "✓ should enforce 95% parity threshold",
-                    "✓ should generate reason codes for mismatches",
-                    "✓ should classify parity reasons correctly",
-                    "✓ should mark report as passed when parity meets threshold",
-                    "✓ should emit parity report with deterministic structure",
-                    "✓ GATE: B1_PARITY_GATE - parity >= 95% enforcement"
-                ]
-            }
-        },
-        {
-            "name": "B2_DETERMINISM_GATE",
-            "status": "DETERMINISM_PASS",
-            "description": "Deterministic Normalization: <= 1% unexpected diff over 20 repeated runs",
-            "testFile": "packages/cli/src/__tests__/determinism.test.ts",
-            "testCount": 8,
-            "allPassed": true,
-            "maxUnexpectedDiffRate": 0.01,
-            "evidence": {
-                "determinismTestCount": 8,
-                "testResults": [
-                    "✓ should normalize entry by zeroing generatedAt",
-                    "✓ should canonicalize numeric values to 3 decimals",
-                    "✓ should normalize manifest by sorting entries and zeroing timestamps",
-                    "✓ should strip entropy from manifests for determinism",
-                    "✓ should classify diffs as expected vs unexpected",
-                    "✓ should produce identical JSON after normalization",
-                    "✓ should handle node array normalization",
-                    "✓ GATE: B2_DETERMINISM_GATE - unexpected diffs <= 1%"
-                ]
-            }
-        }
-    ],
-    "totalTestsPassed": 71,
-    "totalTestsFailed": 0,
-    "gatesBlocking": [
-        "B1_PARITY_GATE",
-        "B2_DETERMINISM_GATE"
-    ],
-    "gatesStatus": "ALL_PASS",
-    "nextGate": "B3_BLUEPRINT_GATE",
-    "readyForPromotion": true
+  "executedAt": "2026-04-07T06:48:43.401Z",
+  "targetBranch": "feat/rewamp",
+  "gates": [
+    {
+      "name": "B1_PARITY_GATE",
+      "status": "PARITY_PASS",
+      "description": "Capture Parity Baseline: >= 95% parity with deterministic reason codes",
+      "testFile": "packages/cli/src/__tests__/parity.test.ts",
+      "testCount": 6,
+      "allPassed": true,
+      "threshold": {
+        "parityRate": 0.95
+      },
+      "evidence": {
+        "exitCode": 0,
+        "passedTestCount": 6,
+        "failedTestCount": 0,
+        "testResults": [
+          "parity B1: Capture Parity Baseline computes parity from route x breakpoint observations",
+          "parity B1: Capture Parity Baseline uses deterministic reason codes",
+          "parity B1: Capture Parity Baseline enforces threshold based on true matrix parity",
+          "parity B1: Capture Parity Baseline is deterministic for the same input",
+          "parity B1: Capture Parity Baseline classifies parity reasons consistently",
+          "parity B1: Capture Parity Baseline keeps report structure machine-readable"
+        ],
+        "failedTests": []
+      }
+    },
+    {
+      "name": "B2_DETERMINISM_GATE",
+      "status": "DETERMINISM_PASS",
+      "description": "Deterministic Normalization: <= 1% unexpected diff over 20 repeated runs",
+      "testFile": "packages/cli/src/__tests__/determinism.test.ts",
+      "testCount": 8,
+      "allPassed": true,
+      "threshold": {
+        "unexpectedDiffRate": 0.01
+      },
+      "evidence": {
+        "exitCode": 0,
+        "passedTestCount": 8,
+        "failedTestCount": 0,
+        "testResults": [
+          "determinism B2: Deterministic Normalization should normalize entry by zeroing generatedAt",
+          "determinism B2: Deterministic Normalization should canonicalize numeric values to 3 decimals",
+          "determinism B2: Deterministic Normalization should normalize manifest by sorting entries and zeroing timestamps",
+          "determinism B2: Deterministic Normalization should strip entropy from manifests for determinism",
+          "determinism B2: Deterministic Normalization should classify diffs as expected vs unexpected",
+          "determinism B2: Deterministic Normalization should mark diffs as expected when in expected set",
+          "determinism B2: Deterministic Normalization GATE: B2_DETERMINISM_GATE - unexpected diff rate <= 1%",
+          "determinism B2: Deterministic Normalization should handle node array normalization with sorting"
+        ],
+        "failedTests": []
+      }
+    },
+    {
+      "name": "B3_BLUEPRINT_GATE",
+      "status": "BLUEPRINT_PASS",
+      "description": "Blueprint quality score threshold >= 0.90",
+      "testFile": "packages/cli/src/__tests__/blueprint-quality-scorer.test.ts",
+      "testCount": 17,
+      "allPassed": true,
+      "threshold": {
+        "qualityScore": 0.9
+      },
+      "evidence": {
+        "exitCode": 0,
+        "passedTestCount": 17,
+        "failedTestCount": 0,
+        "testResults": [
+          "Blueprint Quality Scorer scoreBlueprint scores a complete blueprint with high quality",
+          "Blueprint Quality Scorer scoreBlueprint penalizes empty node lists",
+          "Blueprint Quality Scorer scoreBlueprint penalizes low confidence values",
+          "Blueprint Quality Scorer scoreBlueprint penalizes entries with warnings",
+          "Blueprint Quality Scorer scoreBlueprint penalizes small viewport dimensions",
+          "Blueprint Quality Scorer scoreBlueprint combines multiple penalties for poor blueprints",
+          "Blueprint Quality Scorer isQualityAcceptable accepts blueprints with score >= 0.90",
+          "Blueprint Quality Scorer isQualityAcceptable rejects blueprints with score < threshold",
+          "Blueprint Quality Scorer isQualityAcceptable uses default threshold of 0.88 if not specified",
+          "Blueprint Quality Scorer integrated quality workflow correctly filters pilot matrix for acceptable blueprints",
+          "Blueprint Quality Scorer B3 Edge Cases and Stress Tests handles extreme high dimensions gracefully",
+          "Blueprint Quality Scorer B3 Edge Cases and Stress Tests handles large DOM trees (100+ nodes) with consistent scoring",
+          "Blueprint Quality Scorer B3 Edge Cases and Stress Tests handles threshold boundaries for 0.88 and 0.90",
+          "Blueprint Quality Scorer B3 Edge Cases and Stress Tests handles zero confidence with non-empty nodes",
+          "Blueprint Quality Scorer B3 Edge Cases and Stress Tests handles maximum warning penalties without score collapse",
+          "Blueprint Quality Scorer B3 Edge Cases and Stress Tests maintains pilot quality threshold at or above 0.90",
+          "Blueprint Quality Scorer B3 Edge Cases and Stress Tests GATE: B3_BLUEPRINT_GATE - quality score threshold >= 0.90"
+        ],
+        "failedTests": []
+      }
+    },
+    {
+      "name": "B4_COMPATIBILITY_GATE",
+      "status": "COMPATIBILITY_PASS",
+      "description": "Manifest compatibility matrix passes for supported versions",
+      "testFile": "packages/core/src/__tests__/manifest-validator-b4-compat.test.ts",
+      "testCount": 22,
+      "allPassed": true,
+      "threshold": {
+        "compatibilityPassRate": 1
+      },
+      "evidence": {
+        "exitCode": 0,
+        "passedTestCount": 22,
+        "failedTestCount": 0,
+        "testResults": [
+          "B4: Manifest Compatibility Validator validateManifestCompatibility accepts manifest v1 with current package version",
+          "B4: Manifest Compatibility Validator validateManifestCompatibility rejects manifest with unsupported version",
+          "B4: Manifest Compatibility Validator validateManifestCompatibility validates required fields in manifest structure",
+          "B4: Manifest Compatibility Validator validateManifestCompatibility validates entries conform to compatibility schema",
+          "B4: Manifest Compatibility Validator validateManifestCompatibility returns machine-parseable error codes",
+          "B4: Manifest Compatibility Validator validateManifestCompatibility provides actionable remediation text in errors",
+          "B4: Manifest Compatibility Validator validateCompatibilityMatrix validates backward compatibility for v1.0.0 manifests against current runtime",
+          "B4: Manifest Compatibility Validator validateCompatibilityMatrix accepts manifests from supported package versions",
+          "B4: Manifest Compatibility Validator validateCompatibilityMatrix rejects manifests from unsupported package versions",
+          "B4: Manifest Compatibility Validator validateCompatibilityMatrix validates policy constraint compatibility",
+          "B4: Manifest Compatibility Validator validateCompatibilityMatrix achieves 100% pass rate for supported manifest variants",
+          "B4: Manifest Compatibility Validator compatibility profile definition enforces version gating for strict mode",
+          "B4: Manifest Compatibility Validator compatibility profile definition rejects manifests with incompatible policy constraints for strict mode",
+          "B4: Manifest Compatibility Validator error taxonomy categorizes version mismatch error code",
+          "B4: Manifest Compatibility Validator B4 Version Upgrade Scenarios and Stress Tests validates version upgrade path: 0.1.0 to 1.0.0",
+          "B4: Manifest Compatibility Validator B4 Version Upgrade Scenarios and Stress Tests validates version upgrade path: 1.0.0 to 2.0.0",
+          "B4: Manifest Compatibility Validator B4 Version Upgrade Scenarios and Stress Tests accepts supported minor version variants",
+          "B4: Manifest Compatibility Validator B4 Version Upgrade Scenarios and Stress Tests rejects future version when runtime matrix does not support it",
+          "B4: Manifest Compatibility Validator B4 Version Upgrade Scenarios and Stress Tests handles stress test with 1000+ entries",
+          "B4: Manifest Compatibility Validator B4 Version Upgrade Scenarios and Stress Tests validates backward compatibility with minimum package profile",
+          "B4: Manifest Compatibility Validator B4 Version Upgrade Scenarios and Stress Tests enforces 100% pass rate for supported version matrix",
+          "B4: Manifest Compatibility Validator B4 Version Upgrade Scenarios and Stress Tests GATE: B4_COMPATIBILITY_GATE - supported matrix pass rate is 100%"
+        ],
+        "failedTests": []
+      }
+    },
+    {
+      "name": "B5_CONFIDENCE_GATE",
+      "status": "CONFIDENCE_PASS",
+      "description": "Hybrid confidence gate supports promotion after two passing windows",
+      "testFile": "packages/react/src/__tests__/resolver.test.ts",
+      "testCount": 25,
+      "allPassed": true,
+      "threshold": {
+        "hitRatio": 0.75,
+        "invalidationRate": 0.05
+      },
+      "evidence": {
+        "exitCode": 0,
+        "passedTestCount": 25,
+        "failedTestCount": 0,
+        "testResults": [
+          "resolution-types exposes runtime-only default policy",
+          "resolution-types allows all declared source tags",
+          "resolver prefers explicit blueprint over runtime path",
+          "resolver returns dynamic resolver intent by default",
+          "resolver accepts candidate validation as no-op in phase 1",
+          "resolver uses strict-precomputed only on explicit strict pilot routes",
+          "resolver falls back to hybrid serving route when strict route does not match",
+          "resolver allows disabling hybrid mode for route prefixes",
+          "resolver confidence metrics computes manifest and fallback ratios from counters",
+          "resolver confidence metrics diffs cumulative counters into route windows",
+          "resolver confidence metrics marks confidence gate pass and promotion eligibility on second passing window",
+          "resolver confidence metrics marks rollback when hit ratio and invalidation thresholds breach rollback floor",
+          "resolver confidence metrics GATE: B5_CONFIDENCE_GATE - promotion eligible after two passing windows",
+          "resolver with manifest support prefers explicit blueprint over manifest",
+          "resolver with manifest support checks manifest when no explicit blueprint provided",
+          "resolver with manifest support falls back to dynamic when manifest lookup fails",
+          "resolver with manifest support skips manifest in runtime-only mode",
+          "resolver with manifest support enforces strict manifest in precomputed-only mode",
+          "resolver with manifest support returns placeholder when precomputed-only and manifest fails",
+          "resolver with manifest support reports shadow-hit but serves dynamic output in hybrid shadow mode",
+          "resolver with manifest support reports shadow-miss when manifest key is missing",
+          "resolver with manifest support classifies miss reasons without regex fallback",
+          "resolver with manifest support reports shadow-invalid when manifest entry is stale",
+          "resolver with manifest support uses session fallback in hybrid mode when manifest entry is invalid",
+          "resolver with manifest support tracks phase 5 telemetry counters for invalidation and session fallback"
+        ],
+        "failedTests": []
+      }
+    },
+    {
+      "name": "B6_STRICT_GATE",
+      "status": "STRICT_PASS",
+      "description": "Strict rollout canary route remains compatible and strict-precomputed",
+      "testFile": "packages/react/src/__tests__/strict-rollout.test.ts",
+      "testCount": 5,
+      "allPassed": true,
+      "threshold": {
+        "fallbackAnomalyRate": 0.01
+      },
+      "evidence": {
+        "exitCode": 0,
+        "passedTestCount": 5,
+        "failedTestCount": 0,
+        "testResults": [
+          "strict rollout policy helper enables strict-precomputed on compatible canary routes",
+          "strict rollout policy helper falls back to hybrid when strict compatibility is blocked and hybrid serving is available",
+          "strict rollout policy helper falls back to runtime-only when hybrid serving is unavailable",
+          "strict rollout policy helper preserves legacy strict path behavior when tiered lists are absent",
+          "strict rollout policy helper GATE: B6_STRICT_GATE - canary compatibility enables strict-precomputed"
+        ],
+        "failedTests": []
+      }
+    }
+  ],
+  "totalTestsPassed": 83,
+  "totalTestsFailed": 0,
+  "gatesBlocking": [
+    "B1_PARITY_GATE",
+    "B2_DETERMINISM_GATE",
+    "B3_BLUEPRINT_GATE",
+    "B4_COMPATIBILITY_GATE",
+    "B5_CONFIDENCE_GATE",
+    "B6_STRICT_GATE"
+  ],
+  "gatesStatus": "ALL_PASS",
+  "nextGate": null,
+  "readyForPromotion": true
 }

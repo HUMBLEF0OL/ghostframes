@@ -411,5 +411,25 @@ describe("Blueprint Quality Scorer", () => {
 
             expect(acceptanceRate).toBeGreaterThanOrEqual(0.95);
         });
+
+        it("GATE: B3_BLUEPRINT_GATE - quality score threshold >= 0.90", () => {
+            const gateEntry = createTestEntry({
+                blueprint: {
+                    version: 1,
+                    rootWidth: 360,
+                    rootHeight: 280,
+                    nodes: Array.from({ length: 10 }, (_, i) => createNode(`gate-${i}`, "div")),
+                    generatedAt: Date.now(),
+                    source: "dynamic",
+                },
+                quality: {
+                    confidence: 0.95,
+                    warnings: [],
+                },
+            });
+
+            expect(isQualityAcceptable(gateEntry, { threshold: 0.9 })).toBe(true);
+            expect(scoreBlueprint(gateEntry)).toBeGreaterThanOrEqual(0.9);
+        });
     });
 });
