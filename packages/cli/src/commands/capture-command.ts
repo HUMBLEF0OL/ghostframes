@@ -60,10 +60,20 @@ export async function runCaptureCommand(
 
     // B1: Check parity threshold
     if (config.enableParityCheck !== false) {
-      const pilotRoutes = config.pilotRoutes ?? ["/rtl", "/config-playground", "/reference", "/advanced"];
+      const pilotRoutes = config.pilotRoutes ?? config.routes;
       const threshold = config.parityThreshold ?? 0.95;
       const outputDir = path.resolve(rootDir, config.outputDir);
       const parityObservations = captureResult.parityObservations ?? [];
+
+      const configuredRoutes = new Set(config.routes);
+      const missingPilotRoutes = pilotRoutes.filter((route) => !configuredRoutes.has(route));
+      if (missingPilotRoutes.length > 0) {
+        io.error(
+          `Parity gate configuration error: pilotRoutes must be included in routes. Missing: ${missingPilotRoutes.join(", ")}`
+        );
+        return 1;
+      }
+
       const parityReport = computeParityReport(
         captureResult.artifacts,
         pilotRoutes,

@@ -17,6 +17,7 @@ import { SkeletonRenderer } from "./SkeletonRenderer";
 
 export interface AutoSkeletonProps {
   loading: boolean;
+  skeletonKey?: string;
   children: React.ReactNode;
   fallback?: React.ReactNode;
   config?: Partial<SkeletonConfig>;
@@ -41,6 +42,7 @@ export interface AutoSkeletonProps {
  */
 export function AutoSkeleton({
   loading,
+  skeletonKey,
   children,
   fallback,
   config: configOverride,
@@ -96,6 +98,7 @@ export function AutoSkeleton({
     <div
       ref={containerRef}
       className="skel-auto-container"
+      data-skeleton-key={skeletonKey}
       style={containerStyle}
       aria-busy={loading}
     >

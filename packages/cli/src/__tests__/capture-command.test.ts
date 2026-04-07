@@ -251,6 +251,61 @@ describe("runCli", () => {
     );
   });
 
+  it("fails fast when pilotRoutes are not included in routes", async () => {
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "ghostframes-parity-route-mismatch-test-"));
+    createdDirs.push(tmpDir);
+    const outputDir = path.join(tmpDir, "generated");
+    const configPath = path.join(tmpDir, "capture.config.mjs");
+
+    await fs.writeFile(
+      configPath,
+      [
+        "export default {",
+        "  baseUrl: 'http://localhost:3005',",
+        "  routes: ['/test'],",
+        "  pilotRoutes: ['/rtl'],",
+        "  breakpoints: [375],",
+        "  viewportHeight: 900,",
+        `  outputDir: ${JSON.stringify(outputDir.replace(/\\/g, "/"))},`,
+        "  manifestFileName: 'manifest.json',",
+        "  loaderFileName: 'manifest-loader.ts',",
+        "  selector: '[data-skeleton-key]',",
+        "  waitForMs: 0,",
+        "  retries: 0,",
+        "  enableParityCheck: true,",
+        "};",
+        "",
+      ].join("\n"),
+      "utf8"
+    );
+
+    const io = {
+      log: vi.fn(),
+      error: vi.fn(),
+    };
+
+    const exitCode = await runCaptureCommand(["--config", configPath], io, {
+      runCapture: vi.fn().mockResolvedValue({
+        ok: true,
+        artifacts: [{ key: "ProductCard", entry: makeEntry("ProductCard") }],
+        parityObservations: [
+          {
+            route: "/test",
+            breakpoint: 375,
+            discoveredKeys: ["ProductCard"],
+            extractedKeys: ["ProductCard"],
+            extractionFailures: 0,
+          },
+        ],
+      }),
+    });
+
+    expect(exitCode).toBe(1);
+    expect(io.error).toHaveBeenCalledWith(
+      expect.stringContaining("pilotRoutes must be included in routes")
+    );
+  });
+
   it("fails when selector mismatch budget is exceeded", async () => {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "ghostframes-selector-budget-test-"));
     createdDirs.push(tmpDir);

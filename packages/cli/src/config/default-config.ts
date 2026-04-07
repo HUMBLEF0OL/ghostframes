@@ -17,7 +17,7 @@ export const DEFAULT_CAPTURE_CONFIG: Omit<CaptureConfig, "routes"> = {
   maxSelectorMismatchCount: 0,
   enableDeterminismCheck: true,
   maxUnexpectedDiffRate: 0.01,
-  pilotRoutes: ["/rtl", "/config-playground", "/reference", "/advanced"],
+  pilotRoutes: ["/rtl", "/config-playground", "/test", "/reference/features/resolver-policy"],
   blueprintQualityThreshold: 0.9,
   b1MalformedFallbackRateBaseline: 1,
   minMalformedFallbackReduction: 0.5,

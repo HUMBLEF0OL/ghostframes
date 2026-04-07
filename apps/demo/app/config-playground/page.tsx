@@ -200,7 +200,7 @@ export default function ConfigPlaygroundPage() {
                     background: `linear-gradient(135deg, ${baseColor}22 0%, ${highlightColor}22 100%)`,
                   }}
                 >
-                  <AutoSkeleton loading={loading} config={config}>
+                  <AutoSkeleton loading={loading} config={config} skeletonKey="ConfigPreviewCard">
                     <PreviewCard />
                   </AutoSkeleton>
                 </div>

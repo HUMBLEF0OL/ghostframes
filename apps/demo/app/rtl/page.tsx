@@ -66,7 +66,7 @@ export default function RtlPage() {
 
                 <FeatureCard title="RTL Target" description="Skeletonized content rendered in right-to-left mode">
                     <div dir="rtl" className="space-y-4">
-                        <AutoSkeleton loading={loading}>
+                        <AutoSkeleton loading={loading} skeletonKey="RtlContentCard">
                             <div className="space-y-3">
                                 <RtlContent />
                                 <div className="flex flex-wrap gap-2">

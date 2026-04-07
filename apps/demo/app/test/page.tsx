@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   AutoSkeleton,
   asStructuralHash,
@@ -62,9 +62,11 @@ export default function TestPage(): React.ReactElement {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleResolution = (event: ResolutionEvent) => {
+  const handleResolution = useCallback((event: ResolutionEvent) => {
     setResolutionEvents((prev) => [event, ...prev.slice(0, 9)]);
-  };
+  }, []);
+
+  const policyOverride = useMemo(() => ({ mode: policyMode }), [policyMode]);
 
   return (
     <div className="app-surface guide-page">
@@ -104,7 +106,7 @@ export default function TestPage(): React.ReactElement {
             loading={loading}
             skeletonKey="ProductCard"
             manifest={mockManifest}
-            policyOverride={{ mode: policyMode }}
+            policyOverride={policyOverride}
             onResolution={handleResolution}
           >
             <ProductCard />

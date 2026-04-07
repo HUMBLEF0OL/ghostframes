@@ -83,6 +83,10 @@ export function useAutoSkeleton(
     blueprintRef.current = blueprint;
   }, [blueprint]);
 
+  const policyMode = options.policyOverride?.mode;
+  const policyStrict = options.policyOverride?.strict;
+  const policyShadowTelemetryOnly = options.policyOverride?.shadowTelemetryOnly;
+
   const clearScheduledMeasurement = useCallback(() => {
     if (intersectionObserverRef.current) {
       intersectionObserverRef.current.disconnect();
@@ -354,7 +358,9 @@ export function useAutoSkeleton(
     options.externalBlueprint,
     options.hydrateBlueprint,
     options.onBlueprintInvalidated,
-    options.policyOverride,
+    policyMode,
+    policyStrict,
+    policyShadowTelemetryOnly,
     options.skeletonKey,
     validateHydratedBlueprint,
     config.transitionDuration,

@@ -1,0 +1,9 @@
+{
+  "generatedAt": "2026-04-07T08:44:27.538Z",
+  "qualityThreshold": 0.9,
+  "malformedFallbackRate": 0,
+  "b1BaselineRate": 1,
+  "malformedFallbackReduction": 1,
+  "minMalformedFallbackReduction": 0.5,
+  "passed": true
+}

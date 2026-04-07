@@ -1,5 +1,5 @@
 {
-  "executedAt": "2026-04-07T07:04:20.901Z",
+  "executedAt": "2026-04-07T08:45:13.748Z",
   "targetBranch": "feat/rewamp",
   "gates": [
     {
@@ -59,7 +59,7 @@
       "status": "BLUEPRINT_PASS",
       "description": "Blueprint quality gate enforces >= 0.90 threshold and >= 50% malformed fallback reduction",
       "testFile": "packages/cli/src/__tests__/capture-command.test.ts",
-      "testCount": 10,
+      "testCount": 11,
       "allPassed": true,
       "threshold": {
         "qualityScore": 0.9,
@@ -67,7 +67,7 @@
       },
       "evidence": {
         "exitCode": 0,
-        "passedTestCount": 10,
+        "passedTestCount": 11,
         "failedTestCount": 0,
         "testResults": [
           "runCli returns non-zero for unknown command",
@@ -75,6 +75,7 @@
           "runCli writes compact manifest and logs manifest size",
           "runCli always writes parity-report.json when parity is enabled",
           "runCli fails when parity threshold is not met",
+          "runCli fails fast when pilotRoutes are not included in routes",
           "runCli fails when selector mismatch budget is exceeded",
           "runCli counts selector mismatch budget per key across a check",
           "runCli fails when artifacts are emitted without parity observations",
@@ -205,7 +206,7 @@
       }
     }
   ],
-  "totalTestsPassed": 82,
+  "totalTestsPassed": 83,
   "totalTestsFailed": 0,
   "gatesBlocking": [
     "B1_PARITY_GATE",

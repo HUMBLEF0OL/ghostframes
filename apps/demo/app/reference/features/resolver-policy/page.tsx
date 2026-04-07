@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
     AutoSkeleton,
     asStructuralHash,
@@ -75,9 +75,11 @@ export default function ResolverPolicyFeaturePage() {
     const [mode, setMode] = useState<"runtime-only" | "hybrid" | "precomputed-only">("hybrid");
     const [events, setEvents] = useState<ResolutionEvent[]>([]);
 
-    function onResolution(event: ResolutionEvent) {
+    const onResolution = useCallback((event: ResolutionEvent) => {
         setEvents((prev) => [event, ...prev].slice(0, 10));
-    }
+    }, []);
+
+    const policyOverride = useMemo(() => ({ mode }), [mode]);
 
     return (
         <div className="space-y-6">
@@ -106,7 +108,7 @@ export default function ResolverPolicyFeaturePage() {
                         loading={loading}
                         skeletonKey="ProductCard"
                         manifest={mockManifest}
-                        policyOverride={{ mode }}
+                        policyOverride={policyOverride}
                         onResolution={onResolution}
                     >
                         <ProductCard />

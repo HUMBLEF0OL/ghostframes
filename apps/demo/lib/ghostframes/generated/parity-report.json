@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-04-07T08:44:27.535Z",
+  "totalChecks": 12,
+  "matchedCount": 12,
+  "parityRate": 1,
+  "minThreshold": 0.95,
+  "passed": true,
+  "mismatches": [],
+  "reasonCounts": {
+    "missing_selector": 0,
+    "extra_selector": 0,
+    "breakpoint_mismatch": 0,
+    "route_missing_artifact": 0
+  }
+}
