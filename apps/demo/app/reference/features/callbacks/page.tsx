@@ -8,7 +8,9 @@ import type { Blueprint } from "../../../../lib/ghostframes/core";
 function CallbackSample() {
   return (
     <article className="rounded-xl border border-zinc-800 bg-zinc-900 p-5 light:border-zinc-200 light:bg-white">
-      <h3 className="mb-2 text-lg font-bold text-white light:text-zinc-900">Measurement Candidate</h3>
+      <h3 className="mb-2 text-lg font-bold text-white light:text-zinc-900">
+        Measurement Candidate
+      </h3>
       <p className="mb-4 text-sm text-zinc-500 light:text-zinc-600">
         This content becomes the measurement target for AutoSkeleton.
       </p>
@@ -46,9 +48,12 @@ export default function CallbacksPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">Callbacks & Hooks</h1>
+        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">
+          Callbacks & Hooks
+        </h1>
         <p className="text-lg text-zinc-500 light:text-zinc-600">
-          Use onMeasured to inspect generated blueprints and wire analytics around skeleton generation.
+          Use onMeasured to inspect generated blueprints and wire analytics around skeleton
+          generation.
         </p>
       </header>
 
@@ -73,7 +78,9 @@ export default function CallbacksPage() {
             <div className="grid grid-cols-1 gap-2 rounded-lg border border-zinc-800 bg-zinc-950 p-3 text-xs light:border-zinc-300 light:bg-zinc-100 sm:grid-cols-5">
               <div>
                 <p className="text-zinc-500 light:text-zinc-600">Top-level nodes</p>
-                <p className="font-mono text-zinc-300 light:text-zinc-700">{summary.topLevelNodes}</p>
+                <p className="font-mono text-zinc-300 light:text-zinc-700">
+                  {summary.topLevelNodes}
+                </p>
               </div>
               <div>
                 <p className="text-zinc-500 light:text-zinc-600">Total nodes</p>
@@ -93,7 +100,9 @@ export default function CallbacksPage() {
               </div>
             </div>
           ) : (
-            <p className="text-sm text-zinc-500 light:text-zinc-600">No blueprint captured yet. Toggle loading to trigger measurement.</p>
+            <p className="text-sm text-zinc-500 light:text-zinc-600">
+              No blueprint captured yet. Toggle loading to trigger measurement.
+            </p>
           )}
         </div>
       </FeatureCard>
@@ -104,7 +113,9 @@ export default function CallbacksPage() {
             {JSON.stringify(blueprint, null, 2)}
           </pre>
         ) : (
-          <p className="text-sm text-zinc-500 light:text-zinc-600">Waiting for initial measurement.</p>
+          <p className="text-sm text-zinc-500 light:text-zinc-600">
+            Waiting for initial measurement.
+          </p>
         )}
       </FeatureCard>
 

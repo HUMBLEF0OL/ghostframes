@@ -2,13 +2,21 @@ import Link from "next/link";
 
 const overviewCards = [
   {
+    title: "Getting Started",
+    description:
+      "Install the runtime package, generate artifacts at build time, and wire AutoSkeleton at runtime.",
+    href: "/reference/getting-started",
+  },
+  {
     title: "Features",
-    description: "Custom slots, element exclusion, responsive behavior, callbacks, and caching patterns.",
+    description:
+      "Custom slots, element exclusion, responsive behavior, callbacks, and caching patterns.",
     href: "/reference/features",
   },
   {
     title: "SSR & Static Blueprints",
-    description: "Generate a blueprint on the server and hand it to the runtime for an instant fast path.",
+    description:
+      "Generate a blueprint on the server and hand it to the runtime for an instant fast path.",
     href: "/reference/ssr",
   },
   {
@@ -18,7 +26,8 @@ const overviewCards = [
   },
   {
     title: "CLI Workflow",
-    description: "Capture, validate, diff, report, and rollout with production-ready quality gates.",
+    description:
+      "Capture, validate, diff, report, and rollout with production-ready quality gates.",
     href: "/reference/cli-workflow",
   },
   {
@@ -37,9 +46,12 @@ export default function ReferenceOverview() {
   return (
     <div className="guide-flow">
       <header className="guide-header">
-        <h1 className="guide-title font-bold text-white light:text-zinc-900">Ghostframes Reference</h1>
+        <h1 className="guide-title font-bold text-white light:text-zinc-900">
+          Ghostframes Reference
+        </h1>
         <p className="text-lg text-zinc-500 light:text-zinc-600">
-          Developer-focused guides covering runtime behavior, server rendering, configuration, and operational workflows.
+          Developer-focused guides covering runtime behavior, server rendering, configuration, and
+          operational workflows.
         </p>
       </header>
 

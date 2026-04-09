@@ -72,17 +72,27 @@ export default function TestPage(): React.ReactElement {
     <div className="app-surface guide-page">
       <main className="app-content guide-flow">
         <header className="guide-header">
-          <h1 className="guide-title font-bold text-white light:text-zinc-900">Phase 2: Manifest and Policy Demo</h1>
+          <h1 className="guide-title font-bold text-white light:text-zinc-900">
+            Phase 2: Manifest and Policy Demo
+          </h1>
           <p className="text-zinc-500 light:text-zinc-600">
-            Test precomputed manifest resolution with runtime-only, hybrid, and precomputed-only policies.
+            Test precomputed manifest resolution with runtime-only, hybrid, and precomputed-only
+            policies.
           </p>
         </header>
 
-        <FeatureCard title="Policy Mode" description="Switch resolver behavior for the same component" badge="Resolution">
+        <FeatureCard
+          title="Policy Mode"
+          description="Switch resolver behavior for the same component"
+          badge="Resolution"
+        >
           <div className="space-y-4">
             <div className="flex flex-wrap gap-3">
               {(["runtime-only", "hybrid", "precomputed-only"] as const).map((mode) => (
-                <label key={mode} className="flex items-center gap-2 rounded border border-zinc-700 px-3 py-2 text-sm text-zinc-300 light:border-zinc-300 light:text-zinc-700">
+                <label
+                  key={mode}
+                  className="flex items-center gap-2 rounded border border-zinc-700 px-3 py-2 text-sm text-zinc-300 light:border-zinc-300 light:text-zinc-700"
+                >
                   <input
                     type="radio"
                     checked={policyMode === mode}
@@ -95,13 +105,16 @@ export default function TestPage(): React.ReactElement {
             </div>
 
             <p className="text-xs text-zinc-500 light:text-zinc-600">
-              runtime-only: dynamic measurement only. hybrid: manifest first, dynamic fallback. precomputed-only:
-              manifest required.
+              runtime-only: dynamic measurement only. hybrid: manifest first, dynamic fallback.
+              precomputed-only: manifest required.
             </p>
           </div>
         </FeatureCard>
 
-        <FeatureCard title="Component with Manifest" description="AutoSkeleton resolves using the selected policy">
+        <FeatureCard
+          title="Component with Manifest"
+          description="AutoSkeleton resolves using the selected policy"
+        >
           <AutoSkeleton
             loading={loading}
             skeletonKey="ProductCard"
@@ -113,7 +126,11 @@ export default function TestPage(): React.ReactElement {
           </AutoSkeleton>
         </FeatureCard>
 
-        <FeatureCard title="Resolution Events" description="Latest resolver decisions from onResolution" badge="Log">
+        <FeatureCard
+          title="Resolution Events"
+          description="Latest resolver decisions from onResolution"
+          badge="Log"
+        >
           {resolutionEvents.length === 0 ? (
             <p className="text-sm text-zinc-500 light:text-zinc-600">No events yet</p>
           ) : (
@@ -123,7 +140,10 @@ export default function TestPage(): React.ReactElement {
                   key={idx}
                   className="rounded border border-zinc-700 bg-zinc-950 p-2 font-mono text-xs text-zinc-300 light:border-zinc-300 light:bg-zinc-50 light:text-zinc-700"
                 >
-                  <span className="font-semibold text-indigo-300 light:text-indigo-700">{event.source}</span> | {event.reason}
+                  <span className="font-semibold text-indigo-300 light:text-indigo-700">
+                    {event.source}
+                  </span>{" "}
+                  | {event.reason}
                 </div>
               ))}
             </div>

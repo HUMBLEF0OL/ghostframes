@@ -12,13 +12,18 @@ function ChatHistory() {
           <div className="h-8 w-8 shrink-0 rounded-full bg-indigo-500" />
           <div className="flex-1">
             <p className="mb-1 text-sm font-semibold text-white light:text-zinc-900">Alex</p>
-            <p className="text-sm text-zinc-400 light:text-zinc-600">How is the skeleton demo looking?</p>
+            <p className="text-sm text-zinc-400 light:text-zinc-600">
+              How is the skeleton demo looking?
+            </p>
           </div>
           <span className="text-xs text-zinc-600">2m ago</span>
         </div>
       </div>
 
-      <div data-skeleton-ignore className="flex gap-2 border-t border-zinc-800 p-4 light:border-zinc-200">
+      <div
+        data-skeleton-ignore
+        className="flex gap-2 border-t border-zinc-800 p-4 light:border-zinc-200"
+      >
         <input
           type="text"
           placeholder="Type a message..."
@@ -38,7 +43,9 @@ export default function IgnoreElementsPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">Element Exclusion</h1>
+        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">
+          Element Exclusion
+        </h1>
         <p className="text-lg text-zinc-500 light:text-zinc-600">
           Use data-skeleton-ignore to keep interactive controls available during loading.
         </p>
@@ -65,7 +72,10 @@ export default function IgnoreElementsPage() {
         </div>
       </FeatureCard>
 
-      <FeatureCard title="Code Example" description="Exclude the input area from analyzer traversal">
+      <FeatureCard
+        title="Code Example"
+        description="Exclude the input area from analyzer traversal"
+      >
         <CodeBlock
           code={`<AutoSkeleton loading={loading}>
   <div className="chat-container">

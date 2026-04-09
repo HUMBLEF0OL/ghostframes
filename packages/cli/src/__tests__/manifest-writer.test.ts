@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
 import type { CapturedArtifact } from "../types";
-import type { BlueprintNode, ManifestEntry } from "@ghostframes/core";
-import { parseManifest } from "@ghostframes/core";
+import {
+  asStructuralHash,
+  parseManifest,
+  type BlueprintNode,
+  type ManifestEntry,
+} from "@ghostframes/core";
 import { buildManifestDocument, renderManifestJson } from "../emit/manifest-writer";
 
-const createNode = (id: string, tagName = "div", children: BlueprintNode[] = []): BlueprintNode => ({
+const createNode = (
+  id: string,
+  tagName = "div",
+  children: BlueprintNode[] = []
+): BlueprintNode => ({
   id,
   role: "container",
   width: 100,
@@ -64,7 +72,7 @@ describe("B3: Quality Filtering in buildManifestDocument", () => {
         generatedAt: Date.now(),
         source: "dynamic",
       },
-      structuralHash: `hash-${key}` as any,
+      structuralHash: asStructuralHash(`hash-${key}`),
       generatedAt: Date.now(),
       ttlMs: 86400000,
       quality: {
@@ -76,9 +84,7 @@ describe("B3: Quality Filtering in buildManifestDocument", () => {
   };
 
   it("includes high-quality entries in manifest", () => {
-    const artifacts: CapturedArtifact[] = [
-      createArtifact("HighQuality", 0.95, 5),
-    ];
+    const artifacts: CapturedArtifact[] = [createArtifact("HighQuality", 0.95, 5)];
 
     const manifest = buildManifestDocument({
       packageVersion: "0.1.0",
@@ -91,9 +97,7 @@ describe("B3: Quality Filtering in buildManifestDocument", () => {
   });
 
   it("excludes low-quality entries from manifest when below threshold", () => {
-    const artifacts: CapturedArtifact[] = [
-      createArtifact("LowQuality", 0.3, 0),
-    ];
+    const artifacts: CapturedArtifact[] = [createArtifact("LowQuality", 0.3, 0)];
 
     const manifest = buildManifestDocument({
       packageVersion: "0.1.0",
@@ -129,9 +133,7 @@ describe("B3: Quality Filtering in buildManifestDocument", () => {
   });
 
   it("emits rejected entries metadata when threshold filtering applies", () => {
-    const artifacts: CapturedArtifact[] = [
-      createArtifact("Rejected", 0.3, 0),
-    ];
+    const artifacts: CapturedArtifact[] = [createArtifact("Rejected", 0.3, 0)];
 
     const manifest = buildManifestDocument({
       packageVersion: "0.1.0",
@@ -140,9 +142,8 @@ describe("B3: Quality Filtering in buildManifestDocument", () => {
       qualityThreshold: 0.88,
     });
 
-    const build = manifest.build as any;
-    expect(build.__quality_rejected_entries).toBeDefined();
-    expect(build.__quality_rejected_entries).toContainEqual(
+    expect(manifest.build.qualityRejectedEntries).toBeDefined();
+    expect(manifest.build.qualityRejectedEntries).toContainEqual(
       expect.objectContaining({
         key: "Rejected",
         reason: expect.stringMatching(/quality-below-threshold/),
@@ -151,9 +152,7 @@ describe("B3: Quality Filtering in buildManifestDocument", () => {
   });
 
   it("uses default quality threshold of 0.90 when not specified", () => {
-    const artifacts: CapturedArtifact[] = [
-      createArtifact("Medium", 0.89, 3),
-    ];
+    const artifacts: CapturedArtifact[] = [createArtifact("Medium", 0.89, 3)];
 
     const manifest = buildManifestDocument({
       packageVersion: "0.1.0",
@@ -173,7 +172,7 @@ describe("B3: Quality Filtering in buildManifestDocument", () => {
       // HeroBanner: high quality
       createArtifact("HeroBanner", 0.94, 12),
       // LoadingShimmer: acceptable quality
-      createArtifact("LoadingShimmer", 0.90, 2),
+      createArtifact("LoadingShimmer", 0.9, 2),
       // ComplexLayout: high quality
       createArtifact("ComplexLayout", 0.95, 15),
       // Avatar: good quality

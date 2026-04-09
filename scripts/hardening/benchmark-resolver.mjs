@@ -102,7 +102,10 @@ async function main() {
     "",
   ].join("\n");
 
-  const reportPath = path.resolve(__dirname, "../../docs/reports/resolver-performance-benchmark.md");
+  const reportPath = path.resolve(
+    __dirname,
+    "../../docs/reports/resolver-performance-benchmark.md"
+  );
   await fs.mkdir(path.dirname(reportPath), { recursive: true });
   await fs.writeFile(reportPath, output, "utf8");
   console.log(`Wrote resolver performance benchmark: ${reportPath}`);

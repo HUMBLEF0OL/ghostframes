@@ -117,7 +117,9 @@ export async function runCaptureCommand(
         return 1;
       }
 
-      io.log(`Parity check passed: ${(parityReport.parityRate * 100).toFixed(1)}% >= ${(threshold * 100).toFixed(1)}%`);
+      io.log(
+        `Parity check passed: ${(parityReport.parityRate * 100).toFixed(1)}% >= ${(threshold * 100).toFixed(1)}%`
+      );
     }
 
     const parityObservations = captureResult.parityObservations ?? [];

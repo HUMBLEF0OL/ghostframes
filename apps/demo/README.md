@@ -29,7 +29,7 @@ pnpm build
 pnpm skeleton:generate:dev
 
 # Validate generated artifact integrity
-pnpm quality:verify-artifacts
+pnpm skeleton:validate
 
 # Run full quality + promotion gates
 pnpm quality:gate
@@ -40,6 +40,7 @@ pnpm deploy:sanity
 
 ### Guide page covering this flow
 
+- `/reference/getting-started`
 - `/reference/cli-workflow`
 
 ## Demo Sections

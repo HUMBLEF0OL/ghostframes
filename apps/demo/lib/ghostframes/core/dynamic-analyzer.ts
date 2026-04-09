@@ -65,7 +65,9 @@ export async function generateDynamicBlueprint(
 
   // Virtualized list heuristic: extremely tall scrollHeight compared to children count
   if (root.children.length * 100 < root.scrollHeight && root.scrollHeight > 2000) {
-    console.warn("Ghostframes: Potential virtualized list detected. Skeletons bounded by maxDepth.");
+    console.warn(
+      "Ghostframes: Potential virtualized list detected. Skeletons bounded by maxDepth."
+    );
   }
 
   walk(root, 0);
@@ -106,8 +108,7 @@ export async function generateDynamicBlueprint(
     const { element: el, rect, styles, depth, parentIndex } = reads[i];
 
     // Edge-case filtering resolved via CSS
-    if (styles.display === "none" || styles.visibility === "hidden")
-      continue;
+    if (styles.display === "none" || styles.visibility === "hidden") continue;
     if (styles.position === "fixed") continue; // Cannot accurately relative-position fixed navbars inside flow
     if (rect.width < 1 || rect.height < 1) continue;
 
@@ -185,7 +186,8 @@ export async function generateDynamicBlueprint(
     // Clamp to parent bounds if parent has overflow: hidden
     if (parentIndex !== -1) {
       const parent = reads[parentIndex];
-      if (parent.styles.overflow === "hidden" ||
+      if (
+        parent.styles.overflow === "hidden" ||
         parent.styles.overflowX === "hidden" ||
         parent.styles.overflowY === "hidden"
       ) {

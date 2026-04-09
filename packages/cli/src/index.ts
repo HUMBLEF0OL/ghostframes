@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-import { pathToFileURL } from "node:url";
 import { runCaptureCommand } from "./commands/capture-command";
 import { runDiffCommand } from "./commands/diff-command";
 import { runReportCommand } from "./commands/report-command";
@@ -12,6 +10,12 @@ const defaultIo: CliIo = {
   log: (message) => console.log(message),
   error: (message) => console.error(message),
 };
+
+const DIRECT_INVOCATION_PATH_RE = /[\\/]dist[\\/](index|build)\.(js|cjs)$/;
+
+export function isCliDirectInvocationPath(invokedPath: string): boolean {
+  return DIRECT_INVOCATION_PATH_RE.test(invokedPath);
+}
 
 export async function runCli(argv: string[], io: CliIo = defaultIo): Promise<number> {
   const [command, ...rest] = argv;
@@ -35,9 +39,12 @@ export async function runCli(argv: string[], io: CliIo = defaultIo): Promise<num
   }
 }
 
-const invokedUrl = process.argv[1] ? pathToFileURL(process.argv[1]).href : "";
+const invokedPath = process.argv[1] ?? "";
+const isDirectInvocation =
+  (typeof require !== "undefined" && typeof module !== "undefined" && require.main === module) ||
+  isCliDirectInvocationPath(invokedPath);
 
-if (invokedUrl === import.meta.url) {
+if (isDirectInvocation) {
   runCli(process.argv.slice(2)).then((code) => {
     process.exitCode = code;
   });

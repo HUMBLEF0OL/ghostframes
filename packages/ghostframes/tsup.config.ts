@@ -1,9 +1,9 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-    entry: ["src/index.ts", "src/runtime.ts", "src/build.ts"],
-    format: ["cjs", "esm"],
-    dts: { resolve: true },
-    clean: true,
-    noExternal: [/^@ghostframes\//],
+  entry: ["src/index.ts", "src/runtime.ts", "src/build.ts"],
+  format: ["cjs", "esm"],
+  dts: { resolve: true },
+  clean: true,
+  noExternal: [/^@ghostframes\//],
 });

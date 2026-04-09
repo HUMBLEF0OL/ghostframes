@@ -16,15 +16,21 @@ function ResponsiveCard({ width }: { width: number }) {
         <div className="flex gap-4">
           <div className="h-20 w-20 shrink-0 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600" />
           <div className="flex-1">
-            <h3 className="mb-1 text-sm font-semibold text-white light:text-zinc-900">Adaptive Product Card</h3>
-            <p className="mb-3 text-xs text-zinc-500 light:text-zinc-600">Desktop breakpoint layout</p>
+            <h3 className="mb-1 text-sm font-semibold text-white light:text-zinc-900">
+              Adaptive Product Card
+            </h3>
+            <p className="mb-3 text-xs text-zinc-500 light:text-zinc-600">
+              Desktop breakpoint layout
+            </p>
             <p className="text-sm font-bold text-emerald-400">$129.00</p>
           </div>
         </div>
       ) : (
         <div>
           <div className="mb-3 h-24 w-full rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600" />
-          <h3 className="mb-1 text-sm font-semibold text-white light:text-zinc-900">Adaptive Product Card</h3>
+          <h3 className="mb-1 text-sm font-semibold text-white light:text-zinc-900">
+            Adaptive Product Card
+          </h3>
           <p className="mb-2 text-xs text-zinc-500 light:text-zinc-600">Mobile breakpoint layout</p>
           <p className="text-sm font-bold text-emerald-400">$129.00</p>
         </div>
@@ -41,7 +47,9 @@ export default function ResponsivePage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">Responsive Behavior</h1>
+        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">
+          Responsive Behavior
+        </h1>
         <p className="text-lg text-zinc-500 light:text-zinc-600">
           Use remeasureOnResize to keep skeleton geometry aligned as the container width changes.
         </p>
@@ -67,7 +75,9 @@ export default function ResponsivePage() {
           />
 
           <div className="border-t border-zinc-800 pt-4 light:border-zinc-200">
-            <label className="mb-2 block text-xs font-mono text-zinc-500 light:text-zinc-600">Width: {width}px</label>
+            <label className="mb-2 block text-xs font-mono text-zinc-500 light:text-zinc-600">
+              Width: {width}px
+            </label>
             <input
               type="range"
               min={220}

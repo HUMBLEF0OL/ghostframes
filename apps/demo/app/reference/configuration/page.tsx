@@ -73,8 +73,12 @@ export default function ConfigurationPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">Configuration Options</h1>
-        <p className="text-lg text-zinc-500 light:text-zinc-600">Complete reference for tuning runtime behavior.</p>
+        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">
+          Configuration Options
+        </h1>
+        <p className="text-lg text-zinc-500 light:text-zinc-600">
+          Complete reference for tuning runtime behavior.
+        </p>
       </header>
 
       <FeatureCard title="All Options" description="Type, default, and intent for each config key">
@@ -91,10 +95,18 @@ export default function ConfigurationPage() {
             <tbody>
               {configOptions.map((option) => (
                 <tr key={option.name} className="border-b border-zinc-800/60 light:border-zinc-200">
-                  <td className="px-3 py-2 font-mono text-xs text-indigo-300 light:text-indigo-700">{option.name}</td>
-                  <td className="px-3 py-2 font-mono text-xs text-zinc-400 light:text-zinc-600">{option.type}</td>
-                  <td className="px-3 py-2 font-mono text-xs text-zinc-500 light:text-zinc-500">{option.defaultValue}</td>
-                  <td className="px-3 py-2 text-xs text-zinc-400 light:text-zinc-600">{option.description}</td>
+                  <td className="px-3 py-2 font-mono text-xs text-indigo-300 light:text-indigo-700">
+                    {option.name}
+                  </td>
+                  <td className="px-3 py-2 font-mono text-xs text-zinc-400 light:text-zinc-600">
+                    {option.type}
+                  </td>
+                  <td className="px-3 py-2 font-mono text-xs text-zinc-500 light:text-zinc-500">
+                    {option.defaultValue}
+                  </td>
+                  <td className="px-3 py-2 text-xs text-zinc-400 light:text-zinc-600">
+                    {option.description}
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -251,9 +251,9 @@ export function computeResolverConfidenceMetrics(
     fallbackRatio:
       servedCount > 0
         ? normalizeRatio(
-          (counters.sessionHits + counters.dynamicFallbacks + counters.placeholderFallbacks) /
-          servedCount
-        )
+            (counters.sessionHits + counters.dynamicFallbacks + counters.placeholderFallbacks) /
+              servedCount
+          )
         : 0,
   };
 }
@@ -488,10 +488,10 @@ export function resolveBlueprint(context: ResolverContext): ResolutionResult {
           manifestValidation: isMiss
             ? undefined
             : {
-              valid: false,
-              reason: rejectionReason,
-              invalidationReason,
-            },
+                valid: false,
+                reason: rejectionReason,
+                invalidationReason,
+              },
         },
       };
     }

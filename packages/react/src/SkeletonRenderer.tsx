@@ -44,11 +44,11 @@ function resolveAnimation(
         ...(custom.inlineStyle ?? {}),
         ...(custom.keyframes && custom.durationMs
           ? {
-            animationName: keyframeName,
-            animationDuration: `${custom.durationMs}ms`,
-            animationTimingFunction: "linear",
-            animationIterationCount: "infinite",
-          }
+              animationName: keyframeName,
+              animationDuration: `${custom.durationMs}ms`,
+              animationTimingFunction: "linear",
+              animationIterationCount: "infinite",
+            }
           : {}),
       },
       durationMs: custom.durationMs,

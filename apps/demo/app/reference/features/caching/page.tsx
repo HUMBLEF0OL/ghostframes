@@ -72,18 +72,22 @@ export default function CachingPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">Blueprint Caching</h1>
+        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">
+          Blueprint Caching
+        </h1>
         <p className="text-lg text-zinc-500 light:text-zinc-600">
-          Repeated layouts benefit from structural cache reuse, reducing expensive re-generation work.
+          Repeated layouts benefit from structural cache reuse, reducing expensive re-generation
+          work.
         </p>
       </header>
 
-      <FeatureCard title="Interactive Example" description="Reload the same structure to observe cache reuse" badge={badge}>
+      <FeatureCard
+        title="Interactive Example"
+        description="Reload the same structure to observe cache reuse"
+        badge={badge}
+      >
         <div className="space-y-4">
-          <AutoSkeleton
-            loading={loading}
-            onMeasured={handleMeasured}
-          >
+          <AutoSkeleton loading={loading} onMeasured={handleMeasured}>
             <ProfileCard />
           </AutoSkeleton>
 

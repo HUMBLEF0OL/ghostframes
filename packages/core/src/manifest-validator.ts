@@ -15,6 +15,14 @@ import type {
 import type { Blueprint } from "./types.js";
 import { asStructuralHash, asStyleFingerprint } from "./manifest-types.js";
 
+function toPolicyList(value: string | string[] | undefined): string[] {
+  if (value === undefined) {
+    return [];
+  }
+
+  return Array.isArray(value) ? value : [value];
+}
+
 /**
  * Parse and validate a JSON object as a BlueprintManifest.
  * Safe: never throws, always returns a result object.
@@ -452,11 +460,10 @@ export function validateManifestCompatibility(
 
   // 4. Policy constraints (if specified)
   if (profile?.allowedPolicies) {
-    const policyConstraints = (manifest as any).policyConstraints?.policy ||
-      (manifest as any).policyConstraints?.mode || [
-        manifest.build,
-      ];
-    const policies = Array.isArray(policyConstraints) ? policyConstraints : [policyConstraints];
+    const policies = [
+      ...toPolicyList(manifest.policyConstraints?.policy),
+      ...toPolicyList(manifest.policyConstraints?.mode),
+    ];
 
     for (const policy of policies) {
       if (policy && !profile.allowedPolicies.includes(policy)) {
@@ -557,16 +564,19 @@ export function validateCompatibilityMatrix(
   }
 
   // If allowed modes are specified, check compatibility
-  if (options.allowedModes && (manifest as any).policyConstraints?.mode) {
-    const mode = (manifest as any).policyConstraints.mode;
-    if (!options.allowedModes.includes(mode)) {
-      errors.push({
-        code: "policy-mode-not-allowed",
-        message: `Policy mode "${mode}" is not allowed for current runtime. Allowed: ${options.allowedModes.join(", ")}.`,
-        field: "policyConstraints.mode",
-        expected: options.allowedModes,
-        actual: mode,
-      });
+  if (options.allowedModes) {
+    const modes = toPolicyList(manifest.policyConstraints?.mode);
+
+    for (const mode of modes) {
+      if (!options.allowedModes.includes(mode)) {
+        errors.push({
+          code: "policy-mode-not-allowed",
+          message: `Policy mode "${mode}" is not allowed for current runtime. Allowed: ${options.allowedModes.join(", ")}.`,
+          field: "policyConstraints.mode",
+          expected: options.allowedModes,
+          actual: mode,
+        });
+      }
     }
   }
 

@@ -90,7 +90,9 @@ export default function FeaturesPage() {
                 </h2>
                 <p className="text-sm text-zinc-500 light:text-zinc-600">{feature.description}</p>
               </div>
-              <span className="text-zinc-600 group-hover:text-zinc-400 light:text-zinc-400 light:group-hover:text-zinc-600">→</span>
+              <span className="text-zinc-600 group-hover:text-zinc-400 light:text-zinc-400 light:group-hover:text-zinc-600">
+                →
+              </span>
             </div>
           </Link>
         ))}
@@ -100,7 +102,10 @@ export default function FeaturesPage() {
         <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 light:text-zinc-400">
           Server Rendering
         </p>
-        <Link href="/reference/ssr" className="text-sm font-medium text-indigo-300 transition-colors hover:text-indigo-200 light:text-indigo-700 light:hover:text-indigo-600">
+        <Link
+          href="/reference/ssr"
+          className="text-sm font-medium text-indigo-300 transition-colors hover:text-indigo-200 light:text-indigo-700 light:hover:text-indigo-600"
+        >
           SSR & Static Blueprints →
         </Link>
       </div>

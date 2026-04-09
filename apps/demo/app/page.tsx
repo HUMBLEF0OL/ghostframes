@@ -106,8 +106,12 @@ function PreviewCard() {
     <article className="rounded-xl border border-zinc-800 bg-zinc-900 p-5 light:border-zinc-200 light:bg-white">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 light:text-zinc-600">Guide Preview</p>
-          <h3 className="mt-1 text-lg font-semibold text-white light:text-zinc-900">Runtime Measurement Card</h3>
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 light:text-zinc-600">
+            Guide Preview
+          </p>
+          <h3 className="mt-1 text-lg font-semibold text-white light:text-zinc-900">
+            Runtime Measurement Card
+          </h3>
         </div>
         <button
           type="button"
@@ -118,7 +122,8 @@ function PreviewCard() {
         </button>
       </div>
       <p className="mt-4 text-sm text-zinc-500 light:text-zinc-600">
-        This sample keeps one control interactive during loading and demonstrates guide-ready production patterns.
+        This sample keeps one control interactive during loading and demonstrates guide-ready
+        production patterns.
       </p>
     </article>
   );
@@ -131,17 +136,22 @@ export default function Home() {
       speed: 1,
       borderRadius: 10,
     }),
-    [],
+    []
   );
 
   return (
     <div className="app-surface guide-page">
       <main className="app-content guide-flow">
         <header className="guide-header rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 via-zinc-900 to-indigo-950 p-7 light:border-zinc-200 light:from-white light:via-zinc-50 light:to-indigo-50">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-300 light:text-indigo-700">Developer Guide</p>
-          <h1 className="guide-title font-bold text-white light:text-zinc-900">Ghostframes Official Guide</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-300 light:text-indigo-700">
+            Developer Guide
+          </p>
+          <h1 className="guide-title font-bold text-white light:text-zinc-900">
+            Ghostframes Official Guide
+          </h1>
           <p className="max-w-3xl text-sm text-zinc-400 light:text-zinc-600 sm:text-base">
-            This guide provides implementation, validation, and operational workflows for adopting Ghostframes in production React systems.
+            This guide provides implementation, validation, and operational workflows for adopting
+            Ghostframes in production React systems.
           </p>
         </header>
 
@@ -157,7 +167,9 @@ export default function Home() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-white light:text-zinc-900">Core Guide Sections</h2>
+          <h2 className="text-2xl font-semibold text-white light:text-zinc-900">
+            Core Guide Sections
+          </h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {coreRoutes.map((item) => (
               <GuideCard key={item.href} item={item} />
@@ -166,9 +178,12 @@ export default function Home() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-white light:text-zinc-900">Feature Coverage</h2>
+          <h2 className="text-2xl font-semibold text-white light:text-zinc-900">
+            Feature Coverage
+          </h2>
           <p className="text-sm text-zinc-500 light:text-zinc-600">
-            Every feature offered by the package is documented with dedicated examples and route-level references.
+            Every feature offered by the package is documented with dedicated examples and
+            route-level references.
           </p>
           <div className="grid gap-4 sm:grid-cols-2">
             {featureRoutes.map((item) => (
@@ -178,7 +193,9 @@ export default function Home() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-white light:text-zinc-900">Live Runtime Preview</h2>
+          <h2 className="text-2xl font-semibold text-white light:text-zinc-900">
+            Live Runtime Preview
+          </h2>
           <AutoSkeleton loading={false} config={runtimeConfig}>
             <PreviewCard />
           </AutoSkeleton>

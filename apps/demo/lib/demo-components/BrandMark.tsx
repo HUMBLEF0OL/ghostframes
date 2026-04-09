@@ -5,5 +5,14 @@ type BrandMarkProps = {
 };
 
 export function BrandMark({ size = 32 }: BrandMarkProps) {
-  return <Image src="/logo.png" alt="" aria-hidden="true" width={size} height={size} className="shrink-0" />;
+  return (
+    <Image
+      src="/logo.png"
+      alt=""
+      aria-hidden="true"
+      width={size}
+      height={size}
+      className="shrink-0"
+    />
+  );
 }

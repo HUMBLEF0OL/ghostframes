@@ -17,55 +17,55 @@
         "rootHeight": 138,
         "nodes": [
           {
-            "borderRadius": "4px",
-            "children": [],
-            "height": 17,
             "id": "mvp-line-1",
-            "layout": {},
-            "left": 26,
             "role": "text",
+            "width": 382,
+            "height": 17,
+            "top": 28,
+            "left": 26,
+            "layout": {},
+            "borderRadius": "4px",
             "tagName": "DIV",
             "text": {
               "lastLineWidthRatio": 1,
               "lineHeight": 17,
               "lines": 1
             },
-            "top": 28,
-            "width": 382
+            "children": []
           },
           {
-            "borderRadius": "4px",
-            "children": [],
-            "height": 17,
             "id": "mvp-line-2",
-            "layout": {},
-            "left": 26,
             "role": "text",
+            "width": 298,
+            "height": 17,
+            "top": 53,
+            "left": 26,
+            "layout": {},
+            "borderRadius": "4px",
             "tagName": "DIV",
             "text": {
               "lastLineWidthRatio": 0.78,
               "lineHeight": 17,
               "lines": 1
             },
-            "top": 53,
-            "width": 298
+            "children": []
           },
           {
-            "borderRadius": "4px",
-            "children": [],
-            "height": 17,
             "id": "mvp-line-3",
-            "layout": {},
-            "left": 26,
             "role": "text",
+            "width": 214,
+            "height": 17,
+            "top": 78,
+            "left": 26,
+            "layout": {},
+            "borderRadius": "4px",
             "tagName": "DIV",
             "text": {
               "lastLineWidthRatio": 0.56,
               "lineHeight": 17,
               "lines": 1
             },
-            "top": 78,
-            "width": 214
+            "children": []
           }
         ],
         "generatedAt": 0,
@@ -89,55 +89,55 @@
         "rootHeight": 208,
         "nodes": [
           {
-            "borderRadius": "4px",
-            "children": [],
-            "height": 25,
             "id": "mvp-line-1",
-            "layout": {},
-            "left": 49,
             "role": "text",
+            "width": 724,
+            "height": 25,
+            "top": 42,
+            "left": 49,
+            "layout": {},
+            "borderRadius": "4px",
             "tagName": "DIV",
             "text": {
               "lastLineWidthRatio": 1,
               "lineHeight": 25,
               "lines": 1
             },
-            "top": 42,
-            "width": 724
+            "children": []
           },
           {
-            "borderRadius": "4px",
-            "children": [],
-            "height": 25,
             "id": "mvp-line-2",
-            "layout": {},
-            "left": 49,
             "role": "text",
+            "width": 565,
+            "height": 25,
+            "top": 75,
+            "left": 49,
+            "layout": {},
+            "borderRadius": "4px",
             "tagName": "DIV",
             "text": {
               "lastLineWidthRatio": 0.78,
               "lineHeight": 25,
               "lines": 1
             },
-            "top": 75,
-            "width": 565
+            "children": []
           },
           {
-            "borderRadius": "4px",
-            "children": [],
-            "height": 25,
             "id": "mvp-line-3",
-            "layout": {},
-            "left": 49,
             "role": "text",
+            "width": 405,
+            "height": 25,
+            "top": 108,
+            "left": 49,
+            "layout": {},
+            "borderRadius": "4px",
             "tagName": "DIV",
             "text": {
               "lastLineWidthRatio": 0.56,
               "lineHeight": 25,
               "lines": 1
             },
-            "top": 108,
-            "width": 405
+            "children": []
           }
         ],
         "generatedAt": 0,
@@ -161,55 +161,55 @@
         "rootHeight": 194,
         "nodes": [
           {
-            "borderRadius": "4px",
-            "children": [],
-            "height": 23,
             "id": "mvp-line-1",
-            "layout": {},
-            "left": 59,
             "role": "text",
+            "width": 872,
+            "height": 23,
+            "top": 39,
+            "left": 59,
+            "layout": {},
+            "borderRadius": "4px",
             "tagName": "DIV",
             "text": {
               "lastLineWidthRatio": 1,
               "lineHeight": 23,
               "lines": 1
             },
-            "top": 39,
-            "width": 872
+            "children": []
           },
           {
-            "borderRadius": "4px",
-            "children": [],
-            "height": 23,
             "id": "mvp-line-2",
-            "layout": {},
-            "left": 59,
             "role": "text",
+            "width": 680,
+            "height": 23,
+            "top": 70,
+            "left": 59,
+            "layout": {},
+            "borderRadius": "4px",
             "tagName": "DIV",
             "text": {
               "lastLineWidthRatio": 0.78,
               "lineHeight": 23,
               "lines": 1
             },
-            "top": 70,
-            "width": 680
+            "children": []
           },
           {
-            "borderRadius": "4px",
-            "children": [],
-            "height": 23,
             "id": "mvp-line-3",
-            "layout": {},
-            "left": 59,
             "role": "text",
+            "width": 488,
+            "height": 23,
+            "top": 101,
+            "left": 59,
+            "layout": {},
+            "borderRadius": "4px",
             "tagName": "DIV",
             "text": {
               "lastLineWidthRatio": 0.56,
               "lineHeight": 23,
               "lines": 1
             },
-            "top": 101,
-            "width": 488
+            "children": []
           }
         ],
         "generatedAt": 0,

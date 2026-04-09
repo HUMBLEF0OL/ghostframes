@@ -12,8 +12,12 @@ function ProductCardWithSlot() {
         className="h-20 w-20 shrink-0 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600"
       />
       <div className="flex-1">
-        <h3 className="mb-1 text-sm font-semibold text-white light:text-zinc-900">Premium Headphones</h3>
-        <p className="mb-2 text-xs text-zinc-500 light:text-zinc-600">High-quality audio experience</p>
+        <h3 className="mb-1 text-sm font-semibold text-white light:text-zinc-900">
+          Premium Headphones
+        </h3>
+        <p className="mb-2 text-xs text-zinc-500 light:text-zinc-600">
+          High-quality audio experience
+        </p>
         <div className="flex items-center gap-2">
           <span className="text-sm font-bold text-emerald-400">$199</span>
           <span className="text-xs text-zinc-600 line-through">$249</span>
@@ -38,9 +42,9 @@ export default function CustomSlotsPage() {
       <header>
         <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">Custom Slots</h1>
         <p className="text-lg text-zinc-500 light:text-zinc-600">
-          Apply data-skeleton-slot for custom skeleton rendering on specific elements. Toggle ON passes
-          slots and uses the custom renderer for product-thumbnail; toggle OFF passes undefined and falls
-          back to auto-generated skeletons for the same content.
+          Apply data-skeleton-slot for custom skeleton rendering on specific elements. Toggle ON
+          passes slots and uses the custom renderer for product-thumbnail; toggle OFF passes
+          undefined and falls back to auto-generated skeletons for the same content.
         </p>
       </header>
 
@@ -68,14 +72,17 @@ export default function CustomSlotsPage() {
               <ProductCardWithSlot />
             </AutoSkeleton>
             <p className="mt-3 text-xs text-zinc-500 light:text-zinc-600">
-              The underlying ProductCardWithSlot markup does not change. This toggle only changes skeleton
-              rendering strategy.
+              The underlying ProductCardWithSlot markup does not change. This toggle only changes
+              skeleton rendering strategy.
             </p>
           </div>
         </div>
       </FeatureCard>
 
-      <FeatureCard title="Code Example" description="Define slot key and pass slots to AutoSkeleton">
+      <FeatureCard
+        title="Code Example"
+        description="Define slot key and pass slots to AutoSkeleton"
+      >
         <CodeBlock
           code={`<div data-skeleton-slot="product-thumbnail" className="h-20 w-20" />
 

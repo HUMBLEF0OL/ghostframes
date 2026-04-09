@@ -50,7 +50,7 @@ export function buildManifestDocument(input: {
 
   // Emit quality metadata: store rejected entries count in build metadata
   if (rejectedEntries.length > 0) {
-    (normalized.build as any).__quality_rejected_entries = rejectedEntries;
+    normalized.build.qualityRejectedEntries = rejectedEntries;
   }
 
   return normalized;

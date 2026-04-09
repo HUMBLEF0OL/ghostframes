@@ -246,13 +246,15 @@ describe("runCli", () => {
 
     expect(exitCode).toBe(1);
     expect(io.error).toHaveBeenCalledWith(expect.stringContaining("Parity check failed"));
-    await expect(fs.readFile(path.join(outputDir, "parity-report.json"), "utf8")).resolves.toContain(
-      '"parityRate"'
-    );
+    await expect(
+      fs.readFile(path.join(outputDir, "parity-report.json"), "utf8")
+    ).resolves.toContain('"parityRate"');
   });
 
   it("fails fast when pilotRoutes are not included in routes", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "ghostframes-parity-route-mismatch-test-"));
+    const tmpDir = await fs.mkdtemp(
+      path.join(os.tmpdir(), "ghostframes-parity-route-mismatch-test-")
+    );
     createdDirs.push(tmpDir);
     const outputDir = path.join(tmpDir, "generated");
     const configPath = path.join(tmpDir, "capture.config.mjs");
@@ -358,11 +360,15 @@ describe("runCli", () => {
     });
 
     expect(exitCode).toBe(1);
-    expect(io.error).toHaveBeenCalledWith(expect.stringContaining("selector mismatch budget exceeded"));
+    expect(io.error).toHaveBeenCalledWith(
+      expect.stringContaining("selector mismatch budget exceeded")
+    );
   });
 
   it("counts selector mismatch budget per key across a check", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "ghostframes-selector-key-budget-test-"));
+    const tmpDir = await fs.mkdtemp(
+      path.join(os.tmpdir(), "ghostframes-selector-key-budget-test-")
+    );
     createdDirs.push(tmpDir);
     const outputDir = path.join(tmpDir, "generated");
     const configPath = path.join(tmpDir, "capture.config.mjs");
@@ -413,11 +419,15 @@ describe("runCli", () => {
     });
 
     expect(exitCode).toBe(1);
-    expect(io.error).toHaveBeenCalledWith(expect.stringContaining("selector mismatch budget exceeded (2 > 1)"));
+    expect(io.error).toHaveBeenCalledWith(
+      expect.stringContaining("selector mismatch budget exceeded (2 > 1)")
+    );
   });
 
   it("fails when artifacts are emitted without parity observations", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "ghostframes-missing-observations-test-"));
+    const tmpDir = await fs.mkdtemp(
+      path.join(os.tmpdir(), "ghostframes-missing-observations-test-")
+    );
     createdDirs.push(tmpDir);
     const outputDir = path.join(tmpDir, "generated");
     const configPath = path.join(tmpDir, "capture.config.mjs");
@@ -459,11 +469,13 @@ describe("runCli", () => {
 
     expect(exitCode).toBe(1);
     expect(io.error).toHaveBeenCalledWith(
-      expect.stringContaining("runCapture must return parityObservations when artifacts are emitted")
+      expect.stringContaining(
+        "runCapture must return parityObservations when artifacts are emitted"
+      )
     );
-    await expect(fs.readFile(path.join(outputDir, "parity-report.json"), "utf8")).resolves.toContain(
-      '"parityRate"'
-    );
+    await expect(
+      fs.readFile(path.join(outputDir, "parity-report.json"), "utf8")
+    ).resolves.toContain('"parityRate"');
   });
 
   it("fails when malformed fallback reduction is below B3 threshold", async () => {

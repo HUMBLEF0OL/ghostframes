@@ -3,9 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { FeatureCard } from "../../../../lib/demo-components";
 
-type TelemetrySink = NonNullable<Window["__SKEL_TELEMETRY__"]>;
-type Snapshot = TelemetrySink["snapshots"][number];
-
 export default function RolloutTelemetryFeaturePage() {
     const [count, setCount] = useState(0);
     const [latestRoute, setLatestRoute] = useState("none");
@@ -39,7 +36,9 @@ export default function RolloutTelemetryFeaturePage() {
     return (
         <div className="space-y-6">
             <header>
-                <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">Rollout Telemetry Collector</h1>
+                <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">
+                    Rollout Telemetry Collector
+                </h1>
                 <p className="text-lg text-zinc-500 light:text-zinc-600">
                     Inspect sink snapshots populated by client providers during route navigation.
                 </p>

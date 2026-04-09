@@ -22,7 +22,10 @@ const navSections = [
       { href: "/reference/features/fallback", label: "Fallback Prop" },
       { href: "/reference/features/resolver-policy", label: "Resolver Policy" },
       { href: "/reference/features/rollout-telemetry", label: "Rollout Telemetry" },
-      { href: "/reference/features/manifest-parse-validation", label: "Manifest Parse & Validation" },
+      {
+        href: "/reference/features/manifest-parse-validation",
+        label: "Manifest Parse & Validation",
+      },
       { href: "/reference/features/no-skeleton-vs-ignore", label: "No Skeleton vs Ignore" },
     ],
   },
@@ -57,7 +60,10 @@ export function ReferenceNav() {
   return (
     <nav className="sticky top-[57px] hidden h-[calc(100vh-57px)] w-72 flex-col overflow-y-auto border-r border-zinc-800 bg-zinc-950 p-4 light:border-zinc-200 light:bg-zinc-50 md:flex">
       <div className="mb-6 flex items-center justify-between gap-2">
-        <Link href="/" className="flex items-center gap-2 text-white transition-opacity hover:opacity-80 light:text-zinc-900">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-white transition-opacity hover:opacity-80 light:text-zinc-900"
+        >
           <BrandMark size={20} />
           <span className="text-sm font-bold">Ghostframes</span>
         </Link>
@@ -83,10 +89,11 @@ export function ReferenceNav() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`block rounded-lg px-3 py-2 text-sm transition-colors ${active
-                      ? "bg-indigo-500/20 text-indigo-300 light:bg-indigo-50 light:text-indigo-700"
-                      : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-300 light:text-zinc-600 light:hover:bg-zinc-100 light:hover:text-zinc-700"
-                      }`}
+                    className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                      active
+                        ? "bg-indigo-500/20 text-indigo-300 light:bg-indigo-50 light:text-indigo-700"
+                        : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-300 light:text-zinc-600 light:hover:bg-zinc-100 light:hover:text-zinc-700"
+                    }`}
                   >
                     {item.label}
                   </Link>

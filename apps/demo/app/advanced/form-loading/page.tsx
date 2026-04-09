@@ -8,7 +8,9 @@ function CheckoutFormFields() {
   return (
     <form className="mx-auto max-w-lg space-y-4 rounded-xl border border-zinc-800 bg-zinc-900 p-6 light:border-zinc-200 light:bg-white">
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-400 light:text-zinc-600">Full Name</label>
+        <label className="mb-2 block text-sm font-medium text-zinc-400 light:text-zinc-600">
+          Full Name
+        </label>
         <input
           data-skeleton-ignore
           type="text"
@@ -18,7 +20,9 @@ function CheckoutFormFields() {
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-400 light:text-zinc-600">Email</label>
+        <label className="mb-2 block text-sm font-medium text-zinc-400 light:text-zinc-600">
+          Email
+        </label>
         <input
           data-skeleton-ignore
           type="email"
@@ -29,7 +33,9 @@ function CheckoutFormFields() {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-2 block text-sm font-medium text-zinc-400 light:text-zinc-600">City</label>
+          <label className="mb-2 block text-sm font-medium text-zinc-400 light:text-zinc-600">
+            City
+          </label>
           <input
             data-skeleton-ignore
             type="text"
@@ -38,7 +44,9 @@ function CheckoutFormFields() {
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-zinc-400 light:text-zinc-600">ZIP</label>
+          <label className="mb-2 block text-sm font-medium text-zinc-400 light:text-zinc-600">
+            ZIP
+          </label>
           <input
             data-skeleton-ignore
             type="text"
@@ -67,11 +75,16 @@ export default function FormLoadingPage() {
       <header>
         <h1 className="mb-2 text-3xl font-bold text-white light:text-zinc-900">Forms & Loading</h1>
         <p className="text-zinc-500 light:text-zinc-600">
-          Keep inputs interactive with data-skeleton-ignore while surrounding regions remain skeletonized.
+          Keep inputs interactive with data-skeleton-ignore while surrounding regions remain
+          skeletonized.
         </p>
       </header>
 
-      <FeatureCard title="Interactive Checkout Pattern" description="Toggle loading without blocking user input" badge="form-loading">
+      <FeatureCard
+        title="Interactive Checkout Pattern"
+        description="Toggle loading without blocking user input"
+        badge="form-loading"
+      >
         <div className="space-y-4">
           <button
             onClick={() => setLoading((current) => !current)}
@@ -86,7 +99,10 @@ export default function FormLoadingPage() {
         </div>
       </FeatureCard>
 
-      <FeatureCard title="Implementation Snippet" description="Ignore specific controls during measurement">
+      <FeatureCard
+        title="Implementation Snippet"
+        description="Ignore specific controls during measurement"
+      >
         <CodeBlock
           code={`<AutoSkeleton loading={loading}>
   <form>

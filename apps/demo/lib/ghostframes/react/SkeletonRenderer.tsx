@@ -42,8 +42,11 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
     const isText = node.role === "text" && node.text;
     const isStaticFlowText = mode === "flow" && blueprint.source === "static" && Boolean(isText);
     const animationClass = config.animation === "none" ? "" : `skel-${config.animation}`;
-    const preserveNodeRadius = node.role === "avatar" || (mode === "flow" && blueprint.source === "static");
-    const resolvedBorderRadius = preserveNodeRadius ? node.borderRadius : `${config.borderRadius}px`;
+    const preserveNodeRadius =
+      node.role === "avatar" || (mode === "flow" && blueprint.source === "static");
+    const resolvedBorderRadius = preserveNodeRadius
+      ? node.borderRadius
+      : `${config.borderRadius}px`;
 
     // Common style attributes
     const commonStyles: React.CSSProperties = {
@@ -75,10 +78,7 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
       const filteredLayout = Object.fromEntries(
         Object.entries(node.layout).filter(([key]) => {
           const normalizedKey = key.toLowerCase();
-          return (
-            !normalizedKey.includes("margin") &&
-            !normalizedKey.includes("background")
-          );
+          return !normalizedKey.includes("margin") && !normalizedKey.includes("background");
         })
       );
 
@@ -86,13 +86,13 @@ export const SkeletonRenderer: React.FC<SkeletonRendererProps> = ({
         <Tag
           key={node.id}
           className={`skel-container ${node.tagName.toLowerCase()}`}
-          style={{
-            ...commonStyles,
-            backgroundColor: "transparent", // Containers are invisible
-            ...(mode === "absolute"
-              ? filteredLayout
-              : node.layout),
-          } as React.CSSProperties}
+          style={
+            {
+              ...commonStyles,
+              backgroundColor: "transparent", // Containers are invisible
+              ...(mode === "absolute" ? filteredLayout : node.layout),
+            } as React.CSSProperties
+          }
         >
           {mode === "flow" ? node.children.map(renderNode) : null}
         </Tag>

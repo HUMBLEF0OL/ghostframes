@@ -11,7 +11,9 @@ function createStaticBlueprintTree() {
           <p className="text-xs font-mono uppercase tracking-wider text-indigo-400 light:text-indigo-700">
             Static product card
           </p>
-          <h3 className="mt-2 text-lg font-bold text-white light:text-zinc-900">Build once, reuse everywhere</h3>
+          <h3 className="mt-2 text-lg font-bold text-white light:text-zinc-900">
+            Build once, reuse everywhere
+          </h3>
         </div>
         <span className="shrink-0 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2 py-1 text-[11px] font-semibold text-indigo-300 light:border-indigo-200 light:bg-indigo-50 light:text-indigo-700">
           SSR-ready
@@ -19,13 +21,17 @@ function createStaticBlueprintTree() {
       </div>
 
       <p className="mt-3 text-sm leading-relaxed text-zinc-500 light:text-zinc-600">
-        The same tree can be serialized on the server, cached at the edge, and handed to the client without waiting for
-        a measurement pass.
+        The same tree can be serialized on the server, cached at the edge, and handed to the client
+        without waiting for a measurement pass.
       </p>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <button className="rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white">Preview</button>
-        <span className="text-xs text-zinc-500 light:text-zinc-600">Generated from static markup</span>
+        <button className="rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white">
+          Preview
+        </button>
+        <span className="text-xs text-zinc-500 light:text-zinc-600">
+          Generated from static markup
+        </span>
       </div>
     </article>
   );
@@ -79,9 +85,12 @@ export default function SsrReferencePage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">SSR & Static Blueprints</h1>
+        <h1 className="mb-2 text-4xl font-bold text-white light:text-zinc-900">
+          SSR & Static Blueprints
+        </h1>
         <p className="text-lg text-zinc-500 light:text-zinc-600">
-          Generate a blueprint before hydration, then hand the runtime a precomputed structure for the first paint.
+          Generate a blueprint before hydration, then hand the runtime a precomputed structure for
+          the first paint.
         </p>
       </header>
 
@@ -97,15 +106,21 @@ export default function SsrReferencePage() {
 
           <div className="space-y-3">
             <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-4 light:border-zinc-200 light:bg-zinc-50">
-              <p className="text-xs font-mono uppercase tracking-wider text-zinc-500 light:text-zinc-600">Blueprint summary</p>
+              <p className="text-xs font-mono uppercase tracking-wider text-zinc-500 light:text-zinc-600">
+                Blueprint summary
+              </p>
               <div className="mt-3 grid grid-cols-1 gap-3 text-sm sm:grid-cols-3">
                 <div>
                   <p className="text-zinc-500 light:text-zinc-600">Source</p>
-                  <p className="font-mono text-zinc-300 light:text-zinc-700">{staticBlueprint.source}</p>
+                  <p className="font-mono text-zinc-300 light:text-zinc-700">
+                    {staticBlueprint.source}
+                  </p>
                 </div>
                 <div>
                   <p className="text-zinc-500 light:text-zinc-600">Nodes</p>
-                  <p className="font-mono text-zinc-300 light:text-zinc-700">{staticBlueprint.nodes.length}</p>
+                  <p className="font-mono text-zinc-300 light:text-zinc-700">
+                    {staticBlueprint.nodes.length}
+                  </p>
                 </div>
                 <div>
                   <p className="text-zinc-500 light:text-zinc-600">Mode</p>
@@ -131,7 +146,10 @@ export default function SsrReferencePage() {
         <PrecomputedBlueprintDemo blueprint={staticBlueprint} />
       </FeatureCard>
 
-      <FeatureCard title="Integration example" description="Minimal server-side usage pattern for real apps">
+      <FeatureCard
+        title="Integration example"
+        description="Minimal server-side usage pattern for real apps"
+      >
         <CodeBlock code={staticUsageCode} />
       </FeatureCard>
 
@@ -141,9 +159,15 @@ export default function SsrReferencePage() {
       >
         <div className="space-y-3">
           <ul className="space-y-2 text-sm text-zinc-500 light:text-zinc-600">
-            <li>Send `hydrateBlueprint` from server output and set `blueprintSource=&quot;server&quot;`.</li>
+            <li>
+              Send `hydrateBlueprint` from server output and set
+              `blueprintSource=&quot;server&quot;`.
+            </li>
             <li>Use `blueprintCachePolicy` to enforce schema versions and expiry.</li>
-            <li>Choose `measurementPolicy` per section priority (`eager`, `idle`, `viewport`, `manual`).</li>
+            <li>
+              Choose `measurementPolicy` per section priority (`eager`, `idle`, `viewport`,
+              `manual`).
+            </li>
             <li>Handle `onBlueprintInvalidated` to track drift and fallback behavior.</li>
           </ul>
 

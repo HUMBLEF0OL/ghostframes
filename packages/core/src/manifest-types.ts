@@ -34,6 +34,19 @@ export interface ManifestBuildMetadata {
   builtAt: number;
   /** Application version or build identifier */
   appVersion: string;
+  /** Rejected low-quality entries emitted during capture (optional) */
+  qualityRejectedEntries?: Array<{
+    key: string;
+    reason: string;
+  }>;
+}
+
+/**
+ * Compatibility policy constraints stored on a manifest.
+ */
+export interface ManifestPolicyConstraints {
+  policy?: string | string[];
+  mode?: string | string[];
 }
 
 /**
@@ -107,6 +120,8 @@ export interface BlueprintManifest {
   packageVersion: string;
   /** Build metadata */
   build: ManifestBuildMetadata;
+  /** Optional policy constraints attached at capture time */
+  policyConstraints?: ManifestPolicyConstraints;
   /** Top-level defaults */
   defaults: ManifestDefaults;
   /** All manifest entries, keyed by component identifier */
@@ -135,11 +150,11 @@ export interface ManifestEntryValidationResult {
   entry?: ManifestEntry;
   reason?: string;
   invalidationReason?:
-  | "version-mismatch"
-  | "ttl-expired"
-  | "structural-hash-mismatch"
-  | "style-drift"
-  | "malformed";
+    | "version-mismatch"
+    | "ttl-expired"
+    | "structural-hash-mismatch"
+    | "style-drift"
+    | "malformed";
 }
 
 /**
