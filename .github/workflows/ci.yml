@@ -33,7 +33,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --config.optional=true
 
       - name: Turbo quality gates
         run: pnpm turbo run test lint typecheck build

@@ -32,7 +32,7 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --config.optional=true
 
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
