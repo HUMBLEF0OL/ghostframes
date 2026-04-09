@@ -35,6 +35,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --config.optional=true
 
+      - name: Ensure rolldown Linux binding
+        if: runner.os == 'Linux'
+        run: |
+          if ! node -e "require.resolve('@rolldown/binding-linux-x64-gnu')"; then
+            npm i @rolldown/binding-linux-x64-gnu@1.0.0-rc.12 --no-save --no-package-lock
+          fi
+          node -e "require.resolve('@rolldown/binding-linux-x64-gnu')"
+
       - name: Turbo quality gates
         run: pnpm turbo run test lint typecheck build
 
