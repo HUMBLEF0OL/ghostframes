@@ -1,0 +1,6 @@
+Ghostframes Capture Report
+Routes visited: 4
+Breakpoints: 375, 768, 1280
+Targets discovered: 3
+Artifacts emitted: 3
+Manifest size (bytes): 5527
